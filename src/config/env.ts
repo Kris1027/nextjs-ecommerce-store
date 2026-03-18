@@ -24,7 +24,9 @@ const parsed = isServer
 
 if (!parsed.success) {
   console.error('Invalid environment variables:', parsed.error.flatten());
-  throw new Error('Invalid environment variables. Check server logs.');
+  throw new Error(
+    `Invalid environment variables. Check ${isServer ? 'server logs' : 'browser console'}.`,
+  );
 }
 
 export const env = parsed.data;
