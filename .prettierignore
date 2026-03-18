@@ -2,3 +2,5 @@ pnpm-lock.yaml
 .next
 out
 build
+src/api/generated
+src/api/openapi.json
