@@ -17,11 +17,20 @@ const UserMenu = () => {
   if (!user) {
     return (
       <div className='hidden items-center gap-1 sm:flex'>
-        <Button variant='ghost' size='sm' render={<Link href='/login' />}>
+        <Button
+          variant='ghost'
+          size='sm'
+          nativeButton={false}
+          render={<Link href='/login' />}
+        >
           <SignIn size={16} data-icon='inline-start' />
           Sign In
         </Button>
-        <Button size='sm' render={<Link href='/register' />}>
+        <Button
+          size='sm'
+          nativeButton={false}
+          render={<Link href='/register' />}
+        >
           <UserPlus size={16} data-icon='inline-start' />
           Register
         </Button>

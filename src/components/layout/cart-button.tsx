@@ -9,6 +9,7 @@ const CartButton = () => {
     <Button
       variant='ghost'
       size='icon'
+      nativeButton={false}
       render={<Link href='/cart' />}
       aria-label='Shopping cart'
     >

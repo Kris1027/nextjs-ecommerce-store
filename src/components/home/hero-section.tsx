@@ -14,13 +14,18 @@ const HeroSection = () => {
           shipping on orders over 200 PLN.
         </p>
         <div className='mt-8 flex justify-center gap-4'>
-          <Button size='lg' render={<Link href='/products' />}>
+          <Button
+            size='lg'
+            nativeButton={false}
+            render={<Link href='/products' />}
+          >
             Shop Now
             <ArrowRight size={16} data-icon='inline-end' />
           </Button>
           <Button
             size='lg'
             variant='outline'
+            nativeButton={false}
             render={<Link href='/categories' />}
           >
             Browse Categories
