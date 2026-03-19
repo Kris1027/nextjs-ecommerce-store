@@ -11,7 +11,8 @@ const Header = async () => {
 
     if (response.data?.success) {
       // API types `data` as singular CategoryResponseDto but it returns an array at runtime
-      categories = response.data.data as unknown as CategoryResponseDto[];
+      const data = response.data.data as unknown;
+      categories = Array.isArray(data) ? (data as CategoryResponseDto[]) : [];
     }
   } catch {
     // Header still renders with empty categories on API failure

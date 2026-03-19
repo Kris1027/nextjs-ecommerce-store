@@ -21,7 +21,7 @@ const Home = async () => {
   const [featuredResponse, newArrivalsResponse, categoriesResponse] =
     await Promise.all([
       productsControllerFindAll({
-        query: { limit: 8, sortBy: 'createdAt', sortOrder: 'desc' },
+        query: { limit: 8, isFeatured: 'true' },
       }).catch(() => null),
       productsControllerFindAll({
         query: { limit: 8, sortBy: 'createdAt', sortOrder: 'desc' },

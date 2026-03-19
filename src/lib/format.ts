@@ -4,7 +4,9 @@ const currencyFormatter = new Intl.NumberFormat('pl-PL', {
 });
 
 const formatPrice = (price: string): string => {
-  return currencyFormatter.format(Number(price));
+  const value = Number(price);
+  if (!Number.isFinite(value)) return '—';
+  return currencyFormatter.format(value);
 };
 
 export { formatPrice };
