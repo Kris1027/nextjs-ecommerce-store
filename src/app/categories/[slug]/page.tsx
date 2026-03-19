@@ -1,14 +1,18 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import Image from 'next/image';
 import {
   categoriesControllerFindBySlug,
+  categoriesControllerFindAllTree,
   productsControllerFindAll,
 } from '@/api/generated/sdk.gen';
 import type {
   ProductListItemDto,
+  CategoryResponseDto,
   PaginationMeta,
 } from '@/api/generated/types.gen';
+import { Card, CardContent } from '@/components/ui/card';
 import { ProductGrid } from '@/components/products/product-grid';
 import { ProductSort } from '@/components/products/product-sort';
 import { ProductPagination } from '@/components/products/product-pagination';
@@ -62,6 +66,33 @@ const CategoryPage = async ({ params, searchParams }: CategoryPageProps) => {
     notFound();
   }
 
+  const treeResponse = await categoriesControllerFindAllTree().catch(
+    () => null,
+  );
+  const tree =
+    (treeResponse?.data?.data as unknown as CategoryResponseDto[]) ?? [];
+
+  type CategoryWithChildren = CategoryResponseDto & {
+    children?: CategoryWithChildren[];
+  };
+
+  const findCategory = (
+    categories: CategoryWithChildren[],
+    id: string,
+  ): CategoryWithChildren | null => {
+    for (const cat of categories) {
+      if (cat.id === id) return cat;
+      if (cat.children) {
+        const found = findCategory(cat.children, id);
+        if (found) return found;
+      }
+    }
+    return null;
+  };
+
+  const treeNode = findCategory(tree as CategoryWithChildren[], category.id);
+  const subcategories = treeNode?.children ?? [];
+
   const productsResponse = await productsControllerFindAll({
     query: {
       page: Number(search.page) || 1,
@@ -105,11 +136,45 @@ const CategoryPage = async ({ params, searchParams }: CategoryPageProps) => {
         </p>
       </div>
 
-      <div className='space-y-4'>
-        <ProductSort />
-        <ProductGrid products={products} />
-        <ProductPagination meta={meta} />
-      </div>
+      {subcategories.length > 0 && (
+        <section className='space-y-4'>
+          <h2 className='text-lg font-semibold'>Subcategories</h2>
+          <div className='grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4'>
+            {subcategories.map((sub) => (
+              <Link key={sub.id} href={`/categories/${sub.slug}`}>
+                <Card className='group overflow-hidden'>
+                  <div className='relative aspect-video overflow-hidden bg-muted'>
+                    {typeof sub.imageUrl === 'string' ? (
+                      <Image
+                        src={sub.imageUrl}
+                        alt={sub.name}
+                        fill
+                        sizes='(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw'
+                        className='object-cover transition-transform duration-300 group-hover:scale-105'
+                      />
+                    ) : (
+                      <div className='flex h-full items-center justify-center text-muted-foreground'>
+                        No image
+                      </div>
+                    )}
+                  </div>
+                  <CardContent className='p-3'>
+                    <h3 className='text-sm font-medium'>{sub.name}</h3>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {meta.total > 0 && (
+        <div className='space-y-4'>
+          <ProductSort />
+          <ProductGrid products={products} />
+          <ProductPagination meta={meta} />
+        </div>
+      )}
     </div>
   );
 };
