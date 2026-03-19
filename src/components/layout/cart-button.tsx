@@ -3,17 +3,26 @@
 import Link from 'next/link';
 import { ShoppingCart } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
+import { useGuestCart } from '@/hooks/use-guest-cart';
 
 const CartButton = () => {
+  const { totalItems } = useGuestCart();
+
   return (
     <Button
       variant='ghost'
       size='icon'
       nativeButton={false}
       render={<Link href='/cart' />}
-      aria-label='Shopping cart'
+      aria-label={`Shopping cart${totalItems > 0 ? `, ${totalItems} items` : ''}`}
+      className='relative'
     >
       <ShoppingCart size={18} />
+      {totalItems > 0 && (
+        <span className='absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground'>
+          {totalItems > 99 ? '99+' : totalItems}
+        </span>
+      )}
     </Button>
   );
 };
