@@ -1,11 +1,16 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import {
   productsControllerFindBySlug,
   productsControllerFindAll,
+  categoriesControllerFindAllTree,
 } from '@/api/generated/sdk.gen';
 import type { ProductListItemDto } from '@/api/generated/types.gen';
+import {
+  Breadcrumb,
+  buildBreadcrumbItems,
+  type CategoryWithChildren,
+} from '@/components/ui/breadcrumb';
 import { ProductDetail } from '@/components/products/product-detail';
 import { ProductGrid } from '@/components/products/product-grid';
 import '@/api/client';
@@ -50,6 +55,18 @@ const ProductPage = async ({ params }: ProductPageProps) => {
     notFound();
   }
 
+  const treeResponse = await categoriesControllerFindAllTree().catch(
+    () => null,
+  );
+  const tree =
+    (treeResponse?.data?.data as unknown as CategoryWithChildren[]) ?? [];
+
+  const breadcrumbItems = buildBreadcrumbItems({
+    tree,
+    categoryId: product.categoryId,
+    productName: product.name,
+  });
+
   const relatedResponse = await productsControllerFindAll({
     query: {
       categoryId: product.categoryId,
@@ -63,17 +80,7 @@ const ProductPage = async ({ params }: ProductPageProps) => {
 
   return (
     <div className='space-y-12'>
-      <nav className='flex items-center gap-1 text-sm text-muted-foreground'>
-        <Link href='/' className='hover:text-foreground'>
-          Home
-        </Link>
-        <span>/</span>
-        <Link href='/products' className='hover:text-foreground'>
-          Products
-        </Link>
-        <span>/</span>
-        <span className='text-foreground'>{product.name}</span>
-      </nav>
+      <Breadcrumb items={breadcrumbItems} />
 
       <ProductDetail product={product} />
 

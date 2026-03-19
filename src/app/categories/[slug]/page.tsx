@@ -9,10 +9,14 @@ import {
 } from '@/api/generated/sdk.gen';
 import type {
   ProductListItemDto,
-  CategoryResponseDto,
   PaginationMeta,
 } from '@/api/generated/types.gen';
 import { Card, CardContent } from '@/components/ui/card';
+import {
+  Breadcrumb,
+  buildBreadcrumbItems,
+  type CategoryWithChildren,
+} from '@/components/ui/breadcrumb';
 import { ProductGrid } from '@/components/products/product-grid';
 import { ProductSort } from '@/components/products/product-sort';
 import { ProductPagination } from '@/components/products/product-pagination';
@@ -70,28 +74,29 @@ const CategoryPage = async ({ params, searchParams }: CategoryPageProps) => {
     () => null,
   );
   const tree =
-    (treeResponse?.data?.data as unknown as CategoryResponseDto[]) ?? [];
+    (treeResponse?.data?.data as unknown as CategoryWithChildren[]) ?? [];
 
-  type CategoryWithChildren = CategoryResponseDto & {
-    children?: CategoryWithChildren[];
-  };
-
-  const findCategory = (
+  const findInTree = (
     categories: CategoryWithChildren[],
     id: string,
   ): CategoryWithChildren | null => {
     for (const cat of categories) {
       if (cat.id === id) return cat;
       if (cat.children) {
-        const found = findCategory(cat.children, id);
+        const found = findInTree(cat.children, id);
         if (found) return found;
       }
     }
     return null;
   };
 
-  const treeNode = findCategory(tree as CategoryWithChildren[], category.id);
+  const treeNode = findInTree(tree, category.id);
   const subcategories = treeNode?.children ?? [];
+
+  const breadcrumbItems = buildBreadcrumbItems({
+    tree,
+    categoryId: category.id,
+  });
 
   const productsResponse = await productsControllerFindAll({
     query: {
@@ -116,13 +121,7 @@ const CategoryPage = async ({ params, searchParams }: CategoryPageProps) => {
 
   return (
     <div className='space-y-6'>
-      <nav className='flex items-center gap-1 text-sm text-muted-foreground'>
-        <Link href='/' className='hover:text-foreground'>
-          Home
-        </Link>
-        <span>/</span>
-        <span className='text-foreground'>{category.name}</span>
-      </nav>
+      <Breadcrumb items={breadcrumbItems} />
 
       <div>
         <h1 className='text-2xl font-bold'>{category.name}</h1>
