@@ -6,6 +6,7 @@ import { ThemeProvider } from 'next-themes';
 import { Toaster } from 'sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { queryClient } from '@/lib/query-client';
+import { useAuthHydration } from '@/hooks/use-auth-hydration';
 import '@/api/client';
 
 type ProvidersProps = {
@@ -13,6 +14,8 @@ type ProvidersProps = {
 };
 
 const Providers = ({ children }: ProvidersProps) => {
+  useAuthHydration();
+
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
