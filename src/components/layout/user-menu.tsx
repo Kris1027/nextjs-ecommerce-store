@@ -20,6 +20,7 @@ import { Button } from '@/components/ui/button';
 import { useAuthStore } from '@/stores/auth.store';
 import { authControllerLogout } from '@/api/generated/sdk.gen';
 import { getRefreshToken } from '@/stores/auth.store';
+import { broadcastLogout } from '@/hooks/use-auth-broadcast';
 
 const UserMenu = () => {
   const router = useRouter();
@@ -38,6 +39,7 @@ const UserMenu = () => {
     },
     onSettled: () => {
       clearAuth();
+      broadcastLogout();
       router.push('/');
     },
   });

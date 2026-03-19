@@ -9,6 +9,7 @@ import { toast } from 'sonner';
 import { authControllerRegister } from '@/api/generated/sdk.gen';
 import { usersControllerGetProfile } from '@/api/generated/sdk.gen';
 import { useAuthStore } from '@/stores/auth.store';
+import { broadcastLogin } from '@/hooks/use-auth-broadcast';
 import { registerSchema } from '@/schemas/auth.schemas';
 import type { RegisterFormValues } from '@/schemas/auth.schemas';
 
@@ -59,6 +60,7 @@ export const RegisterForm = () => {
     },
     onSuccess: ({ tokens, user }) => {
       setAuth(tokens.accessToken, tokens.refreshToken, user);
+      broadcastLogin(tokens.accessToken, tokens.refreshToken, user);
       toast.success('Account created successfully!');
       router.push(redirect);
     },
