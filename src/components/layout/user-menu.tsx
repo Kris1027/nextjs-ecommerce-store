@@ -24,6 +24,7 @@ import { getRefreshToken } from '@/stores/auth.store';
 const UserMenu = () => {
   const router = useRouter();
   const user = useAuthStore((state) => state.user);
+  const isHydrated = useAuthStore((state) => state.isHydrated);
   const clearAuth = useAuthStore((state) => state.clearAuth);
 
   const logoutMutation = useMutation({
@@ -40,6 +41,9 @@ const UserMenu = () => {
       router.push('/');
     },
   });
+
+  // Wait for auth hydration to avoid flashing Sign In/Register buttons
+  if (!isHydrated) return null;
 
   if (!user) {
     return (

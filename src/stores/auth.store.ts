@@ -10,6 +10,7 @@ type AuthState = {
   accessToken: string | null;
   refreshToken: string | null;
   user: UserProfileDto | null;
+  isHydrated: boolean;
 };
 
 type AuthActions = {
@@ -22,12 +23,14 @@ type AuthActions = {
   setUser: (user: UserProfileDto) => void;
   clearAuth: () => void;
   hydrateAuth: () => void;
+  setHydrated: () => void;
 };
 
 export const useAuthStore = create<AuthState & AuthActions>()((set) => ({
   accessToken: null,
   refreshToken: null,
   user: null,
+  isHydrated: false,
 
   setAuth: (accessToken, refreshToken, user) => {
     setRefreshTokenCookie(refreshToken);
@@ -50,6 +53,8 @@ export const useAuthStore = create<AuthState & AuthActions>()((set) => ({
     const refreshToken = getRefreshTokenCookie();
     if (refreshToken) set({ refreshToken });
   },
+
+  setHydrated: () => set({ isHydrated: true }),
 }));
 
 export const getAccessToken = (): string | null =>

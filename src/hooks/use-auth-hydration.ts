@@ -7,7 +7,7 @@ import { usersControllerGetProfile } from '@/api/generated/sdk.gen';
 
 export const useAuthHydration = (): void => {
   const calledRef = useRef(false);
-  const { hydrateAuth, setAuth, clearAuth } = useAuthStore();
+  const { hydrateAuth, setAuth, clearAuth, setHydrated } = useAuthStore();
 
   useEffect(() => {
     if (calledRef.current) return;
@@ -17,7 +17,10 @@ export const useAuthHydration = (): void => {
     hydrateAuth();
 
     const refreshToken = useAuthStore.getState().refreshToken;
-    if (!refreshToken) return;
+    if (!refreshToken) {
+      setHydrated();
+      return;
+    }
 
     const hydrate = async () => {
       try {
@@ -40,9 +43,11 @@ export const useAuthHydration = (): void => {
         );
       } catch {
         clearAuth();
+      } finally {
+        setHydrated();
       }
     };
 
     hydrate();
-  }, [hydrateAuth, setAuth, clearAuth]);
+  }, [hydrateAuth, setAuth, clearAuth, setHydrated]);
 };
