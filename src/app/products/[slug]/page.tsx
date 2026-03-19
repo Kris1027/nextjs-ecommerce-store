@@ -58,8 +58,8 @@ const ProductPage = async ({ params }: ProductPageProps) => {
   const treeResponse = await categoriesControllerFindAllTree().catch(
     () => null,
   );
-  const tree =
-    (treeResponse?.data?.data as unknown as CategoryWithChildren[]) ?? [];
+  const treeData = treeResponse?.data?.data as unknown;
+  const tree: CategoryWithChildren[] = Array.isArray(treeData) ? treeData : [];
 
   const breadcrumbItems = buildBreadcrumbItems({
     tree,

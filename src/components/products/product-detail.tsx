@@ -71,6 +71,8 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
               <button
                 key={image.id}
                 type='button'
+                aria-label={`View image ${index + 1}`}
+                aria-pressed={index === selectedImageIndex}
                 onClick={() => setSelectedImageIndex(index)}
                 className={`relative h-20 w-20 shrink-0 overflow-hidden rounded-md border-2 ${
                   index === selectedImageIndex
@@ -130,6 +132,7 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
             <Button
               variant='ghost'
               size='icon'
+              aria-label='Decrease quantity'
               disabled={quantity <= 1}
               onClick={() => setQuantity((q) => q - 1)}
             >
@@ -141,6 +144,7 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
             <Button
               variant='ghost'
               size='icon'
+              aria-label='Increase quantity'
               disabled={quantity >= product.stock}
               onClick={() => setQuantity((q) => q + 1)}
             >

@@ -78,8 +78,8 @@ const CategoryPage = async ({ params, searchParams }: CategoryPageProps) => {
   const treeResponse = await categoriesControllerFindAllTree().catch(
     () => null,
   );
-  const tree =
-    (treeResponse?.data?.data as unknown as CategoryWithChildren[]) ?? [];
+  const treeData = treeResponse?.data?.data as unknown;
+  const tree: CategoryWithChildren[] = Array.isArray(treeData) ? treeData : [];
 
   const findInTree = (
     categories: CategoryWithChildren[],

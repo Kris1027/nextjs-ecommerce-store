@@ -51,6 +51,7 @@ const ProductPagination = ({ meta }: ProductPaginationProps) => {
       <Button
         variant='outline'
         size='icon'
+        aria-label='Previous page'
         disabled={meta.page <= 1}
         onClick={() => handlePageChange(meta.page - 1)}
       >
@@ -80,6 +81,7 @@ const ProductPagination = ({ meta }: ProductPaginationProps) => {
       <Button
         variant='outline'
         size='icon'
+        aria-label='Next page'
         disabled={!meta.hasNextPage}
         onClick={() => handlePageChange(meta.page + 1)}
       >

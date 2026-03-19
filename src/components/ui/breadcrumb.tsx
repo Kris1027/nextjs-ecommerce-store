@@ -62,19 +62,23 @@ const buildBreadcrumbItems = ({
 
 const Breadcrumb = ({ items }: BreadcrumbProps) => {
   return (
-    <nav className='flex items-center gap-1 text-sm text-muted-foreground'>
-      {items.map((item, index) => (
-        <span key={index} className='flex items-center gap-1'>
-          {index > 0 && <span>/</span>}
-          {item.href ? (
-            <Link href={item.href} className='hover:text-foreground'>
-              {item.label}
-            </Link>
-          ) : (
-            <span className='text-foreground'>{item.label}</span>
-          )}
-        </span>
-      ))}
+    <nav aria-label='Breadcrumb' className='text-sm text-muted-foreground'>
+      <ol className='flex items-center gap-1'>
+        {items.map((item, index) => (
+          <li key={item.href ?? item.label} className='flex items-center gap-1'>
+            {index > 0 && <span aria-hidden='true'>/</span>}
+            {item.href ? (
+              <Link href={item.href} className='hover:text-foreground'>
+                {item.label}
+              </Link>
+            ) : (
+              <span className='text-foreground' aria-current='page'>
+                {item.label}
+              </span>
+            )}
+          </li>
+        ))}
+      </ol>
     </nav>
   );
 };
