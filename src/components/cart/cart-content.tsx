@@ -59,9 +59,9 @@ const CartContent = () => {
         {items.map((item) => (
           <Card key={item.id} className='flex gap-4 p-4'>
             <div className='relative h-24 w-24 shrink-0 overflow-hidden rounded-md bg-muted'>
-              {item.product.imageUrl ? (
+              {typeof item.product.imageUrl === 'string' ? (
                 <Image
-                  src={item.product.imageUrl as unknown as string}
+                  src={item.product.imageUrl}
                   alt={item.product.name}
                   fill
                   sizes='96px'

@@ -1,8 +1,10 @@
 const COOKIE_NAME = 'guest-cart-token';
 const MAX_AGE_DAYS = 30;
 
+const isBrowser = typeof document !== 'undefined';
+
 const getGuestCartToken = (): string | null => {
-  if (typeof document === 'undefined') return null;
+  if (!isBrowser) return null;
 
   const match = document.cookie
     .split('; ')
@@ -12,12 +14,14 @@ const getGuestCartToken = (): string | null => {
 };
 
 const setGuestCartToken = (token: string): void => {
+  if (!isBrowser) return;
   const maxAge = MAX_AGE_DAYS * 24 * 60 * 60;
   document.cookie = `${COOKIE_NAME}=${encodeURIComponent(token)}; path=/; max-age=${maxAge}; SameSite=Lax`;
 };
 
 const clearGuestCartToken = (): void => {
-  document.cookie = `${COOKIE_NAME}=; path=/; max-age=0`;
+  if (!isBrowser) return;
+  document.cookie = `${COOKIE_NAME}=; path=/; max-age=0; SameSite=Lax`;
 };
 
 export { getGuestCartToken, setGuestCartToken, clearGuestCartToken };

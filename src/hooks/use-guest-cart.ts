@@ -8,22 +8,38 @@ import {
   guestCartControllerRemoveItem,
   guestCartControllerClearCart,
 } from '@/api/generated/sdk.gen';
+import type { GuestCartResponseDto } from '@/api/generated/types.gen';
 import { useGuestCartStore } from '@/stores/guest-cart.store';
 import { getErrorMessage } from '@/lib/api-error';
 
-const CART_QUERY_KEY = ['guest-cart'] as const;
+const CART_QUERY_KEY_PREFIX = 'guest-cart' as const;
+
+const getCartQueryKey = (token: string | null) =>
+  [CART_QUERY_KEY_PREFIX, token] as const;
+
+const syncCartToStore = (cart: GuestCartResponseDto) => {
+  useGuestCartStore.getState().setCart({
+    items: cart.items ?? [],
+    totalItems: cart.totalItems ?? 0,
+    subtotal: cart.subtotal ?? 0,
+  });
+};
 
 const useGuestCart = () => {
   const queryClient = useQueryClient();
-  const { token, setToken, setCart, clearCart, hydrateToken } =
-    useGuestCartStore();
+  const token = useGuestCartStore((s) => s.token);
+  const setToken = useGuestCartStore((s) => s.setToken);
+  const clearCart = useGuestCartStore((s) => s.clearCart);
+  const hydrateToken = useGuestCartStore((s) => s.hydrateToken);
 
   useEffect(() => {
     hydrateToken();
   }, [hydrateToken]);
 
+  const cartQueryKey = getCartQueryKey(token);
+
   const cartQuery = useQuery({
-    queryKey: CART_QUERY_KEY,
+    queryKey: cartQueryKey,
     queryFn: async () => {
       if (!token) return null;
       const response = await guestCartControllerGetCart({
@@ -36,13 +52,9 @@ const useGuestCart = () => {
 
   useEffect(() => {
     if (cartQuery.data) {
-      setCart({
-        items: cartQuery.data.items ?? [],
-        totalItems: cartQuery.data.totalItems ?? 0,
-        subtotal: cartQuery.data.subtotal ?? 0,
-      });
+      syncCartToStore(cartQuery.data);
     }
-  }, [cartQuery.data, setCart]);
+  }, [cartQuery.data]);
 
   const addItem = useMutation({
     mutationFn: async ({
@@ -66,13 +78,10 @@ const useGuestCart = () => {
     },
     onSuccess: (data) => {
       if (data) {
-        setCart({
-          items: data.items ?? [],
-          totalItems: data.totalItems ?? 0,
-          subtotal: data.subtotal ?? 0,
-        });
+        syncCartToStore(data);
+        const currentToken = useGuestCartStore.getState().token;
+        queryClient.setQueryData(getCartQueryKey(currentToken), data);
       }
-      queryClient.invalidateQueries({ queryKey: CART_QUERY_KEY });
       toast.success('Added to cart');
     },
     onError: (error) => {
@@ -98,13 +107,9 @@ const useGuestCart = () => {
     },
     onSuccess: (data) => {
       if (data) {
-        setCart({
-          items: data.items ?? [],
-          totalItems: data.totalItems ?? 0,
-          subtotal: data.subtotal ?? 0,
-        });
+        syncCartToStore(data);
+        queryClient.setQueryData(cartQueryKey, data);
       }
-      queryClient.invalidateQueries({ queryKey: CART_QUERY_KEY });
     },
     onError: (error) => {
       toast.error(getErrorMessage(error));
@@ -122,13 +127,9 @@ const useGuestCart = () => {
     },
     onSuccess: (data) => {
       if (data) {
-        setCart({
-          items: data.items ?? [],
-          totalItems: data.totalItems ?? 0,
-          subtotal: data.subtotal ?? 0,
-        });
+        syncCartToStore(data);
+        queryClient.setQueryData(cartQueryKey, data);
       }
-      queryClient.invalidateQueries({ queryKey: CART_QUERY_KEY });
       toast.success('Removed from cart');
     },
     onError: (error) => {
@@ -145,7 +146,7 @@ const useGuestCart = () => {
     },
     onSuccess: () => {
       clearCart();
-      queryClient.invalidateQueries({ queryKey: CART_QUERY_KEY });
+      queryClient.setQueryData(cartQueryKey, null);
       toast.success('Cart cleared');
     },
     onError: (error) => {

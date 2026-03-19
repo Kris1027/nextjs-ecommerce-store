@@ -3,10 +3,10 @@
 import Link from 'next/link';
 import { ShoppingCart } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
-import { useGuestCartStore } from '@/stores/guest-cart.store';
+import { useGuestCart } from '@/hooks/use-guest-cart';
 
 const CartButton = () => {
-  const totalItems = useGuestCartStore((s) => s.totalItems);
+  const { totalItems } = useGuestCart();
 
   return (
     <Button
