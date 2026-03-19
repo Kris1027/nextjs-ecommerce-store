@@ -12,6 +12,7 @@ import { ProductGrid } from '@/components/products/product-grid';
 import { ProductFilters } from '@/components/products/product-filters';
 import { ProductSort } from '@/components/products/product-sort';
 import { ProductPagination } from '@/components/products/product-pagination';
+import { MobileFilters } from '@/components/products/mobile-filters';
 import '@/api/client';
 
 export const metadata: Metadata = {
@@ -81,12 +82,15 @@ const ProductsPage = async ({ searchParams }: ProductsPageProps) => {
       </div>
 
       <div className='flex flex-col gap-6 lg:flex-row'>
-        <aside className='w-full shrink-0 lg:w-64'>
+        <aside className='hidden w-full shrink-0 lg:block lg:w-64'>
           <ProductFilters categories={categories} />
         </aside>
 
         <div className='flex-1 space-y-4'>
-          <ProductSort />
+          <div className='flex items-center justify-between'>
+            <MobileFilters categories={categories} />
+            <ProductSort />
+          </div>
           <ProductGrid products={products} />
           <ProductPagination meta={meta} />
         </div>
