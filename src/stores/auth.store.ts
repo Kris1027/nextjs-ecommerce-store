@@ -62,6 +62,3 @@ export const getAccessToken = (): string | null =>
 
 export const getRefreshToken = (): string | null =>
   useAuthStore.getState().refreshToken;
-
-export const isAuthenticated = (): boolean =>
-  useAuthStore.getState().accessToken !== null;

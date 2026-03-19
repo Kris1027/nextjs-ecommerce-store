@@ -9,15 +9,18 @@ import { toast } from 'sonner';
 import { authControllerRegister } from '@/api/generated/sdk.gen';
 import { usersControllerGetProfile } from '@/api/generated/sdk.gen';
 import { useAuthStore } from '@/stores/auth.store';
+import { useGuestCartStore } from '@/stores/guest-cart.store';
 import { broadcastLogin } from '@/hooks/use-auth-broadcast';
+import { getSafeRedirect } from '@/lib/safe-redirect';
 import { registerSchema } from '@/schemas/auth.schemas';
 import type { RegisterFormValues } from '@/schemas/auth.schemas';
 
 export const RegisterForm = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirect = searchParams.get('redirect') ?? '/';
+  const redirect = getSafeRedirect(searchParams.get('redirect'));
   const setAuth = useAuthStore((state) => state.setAuth);
+  const clearGuestCart = useGuestCartStore((state) => state.clearCart);
 
   const {
     register,
@@ -60,7 +63,8 @@ export const RegisterForm = () => {
     },
     onSuccess: ({ tokens, user }) => {
       setAuth(tokens.accessToken, tokens.refreshToken, user);
-      broadcastLogin(tokens.accessToken, tokens.refreshToken, user);
+      clearGuestCart();
+      broadcastLogin();
       toast.success('Account created successfully!');
       router.push(redirect);
     },

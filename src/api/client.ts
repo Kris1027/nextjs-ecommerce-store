@@ -43,14 +43,14 @@ const refreshTokens = async (): Promise<boolean> => {
   }
 };
 
-// Handle 401 responses: refresh token and retry
-client.interceptors.error.use(async (error, response, request) => {
-  if (response?.status !== 401) return error;
+// Handle 401 responses: refresh token and retry the original request
+client.interceptors.response.use(async (response, request) => {
+  if (response.status !== 401) return response;
 
   // Don't try to refresh if this IS the refresh request (avoids infinite loop)
   if (request.url.includes('/auth/refresh')) {
     useAuthStore.getState().clearAuth();
-    return error;
+    return response;
   }
 
   // Deduplicate concurrent refresh attempts
@@ -61,20 +61,15 @@ client.interceptors.error.use(async (error, response, request) => {
   }
 
   const refreshed = await refreshPromise;
-  if (!refreshed) return error;
+  if (!refreshed) return response;
 
   // Retry the original request with the new token
   const newToken = getAccessToken();
   if (newToken) {
     request.headers.set('Authorization', `Bearer ${newToken}`);
   }
-  const retryResponse = await fetch(request);
 
-  if (retryResponse.ok) {
-    return retryResponse.json();
-  }
-
-  return error;
+  return fetch(request);
 });
 
 export { client };

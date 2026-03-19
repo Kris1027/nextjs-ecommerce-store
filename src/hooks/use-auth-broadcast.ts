@@ -2,33 +2,18 @@
 
 import { useEffect } from 'react';
 import { useAuthStore } from '@/stores/auth.store';
-import type { UserProfileDto } from '@/api/generated/types.gen';
+import { authControllerRefresh } from '@/api/generated/sdk.gen';
+import { usersControllerGetProfile } from '@/api/generated/sdk.gen';
+import { getRefreshTokenCookie } from '@/lib/auth-tokens';
 
-type AuthMessage =
-  | {
-      type: 'AUTH_LOGIN';
-      accessToken: string;
-      refreshToken: string;
-      user: UserProfileDto;
-    }
-  | { type: 'AUTH_LOGOUT' };
+type AuthMessage = { type: 'AUTH_LOGIN' } | { type: 'AUTH_LOGOUT' };
 
 const CHANNEL_NAME = 'auth-sync';
 
-export const broadcastLogin = (
-  accessToken: string,
-  refreshToken: string,
-  user: UserProfileDto,
-): void => {
+export const broadcastLogin = (): void => {
   try {
     const channel = new BroadcastChannel(CHANNEL_NAME);
-    const message: AuthMessage = {
-      type: 'AUTH_LOGIN',
-      accessToken,
-      refreshToken,
-      user,
-    };
-    channel.postMessage(message);
+    channel.postMessage({ type: 'AUTH_LOGIN' } satisfies AuthMessage);
     channel.close();
   } catch {
     // BroadcastChannel not supported (e.g., SSR, older browsers)
@@ -38,8 +23,7 @@ export const broadcastLogin = (
 export const broadcastLogout = (): void => {
   try {
     const channel = new BroadcastChannel(CHANNEL_NAME);
-    const message: AuthMessage = { type: 'AUTH_LOGOUT' };
-    channel.postMessage(message);
+    channel.postMessage({ type: 'AUTH_LOGOUT' } satisfies AuthMessage);
     channel.close();
   } catch {
     // BroadcastChannel not supported
@@ -62,12 +46,41 @@ export const useAuthBroadcast = (): void => {
     const handleMessage = (event: MessageEvent<AuthMessage>) => {
       const { data } = event;
 
-      if (data.type === 'AUTH_LOGIN') {
-        setAuth(data.accessToken, data.refreshToken, data.user);
-      }
-
       if (data.type === 'AUTH_LOGOUT') {
         clearAuth();
+        return;
+      }
+
+      if (data.type === 'AUTH_LOGIN') {
+        // Hydrate from cookie instead of receiving tokens over the channel
+        const refreshToken = getRefreshTokenCookie();
+        if (!refreshToken) return;
+
+        const hydrate = async () => {
+          try {
+            const { data: tokenResponse } = await authControllerRefresh({
+              body: { refreshToken },
+              throwOnError: true,
+            });
+
+            const { data: profileResponse } = await usersControllerGetProfile({
+              headers: {
+                Authorization: `Bearer ${tokenResponse.data.accessToken}`,
+              },
+              throwOnError: true,
+            });
+
+            setAuth(
+              tokenResponse.data.accessToken,
+              tokenResponse.data.refreshToken,
+              profileResponse.data,
+            );
+          } catch {
+            clearAuth();
+          }
+        };
+
+        hydrate();
       }
     };
 

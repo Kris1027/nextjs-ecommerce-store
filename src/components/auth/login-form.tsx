@@ -11,13 +11,14 @@ import { usersControllerGetProfile } from '@/api/generated/sdk.gen';
 import { useAuthStore } from '@/stores/auth.store';
 import { useGuestCartStore } from '@/stores/guest-cart.store';
 import { broadcastLogin } from '@/hooks/use-auth-broadcast';
+import { getSafeRedirect } from '@/lib/safe-redirect';
 import { loginSchema } from '@/schemas/auth.schemas';
 import type { LoginFormValues } from '@/schemas/auth.schemas';
 
 export const LoginForm = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirect = searchParams.get('redirect') ?? '/';
+  const redirect = getSafeRedirect(searchParams.get('redirect'));
   const setAuth = useAuthStore((state) => state.setAuth);
   const guestCartToken = useGuestCartStore((state) => state.token);
   const clearGuestCart = useGuestCartStore((state) => state.clearCart);
@@ -61,7 +62,7 @@ export const LoginForm = () => {
     },
     onSuccess: ({ tokens, user }) => {
       setAuth(tokens.accessToken, tokens.refreshToken, user);
-      broadcastLogin(tokens.accessToken, tokens.refreshToken, user);
+      broadcastLogin();
       clearGuestCart();
       toast.success('Signed in successfully!');
       router.push(redirect);

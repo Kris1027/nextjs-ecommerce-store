@@ -1,4 +1,3 @@
-import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { ForgotPasswordForm } from '@/components/auth/forgot-password-form';
 
@@ -16,9 +15,7 @@ const ForgotPasswordPage = () => {
           Enter your email and we&apos;ll send you a reset link
         </p>
       </div>
-      <Suspense>
-        <ForgotPasswordForm />
-      </Suspense>
+      <ForgotPasswordForm />
     </div>
   );
 };

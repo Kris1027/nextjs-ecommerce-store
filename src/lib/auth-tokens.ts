@@ -2,6 +2,7 @@ const COOKIE_NAME = 'refresh-token';
 const MAX_AGE_DAYS = 7;
 
 const isBrowser = typeof document !== 'undefined';
+const isSecure = isBrowser && window.location.protocol === 'https:';
 
 const getRefreshTokenCookie = (): string | null => {
   if (!isBrowser) return null;
@@ -16,7 +17,8 @@ const getRefreshTokenCookie = (): string | null => {
 const setRefreshTokenCookie = (token: string): void => {
   if (!isBrowser) return;
   const maxAge = MAX_AGE_DAYS * 24 * 60 * 60;
-  document.cookie = `${COOKIE_NAME}=${encodeURIComponent(token)}; path=/; max-age=${maxAge}; SameSite=Lax`;
+  const secure = isSecure ? '; Secure' : '';
+  document.cookie = `${COOKIE_NAME}=${encodeURIComponent(token)}; path=/; max-age=${maxAge}; SameSite=Lax${secure}`;
 };
 
 const clearRefreshTokenCookie = (): void => {
