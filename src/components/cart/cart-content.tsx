@@ -2,7 +2,12 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Trash, Minus, Plus, ShoppingCart } from '@phosphor-icons/react';
+import {
+  TrashIcon,
+  MinusIcon,
+  PlusIcon,
+  ShoppingCartIcon,
+} from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
@@ -34,7 +39,7 @@ const CartContent = () => {
   if (items.length === 0) {
     return (
       <Card className='flex flex-col items-center gap-4 p-12 text-center'>
-        <ShoppingCart size={48} className='text-muted-foreground' />
+        <ShoppingCartIcon size={48} className='text-muted-foreground' />
         <div className='space-y-1'>
           <h2 className='text-lg font-semibold'>Your cart is empty</h2>
           <p className='text-sm text-muted-foreground'>
@@ -102,7 +107,7 @@ const CartContent = () => {
                       })
                     }
                   >
-                    <Minus size={14} />
+                    <MinusIcon size={14} />
                   </Button>
                   <span className='w-8 text-center text-sm'>
                     {item.quantity}
@@ -120,7 +125,7 @@ const CartContent = () => {
                       })
                     }
                   >
-                    <Plus size={14} />
+                    <PlusIcon size={14} />
                   </Button>
                 </div>
                 <Button
@@ -131,7 +136,7 @@ const CartContent = () => {
                   disabled={removeItem.isPending}
                   onClick={() => removeItem.mutate(item.id)}
                 >
-                  <Trash size={16} />
+                  <TrashIcon size={16} />
                 </Button>
               </div>
             </div>
