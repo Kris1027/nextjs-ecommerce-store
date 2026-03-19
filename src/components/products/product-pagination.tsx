@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { CaretLeftIcon, CaretRightIcon } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
 import type { PaginationMeta } from '@/api/generated/types.gen';
@@ -11,6 +11,7 @@ type ProductPaginationProps = {
 
 const ProductPagination = ({ meta }: ProductPaginationProps) => {
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
 
   if (meta.totalPages <= 1) return null;
@@ -18,7 +19,7 @@ const ProductPagination = ({ meta }: ProductPaginationProps) => {
   const handlePageChange = (page: number) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set('page', String(page));
-    router.push(`/products?${params.toString()}`);
+    router.push(`${pathname}?${params.toString()}`);
   };
 
   const getPageNumbers = (): (number | '...')[] => {
