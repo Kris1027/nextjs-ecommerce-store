@@ -4,8 +4,11 @@ const footerLinks = {
   shop: [
     { label: 'All Products', href: '/products' },
     { label: 'Categories', href: '/categories' },
-    { label: 'New Arrivals', href: '/products?sort=newest' },
-    { label: 'Featured', href: '/products?featured=true' },
+    {
+      label: 'New Arrivals',
+      href: '/products?sortBy=createdAt&sortOrder=desc',
+    },
+    { label: 'Featured', href: '/products?isFeatured=true' },
   ],
   account: [
     { label: 'Sign In', href: '/login' },
