@@ -6,6 +6,7 @@ import { ThemeProvider } from 'next-themes';
 import { Toaster } from 'sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { queryClient } from '@/lib/query-client';
+import '@/api/client';
 
 type ProvidersProps = {
   children: React.ReactNode;

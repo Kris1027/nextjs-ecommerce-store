@@ -7,6 +7,7 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { formatPrice } from '@/lib/format';
+import { useGuestCart } from '@/hooks/use-guest-cart';
 import type { ProductListItemDto } from '@/api/generated/types.gen';
 
 type ProductCardProps = {
@@ -14,6 +15,13 @@ type ProductCardProps = {
 };
 
 const ProductCard = ({ product }: ProductCardProps) => {
+  const { addItem } = useGuestCart();
+
+  const handleAddToCart = (event: React.MouseEvent) => {
+    event.preventDefault();
+    addItem.mutate({ productId: product.id });
+  };
+
   const imageUrl = product.images[0]?.url;
   const imageAlt =
     (product.images[0]?.alt as unknown as string | null) ?? product.name;
@@ -66,9 +74,14 @@ const ProductCard = ({ product }: ProductCardProps) => {
       </CardContent>
 
       <CardFooter className='p-3 pt-0'>
-        <Button size='sm' className='w-full'>
+        <Button
+          size='sm'
+          className='w-full'
+          disabled={product.stock === 0 || addItem.isPending}
+          onClick={handleAddToCart}
+        >
           <ShoppingCart size={14} data-icon='inline-start' />
-          Add to Cart
+          {product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
         </Button>
       </CardFooter>
     </Card>

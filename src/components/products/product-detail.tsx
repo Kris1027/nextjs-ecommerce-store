@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { formatPrice } from '@/lib/format';
+import { useGuestCart } from '@/hooks/use-guest-cart';
 import type { ProductDetailDto } from '@/api/generated/types.gen';
 
 type ProductDetailProps = {
@@ -16,6 +17,11 @@ type ProductDetailProps = {
 const ProductDetail = ({ product }: ProductDetailProps) => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
+  const { addItem } = useGuestCart();
+
+  const handleAddToCart = () => {
+    addItem.mutate({ productId: product.id, quantity });
+  };
 
   const images = product.images ?? [];
   const selectedImage = images[selectedImageIndex];
@@ -152,7 +158,12 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
             </Button>
           </div>
 
-          <Button size='lg' className='flex-1' disabled={product.stock === 0}>
+          <Button
+            size='lg'
+            className='flex-1'
+            disabled={product.stock === 0 || addItem.isPending}
+            onClick={handleAddToCart}
+          >
             <ShoppingCartIcon size={18} data-icon='inline-start' />
             {product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
           </Button>
