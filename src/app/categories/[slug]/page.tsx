@@ -18,8 +18,10 @@ import {
   type CategoryWithChildren,
 } from '@/components/ui/breadcrumb';
 import { ProductGrid } from '@/components/products/product-grid';
+import { ProductFilters } from '@/components/products/product-filters';
 import { ProductSort } from '@/components/products/product-sort';
 import { ProductPagination } from '@/components/products/product-pagination';
+import { MobileFilters } from '@/components/products/mobile-filters';
 import '@/api/client';
 
 type CategoryPageProps = {
@@ -28,6 +30,9 @@ type CategoryPageProps = {
     sortBy?: string;
     sortOrder?: string;
     page?: string;
+    minPrice?: string;
+    maxPrice?: string;
+    isFeatured?: string;
   }>;
 };
 
@@ -103,6 +108,9 @@ const CategoryPage = async ({ params, searchParams }: CategoryPageProps) => {
       page: Number(search.page) || 1,
       limit: PRODUCTS_PER_PAGE,
       categoryId: category.id,
+      minPrice: search.minPrice,
+      maxPrice: search.maxPrice,
+      isFeatured: search.isFeatured,
       sortBy: search.sortBy,
       sortOrder: search.sortOrder as 'asc' | 'desc' | undefined,
     },
@@ -130,9 +138,11 @@ const CategoryPage = async ({ params, searchParams }: CategoryPageProps) => {
             {category.description}
           </p>
         )}
-        <p className='mt-1 text-sm text-muted-foreground'>
-          {meta.total} {meta.total === 1 ? 'product' : 'products'} found
-        </p>
+        {meta.total > 0 && (
+          <p className='mt-1 text-sm text-muted-foreground'>
+            {meta.total} {meta.total === 1 ? 'product' : 'products'} found
+          </p>
+        )}
       </div>
 
       {subcategories.length > 0 && (
@@ -167,12 +177,27 @@ const CategoryPage = async ({ params, searchParams }: CategoryPageProps) => {
         </section>
       )}
 
-      {meta.total > 0 && (
-        <div className='space-y-4'>
-          <ProductSort />
-          <ProductGrid products={products} />
-          <ProductPagination meta={meta} />
+      {meta.total > 0 ? (
+        <div className='flex flex-col gap-6 lg:flex-row'>
+          <aside className='hidden w-full shrink-0 lg:block lg:w-64'>
+            <ProductFilters showCategoryFilter={false} />
+          </aside>
+
+          <div className='flex-1 space-y-4'>
+            <div className='flex items-center justify-between'>
+              <MobileFilters showCategoryFilter={false} />
+              <ProductSort />
+            </div>
+            <ProductGrid products={products} />
+            <ProductPagination meta={meta} />
+          </div>
         </div>
+      ) : (
+        subcategories.length === 0 && (
+          <p className='text-center text-sm text-muted-foreground'>
+            No products found in this category.
+          </p>
+        )
       )}
     </div>
   );

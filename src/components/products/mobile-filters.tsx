@@ -13,10 +13,14 @@ import { ProductFilters } from '@/components/products/product-filters';
 import type { CategoryResponseDto } from '@/api/generated/types.gen';
 
 type MobileFiltersProps = {
-  categories: CategoryResponseDto[];
+  categories?: CategoryResponseDto[];
+  showCategoryFilter?: boolean;
 };
 
-const MobileFilters = ({ categories }: MobileFiltersProps) => {
+const MobileFilters = ({
+  categories,
+  showCategoryFilter = true,
+}: MobileFiltersProps) => {
   return (
     <Sheet>
       <SheetTrigger
@@ -30,7 +34,10 @@ const MobileFilters = ({ categories }: MobileFiltersProps) => {
           <SheetTitle>Filters</SheetTitle>
         </SheetHeader>
         <div className='mt-4'>
-          <ProductFilters categories={categories} />
+          <ProductFilters
+            categories={categories}
+            showCategoryFilter={showCategoryFilter}
+          />
         </div>
       </SheetContent>
     </Sheet>

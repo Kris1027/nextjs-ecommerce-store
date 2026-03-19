@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { FunnelIcon, XIcon } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -16,11 +16,16 @@ import { Separator } from '@/components/ui/separator';
 import type { CategoryResponseDto } from '@/api/generated/types.gen';
 
 type ProductFiltersProps = {
-  categories: CategoryResponseDto[];
+  categories?: CategoryResponseDto[];
+  showCategoryFilter?: boolean;
 };
 
-const ProductFilters = ({ categories }: ProductFiltersProps) => {
+const ProductFilters = ({
+  categories = [],
+  showCategoryFilter = true,
+}: ProductFiltersProps) => {
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
 
   const currentCategory = searchParams.get('category') ?? '';
@@ -41,7 +46,7 @@ const ProductFilters = ({ categories }: ProductFiltersProps) => {
     }
 
     params.set('page', '1');
-    router.push(`/products?${params.toString()}`);
+    router.push(`${pathname}?${params.toString()}`);
   };
 
   const handleClearAll = () => {
@@ -54,7 +59,7 @@ const ProductFilters = ({ categories }: ProductFiltersProps) => {
     if (sortBy) params.set('sortBy', sortBy);
     if (sortOrder) params.set('sortOrder', sortOrder);
 
-    router.push(`/products?${params.toString()}`);
+    router.push(`${pathname}?${params.toString()}`);
   };
 
   const handlePriceSubmit = (
@@ -74,7 +79,7 @@ const ProductFilters = ({ categories }: ProductFiltersProps) => {
     else params.delete('maxPrice');
 
     params.set('page', '1');
-    router.push(`/products?${params.toString()}`);
+    router.push(`${pathname}?${params.toString()}`);
   };
 
   return (
@@ -94,29 +99,33 @@ const ProductFilters = ({ categories }: ProductFiltersProps) => {
 
       <Separator />
 
-      <div className='space-y-2'>
-        <Label>Category</Label>
-        <Select
-          value={currentCategory}
-          onValueChange={(value) =>
-            updateParam('category', value === 'all' ? '' : value)
-          }
-        >
-          <SelectTrigger>
-            <SelectValue placeholder='All categories' />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value='all'>All categories</SelectItem>
-            {categories.map((category) => (
-              <SelectItem key={category.id} value={category.id}>
-                {category.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+      {showCategoryFilter && (
+        <>
+          <div className='space-y-2'>
+            <Label>Category</Label>
+            <Select
+              value={currentCategory}
+              onValueChange={(value) =>
+                updateParam('category', value === 'all' ? '' : value)
+              }
+            >
+              <SelectTrigger>
+                <SelectValue placeholder='All categories' />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value='all'>All categories</SelectItem>
+                {categories.map((category) => (
+                  <SelectItem key={category.id} value={category.id}>
+                    {category.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
 
-      <Separator />
+          <Separator />
+        </>
+      )}
 
       <form onSubmit={handlePriceSubmit} className='space-y-2'>
         <Label>Price range (PLN)</Label>
