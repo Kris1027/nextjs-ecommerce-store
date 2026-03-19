@@ -1,0 +1,90 @@
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import {
+  productsControllerFindBySlug,
+  productsControllerFindAll,
+} from '@/api/generated/sdk.gen';
+import type { ProductListItemDto } from '@/api/generated/types.gen';
+import { ProductDetail } from '@/components/products/product-detail';
+import { ProductGrid } from '@/components/products/product-grid';
+import '@/api/client';
+
+type ProductPageProps = {
+  params: Promise<{ slug: string }>;
+};
+
+export const generateMetadata = async ({
+  params,
+}: ProductPageProps): Promise<Metadata> => {
+  const { slug } = await params;
+  const response = await productsControllerFindBySlug({
+    path: { slug },
+  }).catch(() => null);
+
+  const product = response?.data?.data;
+
+  if (!product) {
+    return { title: 'Product Not Found | Ecommerce Store' };
+  }
+
+  return {
+    title: `${product.name} | Ecommerce Store`,
+    description:
+      typeof product.description === 'string'
+        ? product.description
+        : `Buy ${product.name} at our store.`,
+  };
+};
+
+const ProductPage = async ({ params }: ProductPageProps) => {
+  const { slug } = await params;
+
+  const response = await productsControllerFindBySlug({
+    path: { slug },
+  }).catch(() => null);
+
+  const product = response?.data?.data;
+
+  if (!product) {
+    notFound();
+  }
+
+  const relatedResponse = await productsControllerFindAll({
+    query: {
+      categoryId: product.categoryId,
+      limit: 4,
+    },
+  }).catch(() => null);
+
+  const relatedProducts: ProductListItemDto[] = (
+    relatedResponse?.data?.data ?? []
+  ).filter((p) => p.id !== product.id);
+
+  return (
+    <div className='space-y-12'>
+      <nav className='flex items-center gap-1 text-sm text-muted-foreground'>
+        <Link href='/' className='hover:text-foreground'>
+          Home
+        </Link>
+        <span>/</span>
+        <Link href='/products' className='hover:text-foreground'>
+          Products
+        </Link>
+        <span>/</span>
+        <span className='text-foreground'>{product.name}</span>
+      </nav>
+
+      <ProductDetail product={product} />
+
+      {relatedProducts.length > 0 && (
+        <section className='space-y-4'>
+          <h2 className='text-xl font-bold'>Related Products</h2>
+          <ProductGrid products={relatedProducts} />
+        </section>
+      )}
+    </div>
+  );
+};
+
+export default ProductPage;
