@@ -19,7 +19,7 @@ const isAuthRoute = (pathname: string): boolean =>
     (route) => pathname === route || pathname.startsWith(`${route}/`),
   );
 
-export const middleware = (request: NextRequest): NextResponse | undefined => {
+export const proxy = (request: NextRequest): NextResponse | undefined => {
   const { pathname } = request.nextUrl;
   const hasRefreshToken = request.cookies.has('refresh-token');
 
