@@ -19,7 +19,7 @@ export const StripePaymentForm = ({ orderId }: StripePaymentFormProps) => {
   const elements = useElements();
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!stripe || !elements) return;

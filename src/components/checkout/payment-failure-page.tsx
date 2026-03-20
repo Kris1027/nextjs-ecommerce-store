@@ -13,7 +13,7 @@ import { getErrorMessage } from '@/lib/api-error';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { XCircle } from '@phosphor-icons/react';
+import { XCircleIcon } from '@phosphor-icons/react';
 
 type PaymentFailurePageProps = {
   orderId: string;
@@ -85,7 +85,7 @@ export const PaymentFailurePage = ({ orderId }: PaymentFailurePageProps) => {
   return (
     <div className='container mx-auto max-w-2xl px-4 py-8'>
       <Card className='p-8 text-center'>
-        <XCircle
+        <XCircleIcon
           weight='fill'
           className='mx-auto mb-4 h-12 w-12 text-red-600'
         />
