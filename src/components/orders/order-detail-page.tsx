@@ -30,7 +30,7 @@ const OrderDetailPage = ({ orderId }: OrderDetailPageProps) => {
     }
   }, [isHydrated, accessToken, router, orderId]);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     ...ordersControllerGetMyOrderByIdOptions({
       path: { id: orderId },
     }),
@@ -64,15 +64,25 @@ const OrderDetailPage = ({ orderId }: OrderDetailPageProps) => {
     );
   }
 
-  const order = data?.data;
+  if (isError) {
+    const is404 =
+      (error as { status?: number }).status === 404 ||
+      (error as { response?: { status?: number } }).response?.status === 404;
 
-  if (!order) {
     return (
       <div className='container mx-auto max-w-3xl px-4 py-8'>
-        <p className='text-muted-foreground'>Order not found.</p>
+        <p className={is404 ? 'text-muted-foreground' : 'text-destructive'}>
+          {is404
+            ? 'Order not found.'
+            : 'Failed to load order. Please try again later.'}
+        </p>
       </div>
     );
   }
+
+  const order = data?.data;
+
+  if (!order) return null;
 
   const couponCode = order.couponCode as unknown as string | null;
   const shippingRegion = order.shippingRegion as unknown as string | null;

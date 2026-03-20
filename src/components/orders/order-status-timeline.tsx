@@ -2,6 +2,7 @@
 
 import { cn } from '@/lib/utils';
 import { CheckIcon, XIcon } from '@phosphor-icons/react';
+import { ORDER_STATUS_LABELS } from '@/components/orders/order-status-badge';
 
 const TIMELINE_STEPS = [
   'PENDING',
@@ -10,14 +11,6 @@ const TIMELINE_STEPS = [
   'SHIPPED',
   'DELIVERED',
 ] as const;
-
-const STEP_LABELS: Record<string, string> = {
-  PENDING: 'Pending',
-  CONFIRMED: 'Confirmed',
-  PROCESSING: 'Processing',
-  SHIPPED: 'Shipped',
-  DELIVERED: 'Delivered',
-};
 
 type OrderStatusTimelineProps = {
   status:
@@ -73,7 +66,7 @@ const OrderStatusTimeline = ({ status }: OrderStatusTimelineProps) => {
                   isFuture && 'text-muted-foreground',
                 )}
               >
-                {STEP_LABELS[step]}
+                {ORDER_STATUS_LABELS[step]}
               </span>
             </div>
             {index < TIMELINE_STEPS.length - 1 && (

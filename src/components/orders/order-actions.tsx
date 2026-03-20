@@ -43,16 +43,17 @@ const OrderActions = ({ orderId, status }: OrderActionsProps) => {
   const [refundReason, setRefundReason] = useState('');
 
   const canCancel = status === 'PENDING' || status === 'CONFIRMED';
-  const canRefund = status === 'DELIVERED';
+  const canRefund = status === 'DELIVERED' || status === 'CONFIRMED';
 
-  const { data: refundData } = useQuery({
+  const { data: refundData, isError: refundNotFound } = useQuery({
     ...ordersControllerGetRefundRequestOptions({
       path: { id: orderId },
     }),
     enabled: canRefund,
+    retry: false,
   });
 
-  const existingRefund = refundData?.data;
+  const existingRefund = refundNotFound ? undefined : refundData?.data;
 
   const cancelOrder = useMutation({
     mutationFn: () =>
@@ -169,7 +170,11 @@ const OrderActions = ({ orderId, status }: OrderActionsProps) => {
                 Please describe the reason for your refund request.
               </DialogDescription>
             </DialogHeader>
+            <label htmlFor='refund-reason' className='sr-only'>
+              Reason for refund
+            </label>
             <textarea
+              id='refund-reason'
               className='border-input bg-background placeholder:text-muted-foreground min-h-24 w-full rounded-md border px-3 py-2 text-sm'
               placeholder='Reason for refund...'
               value={refundReason}

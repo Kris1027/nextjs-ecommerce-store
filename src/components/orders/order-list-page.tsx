@@ -33,7 +33,7 @@ const OrderListPage = () => {
     }
   }, [isHydrated, accessToken, router]);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     ...ordersControllerGetMyOrdersOptions({
       query: {
         page,
@@ -85,13 +85,21 @@ const OrderListPage = () => {
         </div>
       )}
 
-      {!isLoading && orders && orders.length === 0 && (
+      {!isLoading && isError && (
+        <Card className='p-8 text-center'>
+          <p className='text-destructive'>
+            Failed to load orders. Please try again later.
+          </p>
+        </Card>
+      )}
+
+      {!isLoading && !isError && orders && orders.length === 0 && (
         <Card className='p-8 text-center'>
           <p className='text-muted-foreground'>No orders yet.</p>
         </Card>
       )}
 
-      {!isLoading && orders && orders.length > 0 && (
+      {!isLoading && !isError && orders && orders.length > 0 && (
         <div className='space-y-3'>
           {orders.map((order) => (
             <OrderListCard key={order.id} order={order} />

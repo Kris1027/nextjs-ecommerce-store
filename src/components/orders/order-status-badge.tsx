@@ -1,5 +1,6 @@
 'use client';
 
+import type { ComponentProps } from 'react';
 import { Badge } from '@/components/ui/badge';
 
 const ORDER_STATUS_LABELS = {
@@ -13,6 +14,8 @@ const ORDER_STATUS_LABELS = {
 
 type OrderStatus = keyof typeof ORDER_STATUS_LABELS;
 
+type BadgeVariant = ComponentProps<typeof Badge>['variant'];
+
 const STATUS_VARIANTS = {
   PENDING: 'outline',
   CONFIRMED: 'secondary',
@@ -20,7 +23,7 @@ const STATUS_VARIANTS = {
   SHIPPED: 'default',
   DELIVERED: 'default',
   CANCELLED: 'destructive',
-} as const satisfies Record<OrderStatus, string>;
+} as const satisfies Record<OrderStatus, BadgeVariant>;
 
 type OrderStatusBadgeProps = {
   status: OrderStatus;
