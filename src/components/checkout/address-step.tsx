@@ -3,7 +3,13 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { usersControllerGetAddresses } from '@/api/generated';
+import type { UserAddressDto } from '@/api/generated';
 import { useCheckoutStore } from '@/stores/checkout.store';
+
+// OpenAPI generates Decimal/nullable fields as { [key: string]: unknown }.
+// At runtime they are strings, so we cast once at the boundary.
+const getRegion = (address: UserAddressDto): string | null =>
+  (address.region as unknown as string) ?? null;
 import { Button } from '@/components/ui/button';
 import { AddressForm } from './address-form';
 
@@ -11,7 +17,7 @@ export const AddressStep = () => {
   const [isAdding, setIsAdding] = useState(false);
   const { shippingAddressId, setShippingAddressId } = useCheckoutStore();
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ['addresses'],
     queryFn: () => usersControllerGetAddresses({ throwOnError: true }),
   });
@@ -20,6 +26,14 @@ export const AddressStep = () => {
 
   if (isLoading) {
     return <p className='text-muted-foreground'>Loading addresses...</p>;
+  }
+
+  if (isError) {
+    return (
+      <p className='text-sm text-red-500'>
+        Failed to load addresses. Please try again.
+      </p>
+    );
   }
 
   if (isAdding) {
@@ -46,33 +60,40 @@ export const AddressStep = () => {
       ) : (
         <>
           <div className='grid grid-cols-1 gap-3 sm:grid-cols-2'>
-            {addresses.map((address) => (
-              <button
-                key={address.id}
-                type='button'
-                onClick={() => setShippingAddressId(address.id)}
-                className={`rounded-lg border p-4 text-left transition-colors ${
-                  shippingAddressId === address.id
-                    ? 'border-primary bg-primary/5 ring-primary ring-2'
-                    : 'hover:border-primary/50'
-                }`}
-              >
-                <p className='font-medium'>{address.fullName}</p>
-                <p className='text-muted-foreground text-sm'>
-                  {address.street}
-                </p>
-                <p className='text-muted-foreground text-sm'>
-                  {address.postalCode} {address.city}
-                  {address.region ? `, ${address.region}` : ''}
-                </p>
-                <p className='text-muted-foreground text-sm'>{address.phone}</p>
-                {address.isDefault && (
-                  <span className='mt-2 inline-block rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary'>
-                    Default
-                  </span>
-                )}
-              </button>
-            ))}
+            {addresses.map((address) => {
+              const region = getRegion(address);
+              return (
+                <button
+                  key={address.id}
+                  type='button'
+                  aria-label={`Select address for ${address.fullName} at ${address.street}`}
+                  aria-pressed={shippingAddressId === address.id}
+                  onClick={() => setShippingAddressId(address.id)}
+                  className={`rounded-lg border p-4 text-left transition-colors ${
+                    shippingAddressId === address.id
+                      ? 'border-primary bg-primary/5 ring-primary ring-2'
+                      : 'hover:border-primary/50'
+                  }`}
+                >
+                  <p className='font-medium'>{address.fullName}</p>
+                  <p className='text-muted-foreground text-sm'>
+                    {address.street}
+                  </p>
+                  <p className='text-muted-foreground text-sm'>
+                    {address.postalCode} {address.city}
+                    {region ? `, ${region}` : ''}
+                  </p>
+                  <p className='text-muted-foreground text-sm'>
+                    {address.phone}
+                  </p>
+                  {address.isDefault && (
+                    <span className='mt-2 inline-block rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary'>
+                      Default
+                    </span>
+                  )}
+                </button>
+              );
+            })}
           </div>
           <Button variant='outline' onClick={() => setIsAdding(true)}>
             Add new address

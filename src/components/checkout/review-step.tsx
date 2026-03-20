@@ -8,7 +8,7 @@ import {
   shippingControllerFindActive,
   ordersControllerCheckout,
 } from '@/api/generated';
-import type { ShippingMethodDto } from '@/api/generated';
+import type { ShippingMethodDto, UserAddressDto } from '@/api/generated';
 import { useCheckoutStore } from '@/stores/checkout.store';
 import { useCartStore } from '@/stores/cart.store';
 import { formatPrice } from '@/lib/format';
@@ -18,6 +18,9 @@ import { Separator } from '@/components/ui/separator';
 
 const getThreshold = (method: ShippingMethodDto): string | null =>
   (method.freeShippingThreshold as unknown as string) ?? null;
+
+const getRegion = (address: UserAddressDto): string | null =>
+  (address.region as unknown as string) ?? null;
 
 export const ReviewStep = () => {
   const router = useRouter();
@@ -52,16 +55,22 @@ export const ReviewStep = () => {
   const total = subtotal + shippingCost - discount;
 
   const placeOrder = useMutation({
-    mutationFn: () =>
-      ordersControllerCheckout({
+    mutationFn: () => {
+      if (!shippingAddressId || !shippingMethodId) {
+        return Promise.reject(
+          new Error('Please select address and shipping method'),
+        );
+      }
+      return ordersControllerCheckout({
         body: {
-          shippingAddressId: shippingAddressId!,
-          shippingMethodId: shippingMethodId!,
+          shippingAddressId,
+          shippingMethodId,
           ...(cart.couponCode ? { couponCode: cart.couponCode } : {}),
           ...(notes ? { notes } : {}),
         },
         throwOnError: true,
-      }),
+      });
+    },
     onSuccess: async (response) => {
       reset();
       await queryClient.invalidateQueries({ queryKey: ['cart'] });
@@ -82,7 +91,7 @@ export const ReviewStep = () => {
             <p>{address.street}</p>
             <p>
               {address.postalCode} {address.city}
-              {address.region ? `, ${address.region}` : ''}
+              {getRegion(address) ? `, ${getRegion(address)}` : ''}
             </p>
             <p>{address.phone}</p>
           </div>

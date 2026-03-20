@@ -19,7 +19,7 @@ export const ShippingStep = () => {
   const { shippingMethodId, setShippingMethodId } = useCheckoutStore();
   const subtotal = useCartStore((s) => s.subtotal);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ['shipping-methods'],
     queryFn: () => shippingControllerFindActive({ throwOnError: true }),
   });
@@ -28,6 +28,14 @@ export const ShippingStep = () => {
 
   if (isLoading) {
     return <p className='text-muted-foreground'>Loading shipping methods...</p>;
+  }
+
+  if (isError) {
+    return (
+      <p className='text-sm text-red-500'>
+        Failed to load shipping methods. Please try again.
+      </p>
+    );
   }
 
   if (methods.length === 0) {
@@ -48,6 +56,8 @@ export const ShippingStep = () => {
           <button
             key={method.id}
             type='button'
+            aria-label={`Select ${method.name} shipping`}
+            aria-pressed={shippingMethodId === method.id}
             onClick={() => setShippingMethodId(method.id)}
             className={`flex w-full items-center justify-between rounded-lg border p-4 text-left transition-colors ${
               shippingMethodId === method.id
