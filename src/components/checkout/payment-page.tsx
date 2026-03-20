@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { Elements } from '@stripe/react-stripe-js';
 import { toast } from 'sonner';
 import {
@@ -46,27 +46,28 @@ export const PaymentPage = ({ orderId }: PaymentPageProps) => {
   });
 
   const {
-    mutate: createIntent,
     data: intentData,
-    isPending: isIntentPending,
+    isLoading: isIntentLoading,
     isError: isIntentError,
-  } = useMutation({
-    mutationFn: () =>
+    error: intentError,
+    refetch: retryIntent,
+  } = useQuery({
+    queryKey: ['payment-intent', orderId],
+    queryFn: () =>
       paymentsControllerCreatePaymentIntent({
         body: { orderId },
         throwOnError: true,
       }),
-    onError: (error) => {
-      toast.error(getErrorMessage(error));
-    },
+    enabled: !!accessToken,
+    retry: false,
+    staleTime: Infinity,
   });
 
   useEffect(() => {
-    if (accessToken) {
-      createIntent();
+    if (isIntentError && intentError) {
+      toast.error(getErrorMessage(intentError));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- fire once when accessToken becomes available
-  }, [accessToken]);
+  }, [isIntentError, intentError]);
 
   if (!isHydrated) {
     return (
@@ -83,7 +84,7 @@ export const PaymentPage = ({ orderId }: PaymentPageProps) => {
     | undefined;
   const order = orderData?.data?.data;
 
-  const isLoading = isOrderLoading || isIntentPending;
+  const isLoading = isOrderLoading || isIntentLoading;
 
   if (isLoading) {
     return (
@@ -114,7 +115,7 @@ export const PaymentPage = ({ orderId }: PaymentPageProps) => {
         <p className='text-muted-foreground mb-6'>
           Failed to initialize payment. Please try again.
         </p>
-        <Button onClick={() => createIntent()}>Try again</Button>
+        <Button onClick={() => retryIntent()}>Try again</Button>
       </div>
     );
   }
