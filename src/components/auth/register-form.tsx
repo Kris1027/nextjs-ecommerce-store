@@ -2,7 +2,7 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@/lib/zod-resolver';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { toast } from 'sonner';
@@ -12,6 +12,7 @@ import { getErrorMessage } from '@/lib/api-error';
 import { useAuthStore } from '@/stores/auth.store';
 import { useGuestCartStore } from '@/stores/guest-cart.store';
 import { broadcastLogin } from '@/hooks/use-auth-broadcast';
+import { CART_QUERY_KEY } from '@/hooks/use-cart';
 import { getSafeRedirect } from '@/lib/safe-redirect';
 import { registerSchema } from '@/schemas/auth.schemas';
 import type { RegisterFormValues } from '@/schemas/auth.schemas';
@@ -19,6 +20,7 @@ import type { RegisterFormValues } from '@/schemas/auth.schemas';
 export const RegisterForm = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const queryClient = useQueryClient();
   const redirect = getSafeRedirect(searchParams.get('redirect'));
   const setAuth = useAuthStore((state) => state.setAuth);
   const clearGuestCart = useGuestCartStore((state) => state.clearCart);
@@ -66,6 +68,7 @@ export const RegisterForm = () => {
       setAuth(tokens.accessToken, tokens.refreshToken, user);
       clearGuestCart();
       broadcastLogin();
+      queryClient.invalidateQueries({ queryKey: [...CART_QUERY_KEY] });
       toast.success('Account created successfully!');
       router.push(redirect);
     },

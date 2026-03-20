@@ -8,7 +8,7 @@ import {
   UserPlusIcon,
   SignOutIcon,
 } from '@phosphor-icons/react';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,12 +21,16 @@ import { useAuthStore } from '@/stores/auth.store';
 import { authControllerLogout } from '@/api/generated/sdk.gen';
 import { getRefreshToken } from '@/stores/auth.store';
 import { broadcastLogout } from '@/hooks/use-auth-broadcast';
+import { useCartStore } from '@/stores/cart.store';
+import { CART_QUERY_KEY } from '@/hooks/use-cart';
 
 const UserMenu = () => {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const user = useAuthStore((state) => state.user);
   const isHydrated = useAuthStore((state) => state.isHydrated);
   const clearAuth = useAuthStore((state) => state.clearAuth);
+  const clearCart = useCartStore((state) => state.clearCart);
 
   const logoutMutation = useMutation({
     mutationFn: async () => {
@@ -39,7 +43,9 @@ const UserMenu = () => {
     },
     onSettled: () => {
       clearAuth();
+      clearCart();
       broadcastLogout();
+      queryClient.invalidateQueries({ queryKey: [...CART_QUERY_KEY] });
       router.push('/');
     },
   });

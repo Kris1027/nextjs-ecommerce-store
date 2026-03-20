@@ -5,6 +5,9 @@ import { useAuthStore } from '@/stores/auth.store';
 import { authControllerRefresh } from '@/api/generated/sdk.gen';
 import { usersControllerGetProfile } from '@/api/generated/sdk.gen';
 import { getRefreshTokenCookie } from '@/lib/auth-tokens';
+import { useCartStore } from '@/stores/cart.store';
+import { queryClient } from '@/lib/query-client';
+import { CART_QUERY_KEY } from '@/hooks/use-cart';
 
 type AuthMessage = { type: 'AUTH_LOGIN' } | { type: 'AUTH_LOGOUT' };
 
@@ -33,6 +36,7 @@ export const broadcastLogout = (): void => {
 export const useAuthBroadcast = (): void => {
   const setAuth = useAuthStore((state) => state.setAuth);
   const clearAuth = useAuthStore((state) => state.clearAuth);
+  const clearCart = useCartStore((state) => state.clearCart);
 
   useEffect(() => {
     let channel: BroadcastChannel;
@@ -48,6 +52,8 @@ export const useAuthBroadcast = (): void => {
 
       if (data.type === 'AUTH_LOGOUT') {
         clearAuth();
+        clearCart();
+        queryClient.invalidateQueries({ queryKey: [...CART_QUERY_KEY] });
         return;
       }
 
@@ -75,6 +81,7 @@ export const useAuthBroadcast = (): void => {
               tokenResponse.data.refreshToken,
               profileResponse.data,
             );
+            queryClient.invalidateQueries({ queryKey: [...CART_QUERY_KEY] });
           } catch {
             clearAuth();
           }
@@ -90,5 +97,5 @@ export const useAuthBroadcast = (): void => {
       channel.removeEventListener('message', handleMessage);
       channel.close();
     };
-  }, [setAuth, clearAuth]);
+  }, [setAuth, clearAuth, clearCart]);
 };
