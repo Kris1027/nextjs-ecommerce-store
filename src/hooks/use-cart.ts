@@ -103,23 +103,28 @@ const useCart = () => {
       quantity?: number;
     }) => {
       if (isAuthenticated) {
-        const response = await cartControllerAddItem({
+        const { data: response } = await cartControllerAddItem({
           body: { productId, quantity },
+          throwOnError: true,
         });
-        return { type: 'auth' as const, data: response.data?.data ?? null };
+        return { type: 'auth' as const, data: response.data };
       }
 
-      const response = await guestCartControllerAddItem({
-        headers: guestToken ? { 'x-guest-cart-token': guestToken } : undefined,
-        body: { productId, quantity },
-      });
+      const { data: response, response: raw } =
+        await guestCartControllerAddItem({
+          headers: guestToken
+            ? { 'x-guest-cart-token': guestToken }
+            : undefined,
+          body: { productId, quantity },
+          throwOnError: true,
+        });
 
-      const newToken = response.response?.headers?.get('x-guest-cart-token');
+      const newToken = raw?.headers?.get('x-guest-cart-token');
       if (newToken) {
         setGuestToken(newToken);
       }
 
-      return { type: 'guest' as const, data: response.data?.data ?? null };
+      return { type: 'guest' as const, data: response.data };
     },
     onSuccess: (result) => {
       if (result.data) {
@@ -146,20 +151,22 @@ const useCart = () => {
       quantity: number;
     }) => {
       if (isAuthenticated) {
-        const response = await cartControllerUpdateItem({
+        const { data: response } = await cartControllerUpdateItem({
           path: { itemId },
           body: { quantity },
+          throwOnError: true,
         });
-        return { type: 'auth' as const, data: response.data?.data ?? null };
+        return { type: 'auth' as const, data: response.data };
       }
 
       if (!guestToken) throw new Error('No cart token');
-      const response = await guestCartControllerUpdateItem({
+      const { data: response } = await guestCartControllerUpdateItem({
         headers: { 'x-guest-cart-token': guestToken },
         path: { itemId },
         body: { quantity },
+        throwOnError: true,
       });
-      return { type: 'guest' as const, data: response.data?.data ?? null };
+      return { type: 'guest' as const, data: response.data };
     },
     onSuccess: (result) => {
       if (result.data) {
@@ -179,18 +186,20 @@ const useCart = () => {
   const removeItem = useMutation({
     mutationFn: async (itemId: string) => {
       if (isAuthenticated) {
-        const response = await cartControllerRemoveItem({
+        const { data: response } = await cartControllerRemoveItem({
           path: { itemId },
+          throwOnError: true,
         });
-        return { type: 'auth' as const, data: response.data?.data ?? null };
+        return { type: 'auth' as const, data: response.data };
       }
 
       if (!guestToken) throw new Error('No cart token');
-      const response = await guestCartControllerRemoveItem({
+      const { data: response } = await guestCartControllerRemoveItem({
         headers: { 'x-guest-cart-token': guestToken },
         path: { itemId },
+        throwOnError: true,
       });
-      return { type: 'guest' as const, data: response.data?.data ?? null };
+      return { type: 'guest' as const, data: response.data };
     },
     onSuccess: (result) => {
       if (result.data) {
@@ -211,13 +220,14 @@ const useCart = () => {
   const clear = useMutation({
     mutationFn: async () => {
       if (isAuthenticated) {
-        await cartControllerClearCart();
+        await cartControllerClearCart({ throwOnError: true });
         return;
       }
 
       if (!guestToken) throw new Error('No cart token');
       await guestCartControllerClearCart({
         headers: { 'x-guest-cart-token': guestToken },
+        throwOnError: true,
       });
     },
     onSuccess: () => {
@@ -235,10 +245,11 @@ const useCart = () => {
 
   const applyCoupon = useMutation({
     mutationFn: async (code: string) => {
-      const response = await cartControllerApplyCoupon({
+      const { data: response } = await cartControllerApplyCoupon({
         body: { code },
+        throwOnError: true,
       });
-      return response.data?.data ?? null;
+      return response.data;
     },
     onSuccess: (data) => {
       if (data) {
@@ -254,8 +265,10 @@ const useCart = () => {
 
   const removeCoupon = useMutation({
     mutationFn: async () => {
-      const response = await cartControllerRemoveCoupon();
-      return response.data?.data ?? null;
+      const { data: response } = await cartControllerRemoveCoupon({
+        throwOnError: true,
+      });
+      return response.data;
     },
     onSuccess: (data) => {
       if (data) {

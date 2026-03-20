@@ -206,6 +206,7 @@ const CartContent = () => {
                     value={couponInput}
                     onChange={(e) => setCouponInput(e.target.value)}
                     placeholder='Coupon code'
+                    aria-label='Coupon code'
                     className='border-input bg-background placeholder:text-muted-foreground flex-1 rounded-md border px-3 py-1.5 text-sm focus:ring-2 focus:ring-offset-2 focus:outline-none'
                   />
                   <Button
