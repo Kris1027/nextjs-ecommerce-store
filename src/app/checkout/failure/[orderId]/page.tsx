@@ -1,14 +1,11 @@
-'use client';
-
-import { use } from 'react';
 import { PaymentFailurePage } from '@/components/checkout/payment-failure-page';
 
-const CheckoutFailurePage = ({
+const CheckoutFailurePage = async ({
   params,
 }: {
   params: Promise<{ orderId: string }>;
 }) => {
-  const { orderId } = use(params);
+  const { orderId } = await params;
 
   return <PaymentFailurePage orderId={orderId} />;
 };

@@ -9,10 +9,16 @@ import {
 } from '@/api/generated/sdk.gen';
 import { useAuthStore } from '@/stores/auth.store';
 import { formatPrice } from '@/lib/format';
+import { getErrorMessage } from '@/lib/api-error';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { CheckCircle, Clock, SpinnerGap } from '@phosphor-icons/react';
+import {
+  CheckCircleIcon,
+  ClockIcon,
+  SpinnerGapIcon,
+  WarningCircleIcon,
+} from '@phosphor-icons/react';
 
 type PaymentSuccessPageProps = {
   orderId: string;
@@ -35,7 +41,9 @@ export const PaymentSuccessPage = ({ orderId }: PaymentSuccessPageProps) => {
   const {
     data: paymentData,
     isLoading: isPaymentLoading,
-    dataUpdatedAt,
+    isError: isPaymentError,
+    error: paymentError,
+    isRefetching,
   } = useQuery({
     queryKey: ['payment', orderId],
     queryFn: () =>
@@ -97,36 +105,86 @@ export const PaymentSuccessPage = ({ orderId }: PaymentSuccessPageProps) => {
     );
   }
 
-  if (payment?.status === 'PENDING') {
-    const stillPolling = !!dataUpdatedAt;
-
+  if (isPaymentError) {
     return (
       <div className='container mx-auto max-w-2xl px-4 py-8'>
         <Card className='p-8 text-center'>
-          {stillPolling ? (
-            <>
-              <SpinnerGap className='text-primary mx-auto mb-4 h-12 w-12 animate-spin' />
-              <h1 className='mb-2 text-2xl font-bold'>
-                Processing your payment...
-              </h1>
-              <p className='text-muted-foreground'>
-                This usually takes a few seconds.
-              </p>
-            </>
-          ) : (
-            <>
-              <Clock className='text-muted-foreground mx-auto mb-4 h-12 w-12' />
-              <h1 className='mb-2 text-2xl font-bold'>
-                Payment is being processed
-              </h1>
-              <p className='text-muted-foreground mb-6'>
-                {"We'll send you an email once your payment is confirmed."}
-              </p>
-              <Button onClick={() => router.push('/products')}>
-                Continue shopping
-              </Button>
-            </>
-          )}
+          <WarningCircleIcon
+            weight='fill'
+            className='mx-auto mb-4 h-12 w-12 text-red-600'
+          />
+          <h1 className='mb-2 text-2xl font-bold'>Something went wrong</h1>
+          <p className='text-muted-foreground mb-6'>
+            {getErrorMessage(paymentError)}
+          </p>
+          <Button onClick={() => router.push('/orders')}>View orders</Button>
+        </Card>
+      </div>
+    );
+  }
+
+  if (payment?.status === 'PENDING' && isRefetching) {
+    return (
+      <div className='container mx-auto max-w-2xl px-4 py-8'>
+        <Card className='p-8 text-center'>
+          <SpinnerGapIcon className='text-primary mx-auto mb-4 h-12 w-12 animate-spin' />
+          <h1 className='mb-2 text-2xl font-bold'>
+            Processing your payment...
+          </h1>
+          <p className='text-muted-foreground'>
+            This usually takes a few seconds.
+          </p>
+        </Card>
+      </div>
+    );
+  }
+
+  if (payment?.status === 'PENDING') {
+    return (
+      <div className='container mx-auto max-w-2xl px-4 py-8'>
+        <Card className='p-8 text-center'>
+          <ClockIcon className='text-muted-foreground mx-auto mb-4 h-12 w-12' />
+          <h1 className='mb-2 text-2xl font-bold'>
+            Payment is being processed
+          </h1>
+          <p className='text-muted-foreground mb-6'>
+            {"We'll send you an email once your payment is confirmed."}
+          </p>
+          <Button onClick={() => router.push('/products')}>
+            Continue shopping
+          </Button>
+        </Card>
+      </div>
+    );
+  }
+
+  if (payment?.status === 'SUCCEEDED') {
+    return (
+      <div className='container mx-auto max-w-2xl px-4 py-8'>
+        <Card className='p-8 text-center'>
+          <CheckCircleIcon
+            weight='fill'
+            className='mx-auto mb-4 h-12 w-12 text-green-600'
+          />
+          <h1 className='mb-2 text-2xl font-bold'>Payment successful!</h1>
+          <p className='text-muted-foreground mb-6'>
+            Thank you for your order.
+            {order && (
+              <>
+                {' '}
+                Order <span className='font-medium'>
+                  #{order.orderNumber}
+                </span>{' '}
+                — {formatPrice(order.total)} paid.
+              </>
+            )}
+          </p>
+          <div className='flex justify-center gap-4'>
+            <Button variant='outline' onClick={() => router.push('/products')}>
+              Continue shopping
+            </Button>
+            <Button onClick={() => router.push('/orders')}>View orders</Button>
+          </div>
         </Card>
       </div>
     );
@@ -135,28 +193,12 @@ export const PaymentSuccessPage = ({ orderId }: PaymentSuccessPageProps) => {
   return (
     <div className='container mx-auto max-w-2xl px-4 py-8'>
       <Card className='p-8 text-center'>
-        <CheckCircle
-          weight='fill'
-          className='mx-auto mb-4 h-12 w-12 text-green-600'
-        />
-        <h1 className='mb-2 text-2xl font-bold'>Payment successful!</h1>
+        <WarningCircleIcon className='text-muted-foreground mx-auto mb-4 h-12 w-12' />
+        <h1 className='mb-2 text-2xl font-bold'>Unknown payment status</h1>
         <p className='text-muted-foreground mb-6'>
-          Thank you for your order.
-          {order && (
-            <>
-              {' '}
-              Order <span className='font-medium'>
-                #{order.orderNumber}
-              </span> — {formatPrice(order.total)} paid.
-            </>
-          )}
+          Please check your orders for the latest status.
         </p>
-        <div className='flex justify-center gap-4'>
-          <Button variant='outline' onClick={() => router.push('/products')}>
-            Continue shopping
-          </Button>
-          <Button onClick={() => router.push('/orders')}>View orders</Button>
-        </div>
+        <Button onClick={() => router.push('/orders')}>View orders</Button>
       </Card>
     </div>
   );
