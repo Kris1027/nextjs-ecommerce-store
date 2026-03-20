@@ -26,7 +26,8 @@ export const proxy = (request: NextRequest): NextResponse | undefined => {
   // Unauthenticated user trying to access protected route → redirect to login
   if (isProtectedRoute(pathname) && !hasRefreshToken) {
     const loginUrl = new URL('/login', request.url);
-    loginUrl.searchParams.set('redirect', pathname);
+    const redirectPath = pathname + request.nextUrl.search;
+    loginUrl.searchParams.set('redirect', redirectPath);
     return NextResponse.redirect(loginUrl);
   }
 

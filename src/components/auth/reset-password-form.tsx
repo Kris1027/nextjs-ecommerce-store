@@ -7,6 +7,7 @@ import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { authControllerResetPassword } from '@/api/generated/sdk.gen';
+import { getErrorMessage } from '@/lib/api-error';
 import { resetPasswordSchema } from '@/schemas/auth.schemas';
 import type { ResetPasswordFormValues } from '@/schemas/auth.schemas';
 
@@ -36,10 +37,8 @@ export const ResetPasswordForm = () => {
       });
       return data;
     },
-    onError: (error: Error) => {
-      toast.error(
-        error.message || 'Failed to reset password. The link may have expired.',
-      );
+    onError: (error: unknown) => {
+      toast.error(getErrorMessage(error));
     },
   });
 

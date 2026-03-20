@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { toast } from 'sonner';
 import { authControllerLogin } from '@/api/generated/sdk.gen';
 import { usersControllerGetProfile } from '@/api/generated/sdk.gen';
+import { getErrorMessage } from '@/lib/api-error';
 import { useAuthStore } from '@/stores/auth.store';
 import { useGuestCartStore } from '@/stores/guest-cart.store';
 import { broadcastLogin } from '@/hooks/use-auth-broadcast';
@@ -67,8 +68,8 @@ export const LoginForm = () => {
       toast.success('Signed in successfully!');
       router.push(redirect);
     },
-    onError: (error: Error) => {
-      toast.error(error.message || 'Invalid email or password.');
+    onError: (error: unknown) => {
+      toast.error(getErrorMessage(error));
     },
   });
 

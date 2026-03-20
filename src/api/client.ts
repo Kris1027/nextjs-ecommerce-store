@@ -64,12 +64,14 @@ client.interceptors.response.use(async (response, request) => {
   if (!refreshed) return response;
 
   // Retry the original request with the new token
+  // Clone the request because the original body stream may be consumed
+  const retryRequest = request.clone();
   const newToken = getAccessToken();
   if (newToken) {
-    request.headers.set('Authorization', `Bearer ${newToken}`);
+    retryRequest.headers.set('Authorization', `Bearer ${newToken}`);
   }
 
-  return fetch(request);
+  return fetch(retryRequest);
 });
 
 export { client };
