@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { formatPrice } from '@/lib/format';
-import { useGuestCart } from '@/hooks/use-guest-cart';
+import { useCart } from '@/hooks/use-cart';
 import type { ProductDetailDto } from '@/api/generated/types.gen';
 
 type ProductDetailProps = {
@@ -17,7 +17,7 @@ type ProductDetailProps = {
 const ProductDetail = ({ product }: ProductDetailProps) => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  const { addItem } = useGuestCart();
+  const { addItem } = useCart();
 
   const handleAddToCart = () => {
     addItem.mutate({ productId: product.id, quantity });

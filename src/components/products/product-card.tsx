@@ -2,12 +2,12 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { ShoppingCart } from '@phosphor-icons/react';
+import { ShoppingCartIcon } from '@phosphor-icons/react';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { formatPrice } from '@/lib/format';
-import { useGuestCart } from '@/hooks/use-guest-cart';
+import { useCart } from '@/hooks/use-cart';
 import type { ProductListItemDto } from '@/api/generated/types.gen';
 
 type ProductCardProps = {
@@ -15,7 +15,7 @@ type ProductCardProps = {
 };
 
 const ProductCard = ({ product }: ProductCardProps) => {
-  const { addItem } = useGuestCart();
+  const { addItem } = useCart();
 
   const handleAddToCart = (event: React.MouseEvent) => {
     event.preventDefault();
@@ -80,7 +80,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
           disabled={product.stock === 0 || addItem.isPending}
           onClick={handleAddToCart}
         >
-          <ShoppingCart size={14} data-icon='inline-start' />
+          <ShoppingCartIcon size={14} data-icon='inline-start' />
           {product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
         </Button>
       </CardFooter>
