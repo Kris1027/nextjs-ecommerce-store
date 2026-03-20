@@ -7,8 +7,11 @@ import {
   usersControllerGetAddresses,
   shippingControllerFindActive,
   ordersControllerCheckout,
-} from '@/api/generated';
-import type { ShippingMethodDto, UserAddressDto } from '@/api/generated';
+} from '@/api/generated/sdk.gen';
+import type {
+  ShippingMethodDto,
+  UserAddressDto,
+} from '@/api/generated/types.gen';
 import { useCheckoutStore } from '@/stores/checkout.store';
 import { useCartStore } from '@/stores/cart.store';
 import { formatPrice } from '@/lib/format';

@@ -1,8 +1,8 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { shippingControllerFindActive } from '@/api/generated';
-import type { ShippingMethodDto } from '@/api/generated';
+import { shippingControllerFindActive } from '@/api/generated/sdk.gen';
+import type { ShippingMethodDto } from '@/api/generated/types.gen';
 import { useCheckoutStore } from '@/stores/checkout.store';
 import { useCartStore } from '@/stores/cart.store';
 import { formatPrice } from '@/lib/format';

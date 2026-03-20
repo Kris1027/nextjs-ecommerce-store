@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@/lib/zod-resolver';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { usersControllerCreateAddress } from '@/api/generated';
+import { usersControllerCreateAddress } from '@/api/generated/sdk.gen';
 import {
   addressSchema,
   type AddressFormValues,

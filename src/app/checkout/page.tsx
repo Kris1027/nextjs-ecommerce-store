@@ -8,17 +8,17 @@ import { AddressStep } from '@/components/checkout/address-step';
 import { ShippingStep } from '@/components/checkout/shipping-step';
 import { ReviewStep } from '@/components/checkout/review-step';
 import { Button } from '@/components/ui/button';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 const STEPS = ['Shipping address', 'Shipping method', 'Review order'] as const;
 
 const CheckoutPage = () => {
   const router = useRouter();
-  const [currentStep, setCurrentStep] = useState(0);
   const accessToken = useAuthStore((s) => s.accessToken);
   const isHydrated = useAuthStore((s) => s.isHydrated);
   const totalItems = useCartStore((s) => s.totalItems);
-  const { shippingAddressId, shippingMethodId } = useCheckoutStore();
+  const { currentStep, setCurrentStep, shippingAddressId, shippingMethodId } =
+    useCheckoutStore();
 
   useEffect(() => {
     if (isHydrated && !accessToken) {
@@ -97,7 +97,7 @@ const CheckoutPage = () => {
         {currentStep > 0 && (
           <Button
             variant='outline'
-            onClick={() => setCurrentStep((s) => s - 1)}
+            onClick={() => setCurrentStep(currentStep - 1)}
           >
             Back
           </Button>
@@ -109,7 +109,7 @@ const CheckoutPage = () => {
               (currentStep === 0 && !canProceedFromAddress) ||
               (currentStep === 1 && !canProceedFromShipping)
             }
-            onClick={() => setCurrentStep((s) => s + 1)}
+            onClick={() => setCurrentStep(currentStep + 1)}
           >
             Continue
           </Button>

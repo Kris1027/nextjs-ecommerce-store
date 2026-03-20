@@ -9,8 +9,8 @@ export const addressSchema = z.object({
     .max(100, 'Full name must be at most 100 characters'),
   phone: z
     .string()
-    .min(7, 'Phone number must be at least 7 characters')
-    .max(20, 'Phone number must be at most 20 characters'),
+    .min(9, 'Phone number must be at least 9 characters')
+    .max(15, 'Phone number must be at most 15 characters'),
   street: z
     .string()
     .min(3, 'Street must be at least 3 characters')

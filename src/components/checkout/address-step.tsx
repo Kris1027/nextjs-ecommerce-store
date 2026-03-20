@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { usersControllerGetAddresses } from '@/api/generated';
-import type { UserAddressDto } from '@/api/generated';
+import { usersControllerGetAddresses } from '@/api/generated/sdk.gen';
+import type { UserAddressDto } from '@/api/generated/types.gen';
 import { useCheckoutStore } from '@/stores/checkout.store';
 
 // OpenAPI generates Decimal/nullable fields as { [key: string]: unknown }.
