@@ -13,7 +13,7 @@ import { Card } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { formatPrice } from '@/lib/format';
-import { useGuestCart } from '@/hooks/use-guest-cart';
+import { useCart } from '@/hooks/use-cart';
 
 const CartContent = () => {
   const {
@@ -21,10 +21,11 @@ const CartContent = () => {
     subtotal,
     totalItems,
     isLoading,
+    isAuthenticated,
     updateItem,
     removeItem,
     clear,
-  } = useGuestCart();
+  } = useCart();
 
   if (isLoading) {
     return (
@@ -157,12 +158,30 @@ const CartContent = () => {
             <span>Subtotal</span>
             <span>{formatPrice(String(subtotal))}</span>
           </div>
-          <Button className='w-full' size='lg' disabled>
-            Proceed to Checkout
-          </Button>
-          <p className='text-center text-xs text-muted-foreground'>
-            Checkout will be available after signing in.
-          </p>
+          {isAuthenticated ? (
+            <Button
+              className='w-full'
+              size='lg'
+              nativeButton={false}
+              render={<Link href='/checkout' />}
+            >
+              Proceed to Checkout
+            </Button>
+          ) : (
+            <>
+              <Button
+                className='w-full'
+                size='lg'
+                nativeButton={false}
+                render={<Link href='/login?redirect=/cart' />}
+              >
+                Sign in to Checkout
+              </Button>
+              <p className='text-center text-xs text-muted-foreground'>
+                Sign in to proceed with checkout.
+              </p>
+            </>
+          )}
           <div className='flex gap-2'>
             <Button
               variant='outline'
