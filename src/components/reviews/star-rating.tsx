@@ -8,15 +8,17 @@ type StarRatingProps = {
 };
 
 const StarRating = ({ rating, size = 16 }: StarRatingProps) => {
-  const fullStars = Math.floor(rating);
-  const hasHalfStar = rating - fullStars >= 0.5;
+  const clamped = Math.min(5, Math.max(0, rating));
+  const rounded = Math.round(clamped * 2) / 2;
+  const fullStars = Math.floor(rounded);
+  const hasHalfStar = rounded - fullStars === 0.5;
   const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
 
   return (
     <div
       role='img'
       className='flex items-center gap-0.5'
-      aria-label={`${rating} out of 5 stars`}
+      aria-label={`${rounded} out of 5 stars`}
     >
       {Array.from({ length: fullStars }, (_, i) => (
         <StarIcon

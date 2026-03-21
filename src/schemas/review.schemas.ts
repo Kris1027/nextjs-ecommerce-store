@@ -1,14 +1,25 @@
 import { z } from 'zod';
 
+const trimToUndefined = (val: unknown) => {
+  if (typeof val === 'string') {
+    const trimmed = val.trim();
+    return trimmed === '' ? undefined : trimmed;
+  }
+  return val;
+};
+
 export const reviewSchema = z.object({
   rating: z.number().int().min(1, 'Please select a rating').max(5),
-  title: z
-    .string()
-    .max(100, 'Title must be 100 characters or less')
-    .optional()
-    .refine((val) => !val || val.length >= 3, {
-      message: 'Title must be at least 3 characters',
-    }),
+  title: z.preprocess(
+    trimToUndefined,
+    z
+      .string()
+      .max(100, 'Title must be 100 characters or less')
+      .optional()
+      .refine((val) => !val || val.length >= 3, {
+        message: 'Title must be at least 3 characters',
+      }),
+  ),
   comment: z
     .string()
     .min(10, 'Review must be at least 10 characters')

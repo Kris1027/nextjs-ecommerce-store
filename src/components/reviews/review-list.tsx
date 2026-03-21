@@ -16,7 +16,15 @@ type ReviewListProps = {
 const ReviewList = ({ productId, currentUserId }: ReviewListProps) => {
   const searchParams = useSearchParams();
   const page = searchParams.get('page') ?? '1';
-  const rating = searchParams.get('rating');
+  const ratingParam = searchParams.get('rating');
+  const parsedRating = ratingParam ? Number(ratingParam) : null;
+  const rating =
+    parsedRating &&
+    Number.isInteger(parsedRating) &&
+    parsedRating >= 1 &&
+    parsedRating <= 5
+      ? parsedRating
+      : null;
 
   const { data, isLoading, isError } = useQuery({
     ...reviewsControllerFindByProductOptions({
@@ -24,7 +32,7 @@ const ReviewList = ({ productId, currentUserId }: ReviewListProps) => {
       query: {
         page,
         limit: '10',
-        ...(rating ? { rating: Number(rating) } : {}),
+        ...(rating ? { rating } : {}),
       },
     }),
   });

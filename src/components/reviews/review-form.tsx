@@ -73,7 +73,7 @@ const ReviewForm = ({
         path: { productId },
         body: {
           rating: data.rating,
-          title: data.title,
+          title: data.title?.trim() || undefined,
           comment: data.comment,
         },
         throwOnError: true,
