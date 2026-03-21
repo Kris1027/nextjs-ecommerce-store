@@ -55,7 +55,7 @@ const AccountOverview = () => {
     }
   }, [isHydrated, accessToken, router]);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     ...ordersControllerGetMyOrdersOptions({
       query: {
         page: '1',
@@ -130,13 +130,21 @@ const AccountOverview = () => {
           </div>
         )}
 
-        {!isLoading && orders && orders.length === 0 && (
+        {!isLoading && isError && (
+          <Card className='p-6 text-center'>
+            <p className='text-destructive text-sm'>
+              Failed to load recent orders.
+            </p>
+          </Card>
+        )}
+
+        {!isLoading && !isError && orders && orders.length === 0 && (
           <Card className='p-6 text-center'>
             <p className='text-muted-foreground text-sm'>No orders yet.</p>
           </Card>
         )}
 
-        {!isLoading && orders && orders.length > 0 && (
+        {!isLoading && !isError && orders && orders.length > 0 && (
           <div className='space-y-3'>
             {orders.map((order) => (
               <OrderListCard key={order.id} order={order} />

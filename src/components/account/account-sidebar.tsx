@@ -78,6 +78,7 @@ const AccountSidebar = () => {
         ))}
       </nav>
       <button
+        type='button'
         onClick={() => logoutMutation.mutate()}
         disabled={logoutMutation.isPending}
         className='text-muted-foreground hover:bg-muted/50 hover:text-foreground flex shrink-0 items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors'

@@ -161,7 +161,11 @@ const AddressList = () => {
               address={address}
               onEdit={handleEdit}
               onDelete={setDeletingAddress}
-              onSetDefault={(a) => setDefault.mutate(a.id)}
+              onSetDefault={(a) => {
+                if (!setDefault.isPending) {
+                  setDefault.mutate(a.id);
+                }
+              }}
             />
           ))}
         </div>

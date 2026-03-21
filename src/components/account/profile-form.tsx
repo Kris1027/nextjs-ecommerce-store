@@ -46,16 +46,27 @@ const ProfileForm = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isDirty },
   } = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
-    values: profile
-      ? {
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+    },
+  });
+
+  useEffect(() => {
+    if (profile) {
+      reset(
+        {
           firstName: profile.firstName as unknown as string,
           lastName: profile.lastName as unknown as string,
-        }
-      : undefined,
-  });
+        },
+        { keepDirtyValues: true },
+      );
+    }
+  }, [profile, reset]);
 
   const updateProfile = useMutation({
     mutationFn: (data: ProfileFormValues) =>
