@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/breadcrumb';
 import { ProductDetail } from '@/components/products/product-detail';
 import { ProductGrid } from '@/components/products/product-grid';
+import { ReviewsSection } from '@/components/reviews/reviews-section';
 import '@/api/client';
 
 type ProductPageProps = {
@@ -83,6 +84,8 @@ const ProductPage = async ({ params }: ProductPageProps) => {
       <Breadcrumb items={breadcrumbItems} />
 
       <ProductDetail product={product} />
+
+      <ReviewsSection productId={product.id} />
 
       {relatedProducts.length > 0 && (
         <section className='space-y-4'>
