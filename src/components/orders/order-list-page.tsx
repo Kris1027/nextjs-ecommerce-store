@@ -47,11 +47,7 @@ const OrderListPage = () => {
   });
 
   if (!isHydrated) {
-    return (
-      <div className='container mx-auto max-w-3xl px-4 py-8'>
-        <p className='text-muted-foreground'>Loading...</p>
-      </div>
-    );
+    return <p className='text-muted-foreground'>Loading...</p>;
   }
 
   if (!accessToken) return null;
@@ -60,8 +56,8 @@ const OrderListPage = () => {
   const meta = data?.meta;
 
   return (
-    <div className='container mx-auto max-w-3xl px-4 py-8'>
-      <div className='mb-6 flex items-center justify-between'>
+    <div className='space-y-6'>
+      <div className='flex items-center justify-between'>
         <h1 className='text-2xl font-bold'>My Orders</h1>
         <OrderStatusFilter />
       </div>

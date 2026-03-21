@@ -38,22 +38,18 @@ const OrderDetailPage = ({ orderId }: OrderDetailPageProps) => {
   });
 
   if (!isHydrated) {
-    return (
-      <div className='container mx-auto max-w-3xl px-4 py-8'>
-        <p className='text-muted-foreground'>Loading...</p>
-      </div>
-    );
+    return <p className='text-muted-foreground'>Loading...</p>;
   }
 
   if (!accessToken) return null;
 
   if (isLoading) {
     return (
-      <div className='container mx-auto max-w-3xl px-4 py-8'>
-        <Skeleton className='mb-6 h-5 w-32' />
-        <Skeleton className='mb-2 h-8 w-64' />
-        <Skeleton className='mb-6 h-4 w-40' />
-        <Skeleton className='mb-6 h-16 w-full' />
+      <div className='space-y-6'>
+        <Skeleton className='h-5 w-32' />
+        <Skeleton className='h-8 w-64' />
+        <Skeleton className='h-4 w-40' />
+        <Skeleton className='h-16 w-full' />
         <Card className='p-6'>
           <Skeleton className='mb-4 h-5 w-24' />
           <Skeleton className='mb-2 h-12 w-full' />
@@ -70,13 +66,11 @@ const OrderDetailPage = ({ orderId }: OrderDetailPageProps) => {
       (error as { response?: { status?: number } }).response?.status === 404;
 
     return (
-      <div className='container mx-auto max-w-3xl px-4 py-8'>
-        <p className={is404 ? 'text-muted-foreground' : 'text-destructive'}>
-          {is404
-            ? 'Order not found.'
-            : 'Failed to load order. Please try again later.'}
-        </p>
-      </div>
+      <p className={is404 ? 'text-muted-foreground' : 'text-destructive'}>
+        {is404
+          ? 'Order not found.'
+          : 'Failed to load order. Please try again later.'}
+      </p>
     );
   }
 
@@ -96,7 +90,7 @@ const OrderDetailPage = ({ orderId }: OrderDetailPageProps) => {
   });
 
   return (
-    <div className='container mx-auto max-w-3xl px-4 py-8'>
+    <div className='space-y-6'>
       <Link
         href='/account/orders'
         className='text-muted-foreground hover:text-foreground mb-6 inline-flex items-center gap-1 text-sm transition-colors'
