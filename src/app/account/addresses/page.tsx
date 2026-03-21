@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 const AddressesPage = () => {
   return (
-    <Suspense>
+    <Suspense fallback={<p className='text-muted-foreground'>Loading...</p>}>
       <AddressList />
     </Suspense>
   );

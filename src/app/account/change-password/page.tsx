@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 const ChangePasswordPage = () => {
   return (
-    <Suspense>
+    <Suspense fallback={<p className='text-muted-foreground'>Loading...</p>}>
       <ChangePasswordForm />
     </Suspense>
   );

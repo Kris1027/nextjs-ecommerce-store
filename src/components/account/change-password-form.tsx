@@ -84,7 +84,7 @@ const ChangePasswordForm = () => {
               {...register('currentPassword')}
             />
             {errors.currentPassword && (
-              <p className='text-sm text-red-500'>
+              <p className='text-destructive text-xs'>
                 {errors.currentPassword.message}
               </p>
             )}
@@ -99,7 +99,7 @@ const ChangePasswordForm = () => {
               {...register('newPassword')}
             />
             {errors.newPassword && (
-              <p className='text-sm text-red-500'>
+              <p className='text-destructive text-xs'>
                 {errors.newPassword.message}
               </p>
             )}
@@ -114,7 +114,7 @@ const ChangePasswordForm = () => {
               {...register('confirmPassword')}
             />
             {errors.confirmPassword && (
-              <p className='text-sm text-red-500'>
+              <p className='text-destructive text-xs'>
                 {errors.confirmPassword.message}
               </p>
             )}

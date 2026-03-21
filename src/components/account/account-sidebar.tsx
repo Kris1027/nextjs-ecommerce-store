@@ -59,25 +59,24 @@ const AccountSidebar = () => {
   };
 
   return (
-    <nav
-      className='flex gap-1 overflow-x-auto md:flex-col'
-      aria-label='Account navigation'
-    >
-      {NAV_ITEMS.map(({ href, label, icon: Icon }) => (
-        <Link
-          key={href}
-          href={href}
-          className={cn(
-            'flex shrink-0 items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors',
-            isActive(href)
-              ? 'bg-muted font-medium'
-              : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground',
-          )}
-        >
-          <Icon size={16} />
-          {label}
-        </Link>
-      ))}
+    <div className='flex gap-1 overflow-x-auto md:flex-col'>
+      <nav aria-label='Account navigation' className='flex gap-1 md:flex-col'>
+        {NAV_ITEMS.map(({ href, label, icon: Icon }) => (
+          <Link
+            key={href}
+            href={href}
+            className={cn(
+              'flex shrink-0 items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors',
+              isActive(href)
+                ? 'bg-muted font-medium'
+                : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground',
+            )}
+          >
+            <Icon size={16} />
+            {label}
+          </Link>
+        ))}
+      </nav>
       <button
         onClick={() => logoutMutation.mutate()}
         disabled={logoutMutation.isPending}
@@ -86,7 +85,7 @@ const AccountSidebar = () => {
         <SignOutIcon size={16} />
         {logoutMutation.isPending ? 'Signing out...' : 'Sign Out'}
       </button>
-    </nav>
+    </div>
   );
 };
 

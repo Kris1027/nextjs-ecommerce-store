@@ -36,7 +36,7 @@ const ProfileForm = () => {
     }
   }, [isHydrated, accessToken, router]);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     ...usersControllerGetProfileOptions(),
     enabled: !!accessToken,
   });
@@ -91,6 +91,16 @@ const ProfileForm = () => {
     );
   }
 
+  if (isError) {
+    return (
+      <Card className='p-8 text-center'>
+        <p className='text-destructive'>
+          Failed to load profile. Please try again later.
+        </p>
+      </Card>
+    );
+  }
+
   const memberSince = profile
     ? new Date(profile.createdAt).toLocaleDateString('pl-PL', {
         year: 'numeric',
@@ -118,7 +128,7 @@ const ProfileForm = () => {
               <Label htmlFor='firstName'>First name</Label>
               <Input id='firstName' {...register('firstName')} />
               {errors.firstName && (
-                <p className='text-sm text-red-500'>
+                <p className='text-destructive text-xs'>
                   {errors.firstName.message}
                 </p>
               )}
@@ -128,7 +138,7 @@ const ProfileForm = () => {
               <Label htmlFor='lastName'>Last name</Label>
               <Input id='lastName' {...register('lastName')} />
               {errors.lastName && (
-                <p className='text-sm text-red-500'>
+                <p className='text-destructive text-xs'>
                   {errors.lastName.message}
                 </p>
               )}

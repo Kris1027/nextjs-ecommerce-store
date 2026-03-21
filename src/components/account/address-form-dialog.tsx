@@ -155,7 +155,7 @@ const AddressFormDialog = ({
               <Label htmlFor='fullName'>Full name</Label>
               <Input id='fullName' {...register('fullName')} />
               {errors.fullName && (
-                <p className='text-sm text-red-500'>
+                <p className='text-destructive text-xs'>
                   {errors.fullName.message}
                 </p>
               )}
@@ -165,7 +165,9 @@ const AddressFormDialog = ({
               <Label htmlFor='phone'>Phone</Label>
               <Input id='phone' type='tel' {...register('phone')} />
               {errors.phone && (
-                <p className='text-sm text-red-500'>{errors.phone.message}</p>
+                <p className='text-destructive text-xs'>
+                  {errors.phone.message}
+                </p>
               )}
             </div>
           </div>
@@ -174,7 +176,9 @@ const AddressFormDialog = ({
             <Label htmlFor='street'>Street address</Label>
             <Input id='street' {...register('street')} />
             {errors.street && (
-              <p className='text-sm text-red-500'>{errors.street.message}</p>
+              <p className='text-destructive text-xs'>
+                {errors.street.message}
+              </p>
             )}
           </div>
 
@@ -183,7 +187,9 @@ const AddressFormDialog = ({
               <Label htmlFor='city'>City</Label>
               <Input id='city' {...register('city')} />
               {errors.city && (
-                <p className='text-sm text-red-500'>{errors.city.message}</p>
+                <p className='text-destructive text-xs'>
+                  {errors.city.message}
+                </p>
               )}
             </div>
 
@@ -191,7 +197,9 @@ const AddressFormDialog = ({
               <Label htmlFor='region'>Region</Label>
               <Input id='region' {...register('region')} />
               {errors.region && (
-                <p className='text-sm text-red-500'>{errors.region.message}</p>
+                <p className='text-destructive text-xs'>
+                  {errors.region.message}
+                </p>
               )}
             </div>
 
@@ -199,7 +207,7 @@ const AddressFormDialog = ({
               <Label htmlFor='postalCode'>Postal code</Label>
               <Input id='postalCode' {...register('postalCode')} />
               {errors.postalCode && (
-                <p className='text-sm text-red-500'>
+                <p className='text-destructive text-xs'>
                   {errors.postalCode.message}
                 </p>
               )}
