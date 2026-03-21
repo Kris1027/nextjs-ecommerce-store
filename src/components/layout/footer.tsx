@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { FooterAccountLinks } from '@/components/layout/footer-account-links';
 
 const footerLinks = {
   shop: [
@@ -9,12 +10,6 @@ const footerLinks = {
       href: '/products?sortBy=createdAt&sortOrder=desc',
     },
     { label: 'Featured', href: '/products?isFeatured=true' },
-  ],
-  account: [
-    { label: 'Sign In', href: '/login' },
-    { label: 'Register', href: '/register' },
-    { label: 'My Orders', href: '/orders' },
-    { label: 'My Profile', href: '/profile' },
   ],
   support: [
     { label: 'Contact Us', href: '/contact' },
@@ -56,18 +51,7 @@ const Footer = () => {
 
           <div>
             <h3 className='text-sm font-semibold'>Account</h3>
-            <ul className='mt-3 space-y-2'>
-              {footerLinks.account.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className='text-sm text-muted-foreground transition-colors hover:text-foreground'
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <FooterAccountLinks />
           </div>
 
           <div>

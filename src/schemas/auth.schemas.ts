@@ -5,7 +5,7 @@ const emailSchema = z
   .min(1, 'Email is required')
   .check(z.email({ error: 'Please enter a valid email address' }));
 
-const passwordSchema = z
+export const passwordSchema = z
   .string()
   .min(8, 'Password must be at least 8 characters')
   .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')

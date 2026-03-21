@@ -1,18 +1,18 @@
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
-import { AccountOverview } from '@/components/account/account-overview';
+import { ProfileForm } from '@/components/account/profile-form';
 
 export const metadata: Metadata = {
-  title: 'My Account',
-  description: 'Manage your account settings',
+  title: 'Profile',
+  description: 'Edit your profile information',
 };
 
-const AccountPage = () => {
+const ProfilePage = () => {
   return (
     <Suspense fallback={<p className='text-muted-foreground'>Loading...</p>}>
-      <AccountOverview />
+      <ProfileForm />
     </Suspense>
   );
 };
 
-export default AccountPage;
+export default ProfilePage;
