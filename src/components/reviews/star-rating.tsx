@@ -14,6 +14,7 @@ const StarRating = ({ rating, size = 16 }: StarRatingProps) => {
 
   return (
     <div
+      role='img'
       className='flex items-center gap-0.5'
       aria-label={`${rating} out of 5 stars`}
     >

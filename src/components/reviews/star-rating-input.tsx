@@ -12,11 +12,17 @@ const StarRatingInput = ({ value, onChange }: StarRatingInputProps) => {
   const [hoveredStar, setHoveredStar] = useState(0);
 
   return (
-    <div className='flex items-center gap-1'>
+    <div
+      role='radiogroup'
+      aria-label='Rating'
+      className='flex items-center gap-1'
+    >
       {[1, 2, 3, 4, 5].map((star) => (
         <button
           key={star}
           type='button'
+          role='radio'
+          aria-checked={star === value}
           aria-label={`Rate ${star} star${star > 1 ? 's' : ''}`}
           className='cursor-pointer p-0.5 transition-transform hover:scale-110'
           onMouseEnter={() => setHoveredStar(star)}

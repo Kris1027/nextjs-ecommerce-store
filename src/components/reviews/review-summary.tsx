@@ -20,6 +20,7 @@ const ReviewSummary = ({ productId }: ReviewSummaryProps) => {
       path: { productId },
       query: { limit: '100' },
     }),
+    staleTime: 5 * 60 * 1000,
   });
 
   const reviews = data?.data ?? [];
