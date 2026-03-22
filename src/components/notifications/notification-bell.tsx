@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { BellIcon } from '@phosphor-icons/react';
+import { BellIcon, GearIcon } from '@phosphor-icons/react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   notificationsControllerFindUserNotificationsOptions,
@@ -97,7 +97,16 @@ const NotificationBell = () => {
         )}
       </DropdownMenuTrigger>
       <DropdownMenuContent align='end' className='w-80'>
-        <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+        <div className='flex items-center justify-between px-2 py-2'>
+          <DropdownMenuLabel className='p-0'>Notifications</DropdownMenuLabel>
+          <Link
+            href='/account/notifications/preferences'
+            className='text-muted-foreground transition-colors hover:text-foreground'
+            aria-label='Notification preferences'
+          >
+            <GearIcon size={14} />
+          </Link>
+        </div>
         <DropdownMenuSeparator />
         {notifications.length === 0 ? (
           <div className='p-4 text-center text-sm text-muted-foreground'>

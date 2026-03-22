@@ -12,6 +12,7 @@ const AUTH_LINKS = [
   { label: 'My Account', href: '/account' },
   { label: 'My Orders', href: '/account/orders' },
   { label: 'My Profile', href: '/account/profile' },
+  { label: 'My Notifications', href: '/account/notifications' },
   { label: 'My Addresses', href: '/account/addresses' },
 ] as const;
 
