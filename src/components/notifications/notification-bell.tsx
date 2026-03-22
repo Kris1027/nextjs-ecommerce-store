@@ -22,7 +22,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import {
   formatRelativeTime,
-  getNotificationHref,
   NOTIFICATION_ICON_MAP,
 } from '@/components/notifications/notification-utils';
 import type { NotificationDto } from '@/api/generated/types.gen';
@@ -70,10 +69,7 @@ const NotificationBell = () => {
     if (!notification.isRead) {
       markAsRead.mutate({ path: { id: notification.id } });
     }
-    const href = getNotificationHref(notification);
-    if (href) {
-      router.push(href);
-    }
+    router.push('/account/notifications');
   };
 
   return (
