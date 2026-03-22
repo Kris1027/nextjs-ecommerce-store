@@ -7,6 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import {
   UserIcon,
   PackageIcon,
+  BellIcon,
   MapPinIcon,
   LockIcon,
 } from '@phosphor-icons/react';
@@ -28,6 +29,12 @@ const QUICK_LINKS = [
     label: 'Orders',
     description: 'View your order history',
     icon: PackageIcon,
+  },
+  {
+    href: '/account/notifications',
+    label: 'Notifications',
+    description: 'View alerts and preferences',
+    icon: BellIcon,
   },
   {
     href: '/account/addresses',
