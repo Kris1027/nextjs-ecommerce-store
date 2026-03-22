@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { EyeIcon } from '@phosphor-icons/react';
+import { EyeIcon, PackageIcon } from '@phosphor-icons/react';
 import type { NotificationDto } from '@/api/generated/types.gen';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -22,7 +22,7 @@ const NotificationCard = ({
   onMarkAsRead,
 }: NotificationCardProps) => {
   const router = useRouter();
-  const Icon = NOTIFICATION_ICON_MAP[notification.type];
+  const Icon = NOTIFICATION_ICON_MAP[notification.type] ?? PackageIcon;
   const href = getNotificationHref(notification);
 
   const handleClick = () => {

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { BellIcon, GearIcon } from '@phosphor-icons/react';
+import { BellIcon, GearIcon, PackageIcon } from '@phosphor-icons/react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   notificationsControllerFindUserNotificationsOptions,
@@ -17,7 +17,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
@@ -98,7 +97,7 @@ const NotificationBell = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align='end' className='w-80'>
         <div className='flex items-center justify-between px-2 py-2'>
-          <DropdownMenuLabel className='p-0'>Notifications</DropdownMenuLabel>
+          <span className='text-xs text-muted-foreground'>Notifications</span>
           <Link
             href='/account/notifications/preferences'
             className='text-muted-foreground transition-colors hover:text-foreground'
@@ -115,7 +114,8 @@ const NotificationBell = () => {
         ) : (
           <>
             {notifications.map((notification) => {
-              const Icon = NOTIFICATION_ICON_MAP[notification.type];
+              const Icon =
+                NOTIFICATION_ICON_MAP[notification.type] ?? PackageIcon;
               return (
                 <DropdownMenuItem
                   key={notification.id}
