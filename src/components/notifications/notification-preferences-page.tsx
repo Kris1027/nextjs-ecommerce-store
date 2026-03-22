@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
@@ -10,7 +10,6 @@ import {
 } from '@/api/generated/@tanstack/react-query.gen';
 import { useAuthStore } from '@/stores/auth.store';
 import { Card } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Switch } from '@/components/ui/switch';
 import { toast } from 'sonner';
@@ -30,11 +29,18 @@ const CHANNELS: { value: Channel; label: string }[] = [
   { value: 'EMAIL', label: 'Email' },
 ];
 
+type PendingToggle = {
+  type: NotificationDto['type'];
+  channel: Channel;
+  enabled: boolean;
+};
+
 const NotificationPreferencesPage = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const accessToken = useAuthStore((s) => s.accessToken);
   const isHydrated = useAuthStore((s) => s.isHydrated);
+  const [pendingToggles, setPendingToggles] = useState<PendingToggle[]>([]);
 
   useEffect(() => {
     if (isHydrated && !accessToken) {
@@ -49,11 +55,27 @@ const NotificationPreferencesPage = () => {
 
   const updatePreference = useMutation({
     ...notificationsControllerUpdatePreferenceMutation(),
-    onSuccess: () => {
+    onSuccess: (_data, variables) => {
+      setPendingToggles((prev) =>
+        prev.filter(
+          (p) =>
+            p.type !== variables.body.type ||
+            p.channel !== variables.body.channel,
+        ),
+      );
       queryClient.invalidateQueries({
         queryKey: notificationsControllerGetPreferencesQueryKey(),
       });
       toast.success('Preference updated');
+    },
+    onError: (_error, variables) => {
+      setPendingToggles((prev) =>
+        prev.filter(
+          (p) =>
+            p.type !== variables.body.type ||
+            p.channel !== variables.body.channel,
+        ),
+      );
     },
   });
 
@@ -69,6 +91,11 @@ const NotificationPreferencesPage = () => {
     type: NotificationDto['type'],
     channel: Channel,
   ): boolean => {
+    const pending = pendingToggles.find(
+      (p) => p.type === type && p.channel === channel,
+    );
+    if (pending) return pending.enabled;
+
     const pref = preferences.find(
       (p) => p.type === type && p.channel === channel,
     );
@@ -80,6 +107,10 @@ const NotificationPreferencesPage = () => {
     channel: Channel,
     enabled: boolean,
   ) => {
+    setPendingToggles((prev) => [
+      ...prev.filter((p) => p.type !== type || p.channel !== channel),
+      { type, channel, enabled },
+    ]);
     updatePreference.mutate({ body: { type, channel, enabled } });
   };
 
@@ -125,27 +156,34 @@ const NotificationPreferencesPage = () => {
                     key={type}
                     className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'
                   >
-                    <Label className='text-sm'>
+                    <span className='text-sm'>
                       {NOTIFICATION_TYPE_LABELS[type]}
-                    </Label>
+                    </span>
                     <div className='flex items-center gap-4'>
-                      {CHANNELS.map((channel) => (
-                        <div
-                          key={channel.value}
-                          className='flex items-center gap-2'
-                        >
-                          <Switch
-                            checked={isEnabled(type, channel.value)}
-                            onCheckedChange={(checked) =>
-                              handleToggle(type, channel.value, checked)
-                            }
-                            disabled={updatePreference.isPending}
-                          />
-                          <span className='text-xs text-muted-foreground'>
-                            {channel.label}
-                          </span>
-                        </div>
-                      ))}
+                      {CHANNELS.map((channel) => {
+                        const switchId = `${type}-${channel.value}`;
+                        return (
+                          <div
+                            key={channel.value}
+                            className='flex items-center gap-2'
+                          >
+                            <Switch
+                              id={switchId}
+                              checked={isEnabled(type, channel.value)}
+                              onCheckedChange={(checked) =>
+                                handleToggle(type, channel.value, checked)
+                              }
+                              aria-label={`${channel.label}: ${NOTIFICATION_TYPE_LABELS[type]}`}
+                            />
+                            <label
+                              htmlFor={switchId}
+                              className='cursor-pointer text-xs text-muted-foreground'
+                            >
+                              {channel.label}
+                            </label>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 ))}

@@ -46,6 +46,10 @@ const NOTIFICATION_CATEGORIES = [
     types: ['REFUND_INITIATED', 'REFUND_COMPLETED', 'REFUND_FAILED'],
   },
   {
+    label: 'Stock',
+    types: ['LOW_STOCK'],
+  },
+  {
     label: 'Account',
     types: ['WELCOME', 'PASSWORD_CHANGED'],
   },

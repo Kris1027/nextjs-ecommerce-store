@@ -37,12 +37,15 @@ const NotificationCard = ({
   return (
     <Card
       className={cn(
-        'cursor-pointer p-4 transition-colors hover:bg-muted/50',
+        'transition-colors hover:bg-muted/50',
         !notification.isRead && 'border-l-2 border-l-primary',
       )}
-      onClick={handleClick}
     >
-      <div className='flex items-start gap-3'>
+      <button
+        type='button'
+        onClick={handleClick}
+        className='flex w-full items-start gap-3 p-4 text-left'
+      >
         <Icon size={16} className='mt-0.5 shrink-0 text-muted-foreground' />
         <div className='flex-1 space-y-1'>
           <div className='flex items-start justify-between gap-2'>
@@ -75,7 +78,7 @@ const NotificationCard = ({
             {formatRelativeTime(notification.createdAt)}
           </p>
         </div>
-      </div>
+      </button>
     </Card>
   );
 };

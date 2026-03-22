@@ -86,7 +86,10 @@ const NotificationBell = () => {
       >
         <BellIcon size={18} />
         {count > 0 && (
-          <span className='absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground'>
+          <span
+            aria-hidden='true'
+            className='absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground'
+          >
             {count > 99 ? '99+' : count}
           </span>
         )}
