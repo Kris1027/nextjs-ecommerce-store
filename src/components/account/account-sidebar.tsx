@@ -5,6 +5,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import {
   UserIcon,
   PackageIcon,
+  BellIcon,
   MapPinIcon,
   LockIcon,
   SignOutIcon,
@@ -22,6 +23,7 @@ const NAV_ITEMS = [
   { href: '/account', label: 'Overview', icon: HouseIcon },
   { href: '/account/profile', label: 'Profile', icon: UserIcon },
   { href: '/account/orders', label: 'Orders', icon: PackageIcon },
+  { href: '/account/notifications', label: 'Notifications', icon: BellIcon },
   { href: '/account/addresses', label: 'Addresses', icon: MapPinIcon },
   {
     href: '/account/change-password',

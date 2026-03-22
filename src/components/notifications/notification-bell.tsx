@@ -24,7 +24,7 @@ import {
 import {
   formatRelativeTime,
   getNotificationHref,
-  getNotificationIcon,
+  NOTIFICATION_ICON_MAP,
 } from '@/components/notifications/notification-utils';
 import type { NotificationDto } from '@/api/generated/types.gen';
 
@@ -106,7 +106,7 @@ const NotificationBell = () => {
         ) : (
           <>
             {notifications.map((notification) => {
-              const Icon = getNotificationIcon(notification.type);
+              const Icon = NOTIFICATION_ICON_MAP[notification.type];
               return (
                 <DropdownMenuItem
                   key={notification.id}

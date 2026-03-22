@@ -54,20 +54,23 @@ const NOTIFICATION_CATEGORIES = [
   types: readonly NotificationType[];
 }>;
 
-const CATEGORY_ICON_MAP: Record<string, ComponentType<IconProps>> = {
-  Orders: PackageIcon,
-  Payments: CreditCardIcon,
-  Refunds: ArrowCounterClockwiseIcon,
-  Account: UserIcon,
-};
-
-const getNotificationIcon = (
-  type: NotificationType,
-): ComponentType<IconProps> => {
-  const category = NOTIFICATION_CATEGORIES.find((c) =>
-    (c.types as readonly string[]).includes(type),
-  );
-  return CATEGORY_ICON_MAP[category?.label ?? ''] ?? PackageIcon;
+const NOTIFICATION_ICON_MAP: Record<
+  NotificationType,
+  ComponentType<IconProps>
+> = {
+  ORDER_CREATED: PackageIcon,
+  ORDER_CONFIRMED: PackageIcon,
+  ORDER_SHIPPED: PackageIcon,
+  ORDER_DELIVERED: PackageIcon,
+  ORDER_CANCELLED: PackageIcon,
+  PAYMENT_SUCCEEDED: CreditCardIcon,
+  PAYMENT_FAILED: CreditCardIcon,
+  REFUND_INITIATED: ArrowCounterClockwiseIcon,
+  REFUND_COMPLETED: ArrowCounterClockwiseIcon,
+  REFUND_FAILED: ArrowCounterClockwiseIcon,
+  LOW_STOCK: PackageIcon,
+  WELCOME: UserIcon,
+  PASSWORD_CHANGED: UserIcon,
 };
 
 const getNotificationHref = (notification: NotificationDto): string | null => {
@@ -116,7 +119,7 @@ const formatRelativeTime = (dateString: string): string => {
 export {
   NOTIFICATION_TYPE_LABELS,
   NOTIFICATION_CATEGORIES,
-  getNotificationIcon,
+  NOTIFICATION_ICON_MAP,
   getNotificationHref,
   formatRelativeTime,
 };
