@@ -6,7 +6,7 @@ import {
 
 describe('guest-cart-token', () => {
   afterEach(() => {
-    document.cookie = 'guest-cart-token=; max-age=0';
+    clearGuestCartToken();
   });
 
   describe('getGuestCartToken', () => {

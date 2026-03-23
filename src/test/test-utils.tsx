@@ -1,4 +1,4 @@
-import type { ReactElement, ReactNode } from 'react';
+import { useState, type ReactElement, type ReactNode } from 'react';
 import { render, type RenderOptions } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from 'next-themes';
@@ -20,7 +20,7 @@ type AllProvidersProps = {
 };
 
 const AllProviders = ({ children }: AllProvidersProps) => {
-  const queryClient = createTestQueryClient();
+  const [queryClient] = useState(createTestQueryClient);
 
   return (
     <QueryClientProvider client={queryClient}>

@@ -6,7 +6,7 @@ import {
 
 describe('auth-tokens', () => {
   afterEach(() => {
-    document.cookie = 'refresh-token=; max-age=0';
+    clearRefreshTokenCookie();
   });
 
   describe('getRefreshTokenCookie', () => {
