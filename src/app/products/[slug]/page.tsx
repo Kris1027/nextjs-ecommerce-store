@@ -34,12 +34,30 @@ export const generateMetadata = async ({
     return { title: 'Product Not Found' };
   }
 
+  const description =
+    typeof product.description === 'string'
+      ? product.description
+      : `Buy ${product.name} at our store.`;
+
+  const firstImage = product.images[0]?.url;
+
   return {
     title: product.name,
-    description:
-      typeof product.description === 'string'
-        ? product.description
-        : `Buy ${product.name} at our store.`,
+    description,
+    openGraph: {
+      title: product.name,
+      description,
+      ...(firstImage && {
+        images: [{ url: firstImage, alt: product.name }],
+      }),
+    },
+    twitter: {
+      title: product.name,
+      description,
+      ...(firstImage && {
+        images: [{ url: firstImage, alt: product.name }],
+      }),
+    },
   };
 };
 

@@ -52,12 +52,31 @@ export const generateMetadata = async ({
     return { title: 'Category Not Found' };
   }
 
+  const description =
+    typeof category.description === 'string'
+      ? category.description
+      : `Browse ${category.name} products.`;
+
+  const imageUrl =
+    typeof category.imageUrl === 'string' ? category.imageUrl : undefined;
+
+  const ogImages = imageUrl
+    ? { images: [{ url: imageUrl, alt: category.name }] }
+    : {};
+
   return {
     title: category.name,
-    description:
-      typeof category.description === 'string'
-        ? category.description
-        : `Browse ${category.name} products.`,
+    description,
+    openGraph: {
+      title: category.name,
+      description,
+      ...ogImages,
+    },
+    twitter: {
+      title: category.name,
+      description,
+      ...ogImages,
+    },
   };
 };
 
