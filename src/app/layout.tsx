@@ -59,6 +59,9 @@ const RootLayout = ({
       className={cn(geistSans.variable, geistMono.variable)}
       suppressHydrationWarning
     >
+      <head>
+        <link rel='preconnect' href='https://res.cloudinary.com' />
+      </head>
       <body className='antialiased'>
         <Providers>
           <OfflineBanner />
