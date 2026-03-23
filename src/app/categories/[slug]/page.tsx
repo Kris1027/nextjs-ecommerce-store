@@ -22,6 +22,8 @@ import { ProductFilters } from '@/components/products/product-filters';
 import { ProductSort } from '@/components/products/product-sort';
 import { ProductPagination } from '@/components/products/product-pagination';
 import { MobileFilters } from '@/components/products/mobile-filters';
+import { JsonLd, buildBreadcrumbJsonLd } from '@/components/seo/json-ld';
+import { env } from '@/config/env';
 import '@/api/client';
 
 type CategoryPageProps = {
@@ -49,15 +51,34 @@ export const generateMetadata = async ({
   const category = response?.data?.data;
 
   if (!category) {
-    return { title: 'Category Not Found | Ecommerce Store' };
+    return { title: 'Category Not Found' };
   }
 
+  const description =
+    typeof category.description === 'string'
+      ? category.description
+      : `Browse ${category.name} products.`;
+
+  const imageUrl =
+    typeof category.imageUrl === 'string' ? category.imageUrl : undefined;
+
+  const ogImages = imageUrl
+    ? { images: [{ url: imageUrl, alt: category.name }] }
+    : {};
+
   return {
-    title: `${category.name} | Ecommerce Store`,
-    description:
-      typeof category.description === 'string'
-        ? category.description
-        : `Browse ${category.name} products.`,
+    title: category.name,
+    description,
+    openGraph: {
+      title: category.name,
+      description,
+      ...ogImages,
+    },
+    twitter: {
+      title: category.name,
+      description,
+      ...ogImages,
+    },
   };
 };
 
@@ -127,8 +148,11 @@ const CategoryPage = async ({ params, searchParams }: CategoryPageProps) => {
     hasPrevPage: false,
   };
 
+  const siteUrl = env.NEXT_PUBLIC_SITE_URL.replace(/\/+$/, '');
+
   return (
     <div className='space-y-6'>
+      <JsonLd data={buildBreadcrumbJsonLd(breadcrumbItems, siteUrl)} />
       <Breadcrumb items={breadcrumbItems} />
 
       <div>

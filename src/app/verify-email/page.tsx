@@ -5,6 +5,7 @@ import { VerifyEmailContent } from '@/components/auth/verify-email-content';
 export const metadata: Metadata = {
   title: 'Verify Email',
   description: 'Verify your email address',
+  robots: { index: false },
 };
 
 const VerifyEmailPage = () => {

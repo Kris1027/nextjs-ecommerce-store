@@ -9,9 +9,16 @@ import { ProductSort } from '@/components/products/product-sort';
 import { ProductPagination } from '@/components/products/product-pagination';
 import '@/api/client';
 
-export const metadata: Metadata = {
-  title: 'Search | Ecommerce Store',
-  robots: { index: false },
+export const generateMetadata = async ({
+  searchParams,
+}: SearchPageProps): Promise<Metadata> => {
+  const params = await searchParams;
+  const query = params.q;
+
+  return {
+    title: query ? `Search results for "${query}"` : 'Search',
+    robots: { index: false },
+  };
 };
 
 type SearchPageProps = {

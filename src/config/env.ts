@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 const clientEnvSchema = z.object({
   NEXT_PUBLIC_API_URL: z.url(),
+  NEXT_PUBLIC_SITE_URL: z.url(),
   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().startsWith('pk_'),
 });
 
@@ -13,6 +14,7 @@ const isServer = typeof window === 'undefined';
 
 const rawEnv = {
   NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+  NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:
     process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
   ...(isServer ? { API_URL: process.env.API_URL } : {}),

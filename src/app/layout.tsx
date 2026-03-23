@@ -6,6 +6,8 @@ import { Providers } from '@/components/providers';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { OfflineBanner } from '@/components/layout/offline-banner';
+import { env } from '@/config/env';
+import { STORE_NAME, STORE_DESCRIPTION } from '@/lib/constants';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -18,8 +20,29 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Ecommerce Store',
-  description: 'Modern ecommerce store built with Next.js',
+  metadataBase: new URL(env.NEXT_PUBLIC_SITE_URL),
+  title: {
+    default: STORE_NAME,
+    template: `%s | ${STORE_NAME}`,
+  },
+  description: STORE_DESCRIPTION,
+  openGraph: {
+    type: 'website',
+    siteName: STORE_NAME,
+    title: {
+      default: STORE_NAME,
+      template: `%s | ${STORE_NAME}`,
+    },
+    description: STORE_DESCRIPTION,
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: {
+      default: STORE_NAME,
+      template: `%s | ${STORE_NAME}`,
+    },
+    description: STORE_DESCRIPTION,
+  },
 };
 
 const RootLayout = ({
@@ -33,6 +56,13 @@ const RootLayout = ({
       className={cn(geistSans.variable, geistMono.variable)}
       suppressHydrationWarning
     >
+      <head>
+        <link
+          rel='preconnect'
+          href='https://res.cloudinary.com'
+          crossOrigin='anonymous'
+        />
+      </head>
       <body className='antialiased'>
         <Providers>
           <OfflineBanner />
