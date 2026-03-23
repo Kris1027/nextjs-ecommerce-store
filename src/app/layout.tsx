@@ -6,6 +6,7 @@ import { Providers } from '@/components/providers';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { OfflineBanner } from '@/components/layout/offline-banner';
+import { env } from '@/config/env';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -22,6 +23,7 @@ const STORE_DESCRIPTION =
   'Discover quality products at great prices. Shop featured items, new arrivals, and browse categories.';
 
 export const metadata: Metadata = {
+  metadataBase: new URL(env.NEXT_PUBLIC_SITE_URL),
   title: {
     default: STORE_NAME,
     template: `%s | ${STORE_NAME}`,

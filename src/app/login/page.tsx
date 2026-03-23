@@ -5,6 +5,7 @@ import { LoginForm } from '@/components/auth/login-form';
 export const metadata: Metadata = {
   title: 'Sign In',
   description: 'Sign in to your account',
+  robots: { index: false },
 };
 
 const LoginPage = () => {

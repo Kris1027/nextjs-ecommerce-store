@@ -4,6 +4,7 @@ import { ForgotPasswordForm } from '@/components/auth/forgot-password-form';
 export const metadata: Metadata = {
   title: 'Forgot Password',
   description: 'Reset your account password',
+  robots: { index: false },
 };
 
 const ForgotPasswordPage = () => {
