@@ -1,7 +1,7 @@
 import { Skeleton } from '@/components/ui/skeleton';
 import { Card, CardContent } from '@/components/ui/card';
 import { ProductDetailSkeleton } from '@/components/skeletons/product-detail-skeleton';
-import { ProductGridSkeleton } from '@/components/skeletons/product-grid-skeleton';
+import { RelatedProductsSkeleton } from '@/components/skeletons/related-products-skeleton';
 
 const ProductLoading = () => {
   return (
@@ -33,10 +33,7 @@ const ProductLoading = () => {
         ))}
       </section>
 
-      <section className='space-y-4'>
-        <Skeleton className='h-7 w-40' />
-        <ProductGridSkeleton count={4} />
-      </section>
+      <RelatedProductsSkeleton />
     </div>
   );
 };
