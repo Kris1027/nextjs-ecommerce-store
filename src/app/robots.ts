@@ -7,17 +7,17 @@ const robots = (): MetadataRoute.Robots => ({
     userAgent: '*',
     allow: '/',
     disallow: [
-      '/account/',
-      '/cart/',
-      '/checkout/',
-      '/login/',
-      '/register/',
-      '/forgot-password/',
-      '/reset-password/',
-      '/verify-email/',
+      '/account',
+      '/cart',
+      '/checkout',
+      '/login',
+      '/register',
+      '/forgot-password',
+      '/reset-password',
+      '/verify-email',
     ],
   },
-  sitemap: `${env.NEXT_PUBLIC_SITE_URL}/sitemap.xml`,
+  sitemap: `${env.NEXT_PUBLIC_SITE_URL.replace(/\/+$/, '')}/sitemap.xml`,
 });
 
 export default robots;

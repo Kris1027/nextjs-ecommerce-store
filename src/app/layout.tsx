@@ -7,6 +7,7 @@ import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { OfflineBanner } from '@/components/layout/offline-banner';
 import { env } from '@/config/env';
+import { STORE_NAME, STORE_DESCRIPTION } from '@/lib/constants';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -17,10 +18,6 @@ const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
   subsets: ['latin'],
 });
-
-const STORE_NAME = 'Ecommerce Store';
-const STORE_DESCRIPTION =
-  'Discover quality products at great prices. Shop featured items, new arrivals, and browse categories.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(env.NEXT_PUBLIC_SITE_URL),
@@ -60,7 +57,11 @@ const RootLayout = ({
       suppressHydrationWarning
     >
       <head>
-        <link rel='preconnect' href='https://res.cloudinary.com' />
+        <link
+          rel='preconnect'
+          href='https://res.cloudinary.com'
+          crossOrigin='anonymous'
+        />
       </head>
       <body className='antialiased'>
         <Providers>

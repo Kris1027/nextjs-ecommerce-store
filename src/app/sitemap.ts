@@ -7,7 +7,7 @@ import {
 import '@/api/client';
 import { env } from '@/config/env';
 
-const siteUrl = env.NEXT_PUBLIC_SITE_URL;
+const siteUrl = env.NEXT_PUBLIC_SITE_URL.replace(/\/+$/, '');
 
 const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
   const staticRoutes: MetadataRoute.Sitemap = [
@@ -32,43 +32,60 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
   ];
 
   const productRoutes: MetadataRoute.Sitemap = [];
-  let page = 1;
-  let hasMore = true;
+  let productPage = 1;
+  let hasMoreProducts = true;
 
-  while (hasMore) {
-    const { data: response } = await productsControllerFindAll({
-      query: { page, limit: 100 },
-    });
+  while (hasMoreProducts) {
+    try {
+      const { data: response } = await productsControllerFindAll({
+        query: { page: productPage, limit: 100 },
+      });
 
-    if (response?.data) {
-      for (const product of response.data) {
-        productRoutes.push({
-          url: `${siteUrl}/products/${product.slug}`,
-          lastModified: new Date(product.createdAt),
-          changeFrequency: 'weekly',
-          priority: 0.7,
-        });
+      if (response?.data) {
+        for (const product of response.data) {
+          productRoutes.push({
+            url: `${siteUrl}/products/${product.slug}`,
+            lastModified: new Date(product.createdAt),
+            changeFrequency: 'weekly',
+            priority: 0.7,
+          });
+        }
+        hasMoreProducts = response.meta.hasNextPage;
+        productPage++;
+      } else {
+        hasMoreProducts = false;
       }
-      hasMore = response.meta.hasNextPage;
-      page++;
-    } else {
-      hasMore = false;
+    } catch {
+      hasMoreProducts = false;
     }
   }
 
   const categoryRoutes: MetadataRoute.Sitemap = [];
-  const { data: categoriesResponse } = await categoriesControllerFindAll({
-    query: { limit: '100' },
-  });
+  let categoryPage = 1;
+  let hasMoreCategories = true;
 
-  if (categoriesResponse?.data) {
-    for (const category of categoriesResponse.data) {
-      categoryRoutes.push({
-        url: `${siteUrl}/categories/${category.slug}`,
-        lastModified: new Date(),
-        changeFrequency: 'weekly',
-        priority: 0.8,
+  while (hasMoreCategories) {
+    try {
+      const { data: categoriesResponse } = await categoriesControllerFindAll({
+        query: { page: String(categoryPage), limit: '100' },
       });
+
+      if (categoriesResponse?.data) {
+        for (const category of categoriesResponse.data) {
+          categoryRoutes.push({
+            url: `${siteUrl}/categories/${category.slug}`,
+            lastModified: new Date(category.updatedAt),
+            changeFrequency: 'weekly',
+            priority: 0.8,
+          });
+        }
+        hasMoreCategories = categoriesResponse.meta?.hasNextPage ?? false;
+        categoryPage++;
+      } else {
+        hasMoreCategories = false;
+      }
+    } catch {
+      hasMoreCategories = false;
     }
   }
 

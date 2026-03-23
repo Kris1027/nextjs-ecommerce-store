@@ -98,20 +98,31 @@ const ProductPage = async ({ params }: ProductPageProps) => {
     productName: product.name,
   });
 
-  const siteUrl = env.NEXT_PUBLIC_SITE_URL;
+  const siteUrl = env.NEXT_PUBLIC_SITE_URL.replace(/\/+$/, '');
   const description =
     typeof product.description === 'string'
       ? product.description
       : `Buy ${product.name} at our store.`;
 
-  const reviews = reviewsResponse?.data?.data;
-  const reviewData = reviews?.map((r) => ({
-    rating: r.rating,
-    comment: r.comment,
-    userName:
-      [r.user.firstName, r.user.lastName].filter(Boolean).join(' ') ||
-      'Anonymous',
-  }));
+  const reviewsPayload = reviewsResponse?.data;
+  const reviews = reviewsPayload?.data;
+  const totalReviews = reviewsPayload?.meta?.total;
+
+  const hasCompleteReviewData =
+    Array.isArray(reviews) &&
+    typeof totalReviews === 'number' &&
+    totalReviews <= 100 &&
+    totalReviews === reviews.length;
+
+  const reviewData = hasCompleteReviewData
+    ? reviews.map((r) => ({
+        rating: r.rating,
+        comment: r.comment,
+        userName:
+          [r.user.firstName, r.user.lastName].filter(Boolean).join(' ') ||
+          'Anonymous',
+      }))
+    : undefined;
 
   return (
     <div className='space-y-12'>

@@ -15,6 +15,7 @@ import {
   buildWebSiteJsonLd,
 } from '@/components/seo/json-ld';
 import { env } from '@/config/env';
+import { STORE_NAME } from '@/lib/constants';
 import '@/api/client';
 
 export const metadata: Metadata = {
@@ -46,12 +47,12 @@ const Home = async () => {
   const categories: CategoryResponseDto[] =
     categoriesResponse?.data?.data ?? [];
 
-  const siteUrl = env.NEXT_PUBLIC_SITE_URL;
+  const siteUrl = env.NEXT_PUBLIC_SITE_URL.replace(/\/+$/, '');
 
   return (
     <>
-      <JsonLd data={buildOrganizationJsonLd(siteUrl)} />
-      <JsonLd data={buildWebSiteJsonLd(siteUrl)} />
+      <JsonLd data={buildOrganizationJsonLd(siteUrl, STORE_NAME)} />
+      <JsonLd data={buildWebSiteJsonLd(siteUrl, STORE_NAME)} />
       <HeroSection />
       <FeaturedProducts products={featuredProducts} />
       <CategoryShowcase categories={categories} />

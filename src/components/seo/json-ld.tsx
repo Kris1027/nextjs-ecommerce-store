@@ -2,10 +2,16 @@ type JsonLdProps = {
   data: Record<string, unknown>;
 };
 
+const serializeJsonLd = (data: Record<string, unknown>): string =>
+  JSON.stringify(data)
+    .replace(/</g, '\\u003c')
+    .replace(/>/g, '\\u003e')
+    .replace(/&/g, '\\u0026');
+
 const JsonLd = ({ data }: JsonLdProps) => (
   <script
     type='application/ld+json'
-    dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+    dangerouslySetInnerHTML={{ __html: serializeJsonLd(data) }}
   />
 );
 
@@ -84,17 +90,23 @@ const buildBreadcrumbJsonLd = (
   })),
 });
 
-const buildOrganizationJsonLd = (siteUrl: string): Record<string, unknown> => ({
+const buildOrganizationJsonLd = (
+  siteUrl: string,
+  storeName: string,
+): Record<string, unknown> => ({
   '@context': 'https://schema.org',
   '@type': 'Organization',
-  name: 'Ecommerce Store',
+  name: storeName,
   url: siteUrl,
 });
 
-const buildWebSiteJsonLd = (siteUrl: string): Record<string, unknown> => ({
+const buildWebSiteJsonLd = (
+  siteUrl: string,
+  storeName: string,
+): Record<string, unknown> => ({
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  name: 'Ecommerce Store',
+  name: storeName,
   url: siteUrl,
   potentialAction: {
     '@type': 'SearchAction',

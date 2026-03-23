@@ -148,7 +148,7 @@ const CategoryPage = async ({ params, searchParams }: CategoryPageProps) => {
     hasPrevPage: false,
   };
 
-  const siteUrl = env.NEXT_PUBLIC_SITE_URL;
+  const siteUrl = env.NEXT_PUBLIC_SITE_URL.replace(/\/+$/, '');
 
   return (
     <div className='space-y-6'>
