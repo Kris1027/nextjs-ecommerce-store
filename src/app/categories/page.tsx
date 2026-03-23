@@ -7,7 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import '@/api/client';
 
 export const metadata: Metadata = {
-  title: 'Categories | Ecommerce Store',
+  title: 'Categories',
   description: 'Browse all product categories.',
 };
 

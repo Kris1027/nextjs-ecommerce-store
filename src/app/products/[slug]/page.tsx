@@ -31,11 +31,11 @@ export const generateMetadata = async ({
   const product = response?.data?.data;
 
   if (!product) {
-    return { title: 'Product Not Found | Ecommerce Store' };
+    return { title: 'Product Not Found' };
   }
 
   return {
-    title: `${product.name} | Ecommerce Store`,
+    title: product.name,
     description:
       typeof product.description === 'string'
         ? product.description

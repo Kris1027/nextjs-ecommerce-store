@@ -16,7 +16,7 @@ import { MobileFilters } from '@/components/products/mobile-filters';
 import '@/api/client';
 
 export const metadata: Metadata = {
-  title: 'Products | Ecommerce Store',
+  title: 'Products',
   description:
     'Browse our full catalog of products. Filter by category, price, and more.',
 };

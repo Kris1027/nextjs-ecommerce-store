@@ -17,9 +17,33 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
+const STORE_NAME = 'Ecommerce Store';
+const STORE_DESCRIPTION =
+  'Discover quality products at great prices. Shop featured items, new arrivals, and browse categories.';
+
 export const metadata: Metadata = {
-  title: 'Ecommerce Store',
-  description: 'Modern ecommerce store built with Next.js',
+  title: {
+    default: STORE_NAME,
+    template: `%s | ${STORE_NAME}`,
+  },
+  description: STORE_DESCRIPTION,
+  openGraph: {
+    type: 'website',
+    siteName: STORE_NAME,
+    title: {
+      default: STORE_NAME,
+      template: `%s | ${STORE_NAME}`,
+    },
+    description: STORE_DESCRIPTION,
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: {
+      default: STORE_NAME,
+      template: `%s | ${STORE_NAME}`,
+    },
+    description: STORE_DESCRIPTION,
+  },
 };
 
 const RootLayout = ({

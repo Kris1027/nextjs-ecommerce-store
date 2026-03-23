@@ -12,7 +12,7 @@ import type { CategoryResponseDto } from '@/api/generated/types.gen';
 import '@/api/client';
 
 export const metadata: Metadata = {
-  title: 'Home | Ecommerce Store',
+  title: 'Home',
   description:
     'Discover quality products at great prices. Shop featured items, new arrivals, and browse categories.',
 };

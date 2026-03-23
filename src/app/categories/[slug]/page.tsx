@@ -49,11 +49,11 @@ export const generateMetadata = async ({
   const category = response?.data?.data;
 
   if (!category) {
-    return { title: 'Category Not Found | Ecommerce Store' };
+    return { title: 'Category Not Found' };
   }
 
   return {
-    title: `${category.name} | Ecommerce Store`,
+    title: category.name,
     description:
       typeof category.description === 'string'
         ? category.description
