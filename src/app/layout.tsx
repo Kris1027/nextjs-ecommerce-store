@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { Providers } from '@/components/providers';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
+import { OfflineBanner } from '@/components/layout/offline-banner';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -34,6 +35,7 @@ const RootLayout = ({
     >
       <body className='antialiased'>
         <Providers>
+          <OfflineBanner />
           <Header />
           <main className='min-h-[calc(100vh-4rem)]'>{children}</main>
           <Footer />
