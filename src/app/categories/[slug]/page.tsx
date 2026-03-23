@@ -22,6 +22,8 @@ import { ProductFilters } from '@/components/products/product-filters';
 import { ProductSort } from '@/components/products/product-sort';
 import { ProductPagination } from '@/components/products/product-pagination';
 import { MobileFilters } from '@/components/products/mobile-filters';
+import { JsonLd, buildBreadcrumbJsonLd } from '@/components/seo/json-ld';
+import { env } from '@/config/env';
 import '@/api/client';
 
 type CategoryPageProps = {
@@ -146,8 +148,11 @@ const CategoryPage = async ({ params, searchParams }: CategoryPageProps) => {
     hasPrevPage: false,
   };
 
+  const siteUrl = env.NEXT_PUBLIC_SITE_URL;
+
   return (
     <div className='space-y-6'>
+      <JsonLd data={buildBreadcrumbJsonLd(breadcrumbItems, siteUrl)} />
       <Breadcrumb items={breadcrumbItems} />
 
       <div>

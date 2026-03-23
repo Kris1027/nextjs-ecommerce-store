@@ -9,6 +9,12 @@ import { CategoryShowcase } from '@/components/home/category-showcase';
 import { NewArrivals } from '@/components/home/new-arrivals';
 import type { ProductListItemDto } from '@/api/generated/types.gen';
 import type { CategoryResponseDto } from '@/api/generated/types.gen';
+import {
+  JsonLd,
+  buildOrganizationJsonLd,
+  buildWebSiteJsonLd,
+} from '@/components/seo/json-ld';
+import { env } from '@/config/env';
 import '@/api/client';
 
 export const metadata: Metadata = {
@@ -40,8 +46,12 @@ const Home = async () => {
   const categories: CategoryResponseDto[] =
     categoriesResponse?.data?.data ?? [];
 
+  const siteUrl = env.NEXT_PUBLIC_SITE_URL;
+
   return (
     <>
+      <JsonLd data={buildOrganizationJsonLd(siteUrl)} />
+      <JsonLd data={buildWebSiteJsonLd(siteUrl)} />
       <HeroSection />
       <FeaturedProducts products={featuredProducts} />
       <CategoryShowcase categories={categories} />
