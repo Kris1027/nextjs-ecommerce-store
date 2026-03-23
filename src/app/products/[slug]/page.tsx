@@ -1,18 +1,18 @@
+import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import {
   productsControllerFindBySlug,
-  productsControllerFindAll,
   categoriesControllerFindAllTree,
 } from '@/api/generated/sdk.gen';
-import type { ProductListItemDto } from '@/api/generated/types.gen';
 import {
   Breadcrumb,
   buildBreadcrumbItems,
   type CategoryWithChildren,
 } from '@/components/ui/breadcrumb';
 import { ProductDetail } from '@/components/products/product-detail';
-import { ProductGrid } from '@/components/products/product-grid';
+import { RelatedProducts } from '@/components/products/related-products';
+import { RelatedProductsSkeleton } from '@/components/skeletons/related-products-skeleton';
 import { ReviewsSection } from '@/components/reviews/reviews-section';
 import '@/api/client';
 
@@ -68,17 +68,6 @@ const ProductPage = async ({ params }: ProductPageProps) => {
     productName: product.name,
   });
 
-  const relatedResponse = await productsControllerFindAll({
-    query: {
-      categoryId: product.categoryId,
-      limit: 4,
-    },
-  }).catch(() => null);
-
-  const relatedProducts: ProductListItemDto[] = (
-    relatedResponse?.data?.data ?? []
-  ).filter((p) => p.id !== product.id);
-
   return (
     <div className='space-y-12'>
       <Breadcrumb items={breadcrumbItems} />
@@ -87,12 +76,12 @@ const ProductPage = async ({ params }: ProductPageProps) => {
 
       <ReviewsSection productId={product.id} />
 
-      {relatedProducts.length > 0 && (
-        <section className='space-y-4'>
-          <h2 className='text-xl font-bold'>Related Products</h2>
-          <ProductGrid products={relatedProducts} />
-        </section>
-      )}
+      <Suspense fallback={<RelatedProductsSkeleton />}>
+        <RelatedProducts
+          categoryId={product.categoryId}
+          currentProductId={product.id}
+        />
+      </Suspense>
     </div>
   );
 };

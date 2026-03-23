@@ -77,4 +77,4 @@ const ReviewsSection = ({ productId }: ReviewsSectionProps) => (
   </Suspense>
 );
 
-export { ReviewsSection };
+export { ReviewsSection, ReviewsSectionSkeleton };
