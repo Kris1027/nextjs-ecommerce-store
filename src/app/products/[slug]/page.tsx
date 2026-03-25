@@ -23,6 +23,8 @@ import {
 import { env } from '@/config/env';
 import '@/api/client';
 
+export const revalidate = 60;
+
 type ProductPageProps = {
   params: Promise<{ slug: string }>;
 };

@@ -13,7 +13,7 @@ const FeaturedProducts = ({ products }: FeaturedProductsProps) => {
       <h2 className='mb-8 text-2xl font-bold tracking-tight'>
         Featured Products
       </h2>
-      <ProductGrid products={products} />
+      <ProductGrid products={products} priorityCount={4} />
     </section>
   );
 };

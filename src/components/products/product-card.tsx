@@ -7,14 +7,16 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { formatPrice } from '@/lib/format';
+import { blurDataUrl } from '@/lib/image';
 import { useCart } from '@/hooks/use-cart';
 import type { ProductListItemDto } from '@/api/generated/types.gen';
 
 type ProductCardProps = {
   product: ProductListItemDto;
+  priority?: boolean;
 };
 
-const ProductCard = ({ product }: ProductCardProps) => {
+const ProductCard = ({ product, priority = false }: ProductCardProps) => {
   const { addItem } = useCart();
 
   const handleAddToCart = (event: React.MouseEvent) => {
@@ -37,6 +39,9 @@ const ProductCard = ({ product }: ProductCardProps) => {
               alt={imageAlt}
               fill
               sizes='(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw'
+              priority={priority}
+              placeholder='blur'
+              blurDataURL={blurDataUrl()}
               className='object-cover transition-transform duration-300 group-hover:scale-105'
             />
           ) : (

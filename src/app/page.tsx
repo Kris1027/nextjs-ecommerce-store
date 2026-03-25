@@ -18,6 +18,8 @@ import { env } from '@/config/env';
 import { STORE_NAME } from '@/lib/constants';
 import '@/api/client';
 
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   title: 'Home',
   description:

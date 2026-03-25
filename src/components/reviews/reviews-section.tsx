@@ -1,6 +1,7 @@
 'use client';
 
 import { Suspense, useState } from 'react';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useAuthStore } from '@/stores/auth.store';
 import { Button } from '@/components/ui/button';
@@ -9,7 +10,12 @@ import { Card, CardContent } from '@/components/ui/card';
 import { ReviewSummary } from '@/components/reviews/review-summary';
 import { ReviewFilters } from '@/components/reviews/review-filters';
 import { ReviewList } from '@/components/reviews/review-list';
-import { ReviewForm } from '@/components/reviews/review-form';
+
+const ReviewForm = dynamic(() =>
+  import('@/components/reviews/review-form').then((mod) => ({
+    default: mod.ReviewForm,
+  })),
+);
 
 type ReviewsSectionProps = {
   productId: string;
@@ -60,7 +66,7 @@ const ReviewsSectionContent = ({ productId }: ReviewsSectionProps) => {
 
       <ReviewList productId={productId} currentUserId={user?.id} />
 
-      {user && (
+      {user && formOpen && (
         <ReviewForm
           productId={productId}
           open={formOpen}

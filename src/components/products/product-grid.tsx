@@ -3,9 +3,10 @@ import type { ProductListItemDto } from '@/api/generated/types.gen';
 
 type ProductGridProps = {
   products: ProductListItemDto[];
+  priorityCount?: number;
 };
 
-const ProductGrid = ({ products }: ProductGridProps) => {
+const ProductGrid = ({ products, priorityCount = 0 }: ProductGridProps) => {
   if (products.length === 0) {
     return (
       <p className='text-center text-sm text-muted-foreground'>
@@ -16,8 +17,12 @@ const ProductGrid = ({ products }: ProductGridProps) => {
 
   return (
     <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4'>
-      {products.map((product) => (
-        <ProductCard key={product.id} product={product} />
+      {products.map((product, index) => (
+        <ProductCard
+          key={product.id}
+          product={product}
+          priority={index < priorityCount}
+        />
       ))}
     </div>
   );
