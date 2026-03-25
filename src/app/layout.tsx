@@ -81,7 +81,11 @@ const RootLayout = ({
           </a>
           <OfflineBanner />
           <Header />
-          <main id='main-content' className='min-h-[calc(100vh-4rem)]'>
+          <main
+            id='main-content'
+            tabIndex={-1}
+            className='min-h-[calc(100vh-4rem)] outline-none'
+          >
             {children}
           </main>
           <Footer />

@@ -11,9 +11,7 @@ const PAGES = [
 ];
 
 for (const { name, path } of PAGES) {
-  test(`${name} page has no critical accessibility violations`, async ({
-    page,
-  }) => {
+  test(`${name} page has no accessibility violations`, async ({ page }) => {
     await page.goto(path);
     await page.waitForLoadState('domcontentloaded');
 
@@ -37,6 +35,8 @@ test('skip-to-content link works', async ({ page }) => {
 
   const main = page.locator('#main-content');
   await expect(main).toBeAttached();
+  await expect(page).toHaveURL(/#main-content$/);
+  await expect(main).toBeFocused();
 });
 
 test('keyboard navigation works in header', async ({ page }) => {
