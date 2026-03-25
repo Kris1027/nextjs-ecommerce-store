@@ -10,7 +10,7 @@ const priceSchema = z
   .optional();
 
 export const productsSearchParamsSchema = z.object({
-  category: z.string().uuid().optional(),
+  category: z.uuid().optional(),
   minPrice: priceSchema,
   maxPrice: priceSchema,
   isFeatured: z.enum(['true', 'false']).optional(),
