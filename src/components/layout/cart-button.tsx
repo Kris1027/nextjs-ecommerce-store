@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ShoppingCart } from '@phosphor-icons/react';
+import { ShoppingCartIcon } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/hooks/use-cart';
 
@@ -17,12 +17,18 @@ const CartButton = () => {
       aria-label={`Shopping cart${totalItems > 0 ? `, ${totalItems} items` : ''}`}
       className='relative'
     >
-      <ShoppingCart size={18} />
+      <ShoppingCartIcon size={18} />
       {totalItems > 0 && (
-        <span className='absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground'>
+        <span
+          aria-hidden='true'
+          className='absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground'
+        >
           {totalItems > 99 ? '99+' : totalItems}
         </span>
       )}
+      <span className='sr-only' aria-live='polite'>
+        {totalItems > 0 ? `${totalItems} items in cart` : 'Cart is empty'}
+      </span>
     </Button>
   );
 };

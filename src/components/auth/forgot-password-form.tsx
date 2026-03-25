@@ -61,7 +61,9 @@ export const ForgotPasswordForm = () => {
           {...register('email')}
         />
         {errors.email && (
-          <p className='text-destructive text-xs'>{errors.email.message}</p>
+          <p role='alert' className='text-destructive text-xs'>
+            {errors.email.message}
+          </p>
         )}
       </div>
 

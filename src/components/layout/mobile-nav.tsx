@@ -82,13 +82,15 @@ const MobileNav = ({ categories }: MobileNavProps) => {
         </SheetHeader>
 
         <div className='flex flex-col gap-4 p-4'>
-          <form onSubmit={handleSearch} className='relative'>
+          <form onSubmit={handleSearch} role='search' className='relative'>
             <MagnifyingGlassIcon
               size={16}
               className='absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground'
+              aria-hidden='true'
             />
             <Input
               type='search'
+              aria-label='Search products'
               placeholder='Search products...'
               value={search}
               onChange={(e) => setSearch(e.target.value)}

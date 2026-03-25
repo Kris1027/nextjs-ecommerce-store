@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { MagnifyingGlass } from '@phosphor-icons/react';
+import { MagnifyingGlassIcon } from '@phosphor-icons/react';
 import { Input } from '@/components/ui/input';
 
 const DEBOUNCE_MS = 400;
@@ -40,13 +40,15 @@ const SearchInput = () => {
   };
 
   return (
-    <div className='relative hidden w-full max-w-sm md:block'>
-      <MagnifyingGlass
+    <div role='search' className='relative hidden w-full max-w-sm md:block'>
+      <MagnifyingGlassIcon
         size={16}
         className='absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground'
+        aria-hidden='true'
       />
       <Input
         type='search'
+        aria-label='Search products'
         placeholder='Search products...'
         value={query}
         onChange={(e) => setQuery(e.target.value)}

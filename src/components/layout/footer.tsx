@@ -33,7 +33,7 @@ const Footer = () => {
             </p>
           </div>
 
-          <div>
+          <nav aria-label='Shop'>
             <h3 className='text-sm font-semibold'>Shop</h3>
             <ul className='mt-3 space-y-2'>
               {footerLinks.shop.map((link) => (
@@ -47,14 +47,14 @@ const Footer = () => {
                 </li>
               ))}
             </ul>
-          </div>
+          </nav>
 
-          <div>
+          <nav aria-label='Account'>
             <h3 className='text-sm font-semibold'>Account</h3>
             <FooterAccountLinks />
-          </div>
+          </nav>
 
-          <div>
+          <nav aria-label='Support'>
             <h3 className='text-sm font-semibold'>Support</h3>
             <ul className='mt-3 space-y-2'>
               {footerLinks.support.map((link) => (
@@ -68,7 +68,7 @@ const Footer = () => {
                 </li>
               ))}
             </ul>
-          </div>
+          </nav>
         </div>
 
         <div className='mt-12 border-t pt-8 text-center text-sm text-muted-foreground'>

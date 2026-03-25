@@ -60,8 +60,13 @@ const CheckoutPage = () => {
       <nav className='mb-8' aria-label='Checkout steps'>
         <ol className='flex items-center gap-2'>
           {STEPS.map((step, index) => (
-            <li key={step} className='flex items-center gap-2'>
+            <li
+              key={step}
+              className='flex items-center gap-2'
+              aria-current={index === currentStep ? 'step' : undefined}
+            >
               <span
+                aria-hidden='true'
                 className={`flex size-8 items-center justify-center rounded-full text-sm font-medium ${
                   index === currentStep
                     ? 'bg-primary text-primary-foreground'
@@ -81,8 +86,17 @@ const CheckoutPage = () => {
               >
                 {step}
               </span>
+              <span className='sr-only'>
+                {index < currentStep
+                  ? '(completed)'
+                  : index === currentStep
+                    ? '(current)'
+                    : ''}
+              </span>
               {index < STEPS.length - 1 && (
-                <span className='text-muted-foreground mx-2'>—</span>
+                <span aria-hidden='true' className='text-muted-foreground mx-2'>
+                  —
+                </span>
               )}
             </li>
           ))}

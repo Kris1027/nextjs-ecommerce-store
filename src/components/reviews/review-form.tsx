@@ -154,7 +154,7 @@ const ReviewForm = ({
               )}
             />
             {errors.rating && (
-              <p className='text-xs text-destructive'>
+              <p role='alert' className='text-xs text-destructive'>
                 {errors.rating.message}
               </p>
             )}
@@ -167,7 +167,9 @@ const ReviewForm = ({
               {...register('title')}
             />
             {errors.title && (
-              <p className='text-xs text-destructive'>{errors.title.message}</p>
+              <p role='alert' className='text-xs text-destructive'>
+                {errors.title.message}
+              </p>
             )}
           </div>
           <div className='grid gap-2'>
@@ -179,7 +181,7 @@ const ReviewForm = ({
               {...register('comment')}
             />
             {errors.comment && (
-              <p className='text-xs text-destructive'>
+              <p role='alert' className='text-xs text-destructive'>
                 {errors.comment.message}
               </p>
             )}
