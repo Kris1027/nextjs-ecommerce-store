@@ -24,18 +24,15 @@ import { ProductPagination } from '@/components/products/product-pagination';
 import { MobileFilters } from '@/components/products/mobile-filters';
 import { JsonLd, buildBreadcrumbJsonLd } from '@/components/seo/json-ld';
 import { env } from '@/config/env';
+import {
+  categorySearchParamsSchema,
+  CATEGORY_DEFAULTS,
+} from '@/schemas/search-params.schema';
 import '@/api/client';
 
 type CategoryPageProps = {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<{
-    sortBy?: string;
-    sortOrder?: string;
-    page?: string;
-    minPrice?: string;
-    maxPrice?: string;
-    isFeatured?: string;
-  }>;
+  searchParams: Promise<Record<string, string | undefined>>;
 };
 
 const PRODUCTS_PER_PAGE = 12;
@@ -84,7 +81,9 @@ export const generateMetadata = async ({
 
 const CategoryPage = async ({ params, searchParams }: CategoryPageProps) => {
   const { slug } = await params;
-  const search = await searchParams;
+  const raw = await searchParams;
+  const parsed = categorySearchParamsSchema.safeParse(raw);
+  const search = parsed.success ? parsed.data : CATEGORY_DEFAULTS;
 
   const categoryResponse = await categoriesControllerFindBySlug({
     path: { slug },
@@ -126,14 +125,14 @@ const CategoryPage = async ({ params, searchParams }: CategoryPageProps) => {
 
   const productsResponse = await productsControllerFindAll({
     query: {
-      page: Number(search.page) || 1,
+      page: search.page,
       limit: PRODUCTS_PER_PAGE,
       categoryId: category.id,
       minPrice: search.minPrice,
       maxPrice: search.maxPrice,
       isFeatured: search.isFeatured,
       sortBy: search.sortBy,
-      sortOrder: search.sortOrder as 'asc' | 'desc' | undefined,
+      sortOrder: search.sortOrder,
     },
   }).catch(() => null);
 
