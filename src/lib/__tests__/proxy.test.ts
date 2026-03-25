@@ -56,7 +56,7 @@ describe('proxy', () => {
     it('should include nonce in script-src directive', () => {
       const response = proxy(createRequest('/'));
       const csp = response.headers.get('Content-Security-Policy') ?? '';
-      expect(csp).toMatch(/script-src[^;]*'nonce-[A-Za-z0-9+/=]+'[^;]*/);
+      expect(csp).toMatch(/script-src[^;]*'nonce-[a-f0-9-]+'[^;]*/);
     });
 
     it('should include strict-dynamic in script-src', () => {

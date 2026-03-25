@@ -24,7 +24,10 @@ import { ProductPagination } from '@/components/products/product-pagination';
 import { MobileFilters } from '@/components/products/mobile-filters';
 import { JsonLd, buildBreadcrumbJsonLd } from '@/components/seo/json-ld';
 import { env } from '@/config/env';
-import { categorySearchParamsSchema } from '@/schemas/search-params.schema';
+import {
+  categorySearchParamsSchema,
+  CATEGORY_DEFAULTS,
+} from '@/schemas/search-params.schema';
 import '@/api/client';
 
 type CategoryPageProps = {
@@ -79,7 +82,8 @@ export const generateMetadata = async ({
 const CategoryPage = async ({ params, searchParams }: CategoryPageProps) => {
   const { slug } = await params;
   const raw = await searchParams;
-  const search = categorySearchParamsSchema.parse(raw);
+  const parsed = categorySearchParamsSchema.safeParse(raw);
+  const search = parsed.success ? parsed.data : CATEGORY_DEFAULTS;
 
   const categoryResponse = await categoriesControllerFindBySlug({
     path: { slug },

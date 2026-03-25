@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+const sortBySchema = z.enum(['createdAt', 'price', 'name']).optional();
+
 const sortOrderSchema = z.enum(['asc', 'desc']).optional();
 
 const pageSchema = z.coerce.number().int().positive().optional().default(1);
@@ -14,7 +16,7 @@ export const productsSearchParamsSchema = z.object({
   minPrice: priceSchema,
   maxPrice: priceSchema,
   isFeatured: z.enum(['true', 'false']).optional(),
-  sortBy: z.string().optional(),
+  sortBy: sortBySchema,
   sortOrder: sortOrderSchema,
   page: pageSchema,
   search: z.string().max(200).optional(),
@@ -22,19 +24,31 @@ export const productsSearchParamsSchema = z.object({
 
 export const searchPageParamsSchema = z.object({
   q: z.string().max(200).optional(),
-  sortBy: z.string().optional(),
+  sortBy: sortBySchema,
   sortOrder: sortOrderSchema,
   page: pageSchema,
 });
 
 export const categorySearchParamsSchema = z.object({
-  sortBy: z.string().optional(),
+  sortBy: sortBySchema,
   sortOrder: sortOrderSchema,
   page: pageSchema,
   minPrice: priceSchema,
   maxPrice: priceSchema,
   isFeatured: z.enum(['true', 'false']).optional(),
 });
+
+export const PRODUCTS_DEFAULTS: ProductsSearchParams = {
+  page: 1,
+};
+
+export const SEARCH_DEFAULTS: SearchPageParams = {
+  page: 1,
+};
+
+export const CATEGORY_DEFAULTS: CategorySearchParams = {
+  page: 1,
+};
 
 export type ProductsSearchParams = z.infer<typeof productsSearchParamsSchema>;
 export type SearchPageParams = z.infer<typeof searchPageParamsSchema>;

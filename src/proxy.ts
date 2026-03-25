@@ -84,7 +84,7 @@ export const proxy = (request: NextRequest): NextResponse => {
   }
 
   // Generate CSP nonce for every request
-  const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
+  const nonce = crypto.randomUUID();
   const csp = buildCsp(nonce);
 
   // Pass nonce to server components via request headers
@@ -109,7 +109,7 @@ export const config = {
      * - _next/static (static files)
      * - _next/image (image optimization)
      * - favicon.ico, sitemap.xml, robots.txt (metadata files)
-     * - public folder assets (images, icons)
+     * - image/icon assets with extensions: svg, png, jpg, jpeg, gif, webp, ico
      */
     '/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)',
   ],

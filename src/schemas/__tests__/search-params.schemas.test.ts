@@ -73,6 +73,19 @@ describe('productsSearchParamsSchema', () => {
     const result = productsSearchParamsSchema.parse({ category: uuid });
     expect(result.category).toBe(uuid);
   });
+
+  it('should reject invalid sortBy values', () => {
+    expect(() =>
+      productsSearchParamsSchema.parse({ sortBy: 'malicious' }),
+    ).toThrow();
+  });
+
+  it('should accept valid sortBy values', () => {
+    for (const sortBy of ['createdAt', 'price', 'name']) {
+      const result = productsSearchParamsSchema.parse({ sortBy });
+      expect(result.sortBy).toBe(sortBy);
+    }
+  });
 });
 
 describe('searchPageParamsSchema', () => {

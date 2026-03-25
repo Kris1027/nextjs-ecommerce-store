@@ -13,7 +13,10 @@ import { ProductFilters } from '@/components/products/product-filters';
 import { ProductSort } from '@/components/products/product-sort';
 import { ProductPagination } from '@/components/products/product-pagination';
 import { MobileFilters } from '@/components/products/mobile-filters';
-import { productsSearchParamsSchema } from '@/schemas/search-params.schema';
+import {
+  productsSearchParamsSchema,
+  PRODUCTS_DEFAULTS,
+} from '@/schemas/search-params.schema';
 import '@/api/client';
 
 export const metadata: Metadata = {
@@ -30,7 +33,8 @@ const PRODUCTS_PER_PAGE = 12;
 
 const ProductsPage = async ({ searchParams }: ProductsPageProps) => {
   const raw = await searchParams;
-  const params = productsSearchParamsSchema.parse(raw);
+  const parsed = productsSearchParamsSchema.safeParse(raw);
+  const params = parsed.success ? parsed.data : PRODUCTS_DEFAULTS;
 
   const [productsResponse, categoriesResponse] = await Promise.all([
     productsControllerFindAll({

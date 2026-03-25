@@ -43,15 +43,34 @@ const refreshTokens = async (): Promise<boolean> => {
   }
 };
 
+const DEFAULT_RETRY_MS = 2000;
+const MAX_RETRY_MS = 10_000;
+
+const computeRetryAfterMs = (retryAfter: string | null): number => {
+  if (!retryAfter) return DEFAULT_RETRY_MS;
+
+  const seconds = Number(retryAfter);
+  if (Number.isFinite(seconds) && seconds >= 0) {
+    return Math.min(seconds * 1000, MAX_RETRY_MS);
+  }
+
+  const parsedDateMs = Date.parse(retryAfter);
+  if (!Number.isNaN(parsedDateMs)) {
+    const deltaMs = parsedDateMs - Date.now();
+    if (deltaMs > 0) return Math.min(deltaMs, MAX_RETRY_MS);
+  }
+
+  return DEFAULT_RETRY_MS;
+};
+
 // Handle 429 responses: rate limited — wait and retry once
 client.interceptors.response.use(async (response, request) => {
   if (response.status !== 429) return response;
 
   const retryAfter = response.headers.get('Retry-After');
-  const waitMs = retryAfter ? Number(retryAfter) * 1000 : 2000;
-  const clampedMs = Math.min(waitMs, 10_000);
+  const waitMs = computeRetryAfterMs(retryAfter);
 
-  await new Promise((resolve) => setTimeout(resolve, clampedMs));
+  await new Promise((resolve) => setTimeout(resolve, waitMs));
 
   return fetch(request.clone());
 });

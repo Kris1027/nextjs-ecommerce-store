@@ -7,7 +7,10 @@ import type {
 import { ProductGrid } from '@/components/products/product-grid';
 import { ProductSort } from '@/components/products/product-sort';
 import { ProductPagination } from '@/components/products/product-pagination';
-import { searchPageParamsSchema } from '@/schemas/search-params.schema';
+import {
+  searchPageParamsSchema,
+  SEARCH_DEFAULTS,
+} from '@/schemas/search-params.schema';
 import '@/api/client';
 
 type SearchPageProps = {
@@ -18,7 +21,8 @@ export const generateMetadata = async ({
   searchParams,
 }: SearchPageProps): Promise<Metadata> => {
   const raw = await searchParams;
-  const params = searchPageParamsSchema.parse(raw);
+  const parsed = searchPageParamsSchema.safeParse(raw);
+  const params = parsed.success ? parsed.data : SEARCH_DEFAULTS;
 
   return {
     title: params.q ? `Search results for "${params.q}"` : 'Search',
@@ -30,7 +34,8 @@ const PRODUCTS_PER_PAGE = 12;
 
 const SearchPage = async ({ searchParams }: SearchPageProps) => {
   const raw = await searchParams;
-  const params = searchPageParamsSchema.parse(raw);
+  const parsed = searchPageParamsSchema.safeParse(raw);
+  const params = parsed.success ? parsed.data : SEARCH_DEFAULTS;
   const query = params.q ?? '';
 
   const response = query

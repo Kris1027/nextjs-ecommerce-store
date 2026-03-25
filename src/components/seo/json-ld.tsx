@@ -1,6 +1,7 @@
+import { headers } from 'next/headers';
+
 type JsonLdProps = {
   data: Record<string, unknown>;
-  nonce?: string;
 };
 
 const serializeJsonLd = (data: Record<string, unknown>): string =>
@@ -9,13 +10,17 @@ const serializeJsonLd = (data: Record<string, unknown>): string =>
     .replace(/>/g, '\\u003e')
     .replace(/&/g, '\\u0026');
 
-const JsonLd = ({ data, nonce }: JsonLdProps) => (
-  <script
-    type='application/ld+json'
-    nonce={nonce}
-    dangerouslySetInnerHTML={{ __html: serializeJsonLd(data) }}
-  />
-);
+const JsonLd = async ({ data }: JsonLdProps) => {
+  const nonce = (await headers()).get('x-nonce') ?? undefined;
+
+  return (
+    <script
+      type='application/ld+json'
+      nonce={nonce}
+      dangerouslySetInnerHTML={{ __html: serializeJsonLd(data) }}
+    />
+  );
+};
 
 type ProductJsonLdParams = {
   name: string;
