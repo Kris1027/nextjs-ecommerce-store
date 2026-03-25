@@ -269,7 +269,7 @@ All environment variables are validated at build time via Zod. The app will not 
 - Rate limit handling with Retry-After support
 - Protected route middleware (auth-required and auth-redirect)
 - TypeScript strict mode with no `any` types
-- React Compiler lint rules for purity and immutability
+- React Compiler-friendly patterns emphasizing purity and immutability
 
 ---
 
