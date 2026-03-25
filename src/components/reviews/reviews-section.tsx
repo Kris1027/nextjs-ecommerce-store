@@ -66,7 +66,7 @@ const ReviewsSectionContent = ({ productId }: ReviewsSectionProps) => {
 
       <ReviewList productId={productId} currentUserId={user?.id} />
 
-      {user && (
+      {user && formOpen && (
         <ReviewForm
           productId={productId}
           open={formOpen}

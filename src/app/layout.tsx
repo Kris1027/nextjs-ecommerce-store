@@ -63,8 +63,11 @@ const RootLayout = ({
           crossOrigin='anonymous'
         />
         <link rel='dns-prefetch' href='https://res.cloudinary.com' />
-        <link rel='preconnect' href={env.NEXT_PUBLIC_API_URL} />
-        <link rel='dns-prefetch' href={env.NEXT_PUBLIC_API_URL} />
+        <link rel='preconnect' href={new URL(env.NEXT_PUBLIC_API_URL).origin} />
+        <link
+          rel='dns-prefetch'
+          href={new URL(env.NEXT_PUBLIC_API_URL).origin}
+        />
         <link rel='preconnect' href='https://js.stripe.com' />
         <link rel='dns-prefetch' href='https://js.stripe.com' />
       </head>

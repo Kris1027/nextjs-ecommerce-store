@@ -18,7 +18,16 @@ const toBase64 = (str: string): string =>
     ? Buffer.from(str).toString('base64')
     : window.btoa(str);
 
-const blurDataUrl = (width = 400, height = 400): string =>
-  `data:image/svg+xml;base64,${toBase64(shimmer(width, height))}`;
+const cache = new Map<string, string>();
+
+const blurDataUrl = (width = 400, height = 400): string => {
+  const key = `${width}x${height}`;
+  const cached = cache.get(key);
+  if (cached) return cached;
+
+  const result = `data:image/svg+xml;base64,${toBase64(shimmer(width, height))}`;
+  cache.set(key, result);
+  return result;
+};
 
 export { blurDataUrl };

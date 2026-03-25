@@ -76,12 +76,14 @@ const ReviewActions = ({ review, productId }: ReviewActionsProps) => {
         </Button>
       </div>
 
-      <ReviewForm
-        productId={productId}
-        existingReview={review}
-        open={editOpen}
-        onOpenChange={setEditOpen}
-      />
+      {editOpen && (
+        <ReviewForm
+          productId={productId}
+          existingReview={review}
+          open={editOpen}
+          onOpenChange={setEditOpen}
+        />
+      )}
 
       <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
         <DialogContent>
