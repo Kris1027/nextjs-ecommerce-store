@@ -48,6 +48,7 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - run: pnpm api:generate
       - run: pnpm typecheck
 
   test:
@@ -61,6 +62,7 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - run: pnpm api:generate
       - run: pnpm test:coverage
       - uses: actions/upload-artifact@v4
         with:
