@@ -1,7 +1,32 @@
 {
   "name": "nextjs-ecommerce-store",
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "description": "Production-ready customer-facing ecommerce storefront built with Next.js 16, React 19, and Stripe",
+  "author": "Krzysztof Obarzanek (https://github.com/Kris1027)",
   "private": true,
+  "homepage": "https://github.com/Kris1027/nextjs-ecommerce-store#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Kris1027/nextjs-ecommerce-store.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Kris1027/nextjs-ecommerce-store/issues"
+  },
+  "keywords": [
+    "nextjs",
+    "ecommerce",
+    "storefront",
+    "react",
+    "typescript",
+    "stripe",
+    "tailwindcss",
+    "shadcn-ui"
+  ],
+  "engines": {
+    "node": ">=22.0.0",
+    "pnpm": ">=10.0.0"
+  },
+  "license": "SEE LICENSE IN LICENSE",
   "scripts": {
     "dev": "next dev --port 3002",
     "prebuild": "openapi-ts",
@@ -52,7 +77,7 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
-    "@types/node": "^20",
+    "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@vitejs/plugin-react": "^6.0.1",
