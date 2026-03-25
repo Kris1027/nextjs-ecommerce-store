@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Card, CardContent } from '@/components/ui/card';
+import { blurDataUrl } from '@/lib/image';
 import type { CategoryResponseDto } from '@/api/generated/types.gen';
 
 type CategoryShowcaseProps = {
@@ -26,13 +27,15 @@ const CategoryShowcase = ({ categories }: CategoryShowcaseProps) => {
             return (
               <Link key={category.id} href={`/categories/${category.slug}`}>
                 <Card className='group overflow-hidden transition-shadow hover:shadow-md'>
-                  <div className='relative aspect-[4/3] overflow-hidden bg-muted'>
+                  <div className='relative aspect-4/3 overflow-hidden bg-muted'>
                     {imageUrl ? (
                       <Image
                         src={imageUrl}
                         alt={category.name}
                         fill
                         sizes='(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw'
+                        placeholder='blur'
+                        blurDataURL={blurDataUrl(400, 300)}
                         className='object-cover transition-transform duration-300 group-hover:scale-105'
                       />
                     ) : (
