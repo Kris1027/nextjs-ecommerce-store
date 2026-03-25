@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import dynamic from 'next/dynamic';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { PencilSimpleIcon, TrashIcon } from '@phosphor-icons/react';
@@ -17,7 +18,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { ReviewForm } from '@/components/reviews/review-form';
+
+const ReviewForm = dynamic(() =>
+  import('@/components/reviews/review-form').then((mod) => ({
+    default: mod.ReviewForm,
+  })),
+);
 
 type ReviewActionsProps = {
   review: ReviewDto;
