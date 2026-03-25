@@ -16,14 +16,32 @@ const getRefreshTokenCookie = (): string | null => {
 
 const setRefreshTokenCookie = (token: string): void => {
   if (!isBrowser) return;
+
   const maxAge = MAX_AGE_DAYS * 24 * 60 * 60;
-  const secure = isSecure ? '; Secure' : '';
-  document.cookie = `${COOKIE_NAME}=${encodeURIComponent(token)}; path=/; max-age=${maxAge}; SameSite=Lax${secure}`;
+  const parts = [
+    `${COOKIE_NAME}=${encodeURIComponent(token)}`,
+    'path=/',
+    `max-age=${maxAge}`,
+    'SameSite=Lax',
+  ];
+
+  if (isSecure) {
+    parts.push('Secure');
+  }
+
+  document.cookie = parts.join('; ');
 };
 
 const clearRefreshTokenCookie = (): void => {
   if (!isBrowser) return;
-  document.cookie = `${COOKIE_NAME}=; path=/; max-age=0; SameSite=Lax`;
+
+  const parts = [`${COOKIE_NAME}=`, 'path=/', 'max-age=0', 'SameSite=Lax'];
+
+  if (isSecure) {
+    parts.push('Secure');
+  }
+
+  document.cookie = parts.join('; ');
 };
 
 export {

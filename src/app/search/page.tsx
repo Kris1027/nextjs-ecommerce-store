@@ -7,43 +7,40 @@ import type {
 import { ProductGrid } from '@/components/products/product-grid';
 import { ProductSort } from '@/components/products/product-sort';
 import { ProductPagination } from '@/components/products/product-pagination';
+import { searchPageParamsSchema } from '@/schemas/search-params.schema';
 import '@/api/client';
+
+type SearchPageProps = {
+  searchParams: Promise<Record<string, string | undefined>>;
+};
 
 export const generateMetadata = async ({
   searchParams,
 }: SearchPageProps): Promise<Metadata> => {
-  const params = await searchParams;
-  const query = params.q;
+  const raw = await searchParams;
+  const params = searchPageParamsSchema.parse(raw);
 
   return {
-    title: query ? `Search results for "${query}"` : 'Search',
+    title: params.q ? `Search results for "${params.q}"` : 'Search',
     robots: { index: false },
   };
-};
-
-type SearchPageProps = {
-  searchParams: Promise<{
-    q?: string;
-    sortBy?: string;
-    sortOrder?: string;
-    page?: string;
-  }>;
 };
 
 const PRODUCTS_PER_PAGE = 12;
 
 const SearchPage = async ({ searchParams }: SearchPageProps) => {
-  const params = await searchParams;
+  const raw = await searchParams;
+  const params = searchPageParamsSchema.parse(raw);
   const query = params.q ?? '';
 
   const response = query
     ? await productsControllerFindAll({
         query: {
           search: query,
-          page: Number(params.page) || 1,
+          page: params.page,
           limit: PRODUCTS_PER_PAGE,
           sortBy: params.sortBy,
-          sortOrder: params.sortOrder as 'asc' | 'desc' | undefined,
+          sortOrder: params.sortOrder,
         },
       }).catch(() => null)
     : null;

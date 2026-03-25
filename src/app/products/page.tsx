@@ -13,6 +13,7 @@ import { ProductFilters } from '@/components/products/product-filters';
 import { ProductSort } from '@/components/products/product-sort';
 import { ProductPagination } from '@/components/products/product-pagination';
 import { MobileFilters } from '@/components/products/mobile-filters';
+import { productsSearchParamsSchema } from '@/schemas/search-params.schema';
 import '@/api/client';
 
 export const metadata: Metadata = {
@@ -22,34 +23,26 @@ export const metadata: Metadata = {
 };
 
 type ProductsPageProps = {
-  searchParams: Promise<{
-    category?: string;
-    minPrice?: string;
-    maxPrice?: string;
-    isFeatured?: string;
-    sortBy?: string;
-    sortOrder?: string;
-    page?: string;
-    search?: string;
-  }>;
+  searchParams: Promise<Record<string, string | undefined>>;
 };
 
 const PRODUCTS_PER_PAGE = 12;
 
 const ProductsPage = async ({ searchParams }: ProductsPageProps) => {
-  const params = await searchParams;
+  const raw = await searchParams;
+  const params = productsSearchParamsSchema.parse(raw);
 
   const [productsResponse, categoriesResponse] = await Promise.all([
     productsControllerFindAll({
       query: {
-        page: Number(params.page) || 1,
+        page: params.page,
         limit: PRODUCTS_PER_PAGE,
         categoryId: params.category,
         minPrice: params.minPrice,
         maxPrice: params.maxPrice,
         isFeatured: params.isFeatured,
         sortBy: params.sortBy,
-        sortOrder: params.sortOrder as 'asc' | 'desc' | undefined,
+        sortOrder: params.sortOrder,
         search: params.search,
       },
     }).catch(() => null),

@@ -1,5 +1,6 @@
 type JsonLdProps = {
   data: Record<string, unknown>;
+  nonce?: string;
 };
 
 const serializeJsonLd = (data: Record<string, unknown>): string =>
@@ -8,9 +9,10 @@ const serializeJsonLd = (data: Record<string, unknown>): string =>
     .replace(/>/g, '\\u003e')
     .replace(/&/g, '\\u0026');
 
-const JsonLd = ({ data }: JsonLdProps) => (
+const JsonLd = ({ data, nonce }: JsonLdProps) => (
   <script
     type='application/ld+json'
+    nonce={nonce}
     dangerouslySetInnerHTML={{ __html: serializeJsonLd(data) }}
   />
 );

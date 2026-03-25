@@ -43,6 +43,19 @@ const refreshTokens = async (): Promise<boolean> => {
   }
 };
 
+// Handle 429 responses: rate limited — wait and retry once
+client.interceptors.response.use(async (response, request) => {
+  if (response.status !== 429) return response;
+
+  const retryAfter = response.headers.get('Retry-After');
+  const waitMs = retryAfter ? Number(retryAfter) * 1000 : 2000;
+  const clampedMs = Math.min(waitMs, 10_000);
+
+  await new Promise((resolve) => setTimeout(resolve, clampedMs));
+
+  return fetch(request.clone());
+});
+
 // Handle 401 responses: refresh token and retry the original request
 client.interceptors.response.use(async (response, request) => {
   if (response.status !== 401) return response;
