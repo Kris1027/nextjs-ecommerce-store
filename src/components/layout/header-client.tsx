@@ -23,7 +23,10 @@ const HeaderClient = ({ categories }: HeaderClientProps) => {
           Store
         </Link>
 
-        <nav className='hidden items-center gap-4 md:flex'>
+        <nav
+          aria-label='Main navigation'
+          className='hidden items-center gap-4 md:flex'
+        >
           {categories.map((category) => (
             <Link
               key={category.id}

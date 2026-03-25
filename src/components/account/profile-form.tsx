@@ -139,7 +139,7 @@ const ProfileForm = () => {
               <Label htmlFor='firstName'>First name</Label>
               <Input id='firstName' {...register('firstName')} />
               {errors.firstName && (
-                <p className='text-destructive text-xs'>
+                <p role='alert' className='text-destructive text-xs'>
                   {errors.firstName.message}
                 </p>
               )}
@@ -149,7 +149,7 @@ const ProfileForm = () => {
               <Label htmlFor='lastName'>Last name</Label>
               <Input id='lastName' {...register('lastName')} />
               {errors.lastName && (
-                <p className='text-destructive text-xs'>
+                <p role='alert' className='text-destructive text-xs'>
                   {errors.lastName.message}
                 </p>
               )}

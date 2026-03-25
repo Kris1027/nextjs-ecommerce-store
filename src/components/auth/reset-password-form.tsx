@@ -91,7 +91,9 @@ export const ResetPasswordForm = () => {
           {...register('password')}
         />
         {errors.password && (
-          <p className='text-destructive text-xs'>{errors.password.message}</p>
+          <p role='alert' className='text-destructive text-xs'>
+            {errors.password.message}
+          </p>
         )}
       </div>
 
@@ -108,7 +110,7 @@ export const ResetPasswordForm = () => {
           {...register('confirmPassword')}
         />
         {errors.confirmPassword && (
-          <p className='text-destructive text-xs'>
+          <p role='alert' className='text-destructive text-xs'>
             {errors.confirmPassword.message}
           </p>
         )}

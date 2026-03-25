@@ -95,7 +95,9 @@ export const LoginForm = () => {
           {...register('email')}
         />
         {errors.email && (
-          <p className='text-destructive text-xs'>{errors.email.message}</p>
+          <p role='alert' className='text-destructive text-xs'>
+            {errors.email.message}
+          </p>
         )}
       </div>
 
@@ -120,7 +122,9 @@ export const LoginForm = () => {
           {...register('password')}
         />
         {errors.password && (
-          <p className='text-destructive text-xs'>{errors.password.message}</p>
+          <p role='alert' className='text-destructive text-xs'>
+            {errors.password.message}
+          </p>
         )}
       </div>
 

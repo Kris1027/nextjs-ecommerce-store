@@ -97,7 +97,7 @@ export const RegisterForm = () => {
             {...register('firstName')}
           />
           {errors.firstName && (
-            <p className='text-destructive text-xs'>
+            <p role='alert' className='text-destructive text-xs'>
               {errors.firstName.message}
             </p>
           )}
@@ -115,7 +115,7 @@ export const RegisterForm = () => {
             {...register('lastName')}
           />
           {errors.lastName && (
-            <p className='text-destructive text-xs'>
+            <p role='alert' className='text-destructive text-xs'>
               {errors.lastName.message}
             </p>
           )}
@@ -135,7 +135,9 @@ export const RegisterForm = () => {
           {...register('email')}
         />
         {errors.email && (
-          <p className='text-destructive text-xs'>{errors.email.message}</p>
+          <p role='alert' className='text-destructive text-xs'>
+            {errors.email.message}
+          </p>
         )}
       </div>
 
@@ -152,7 +154,9 @@ export const RegisterForm = () => {
           {...register('password')}
         />
         {errors.password && (
-          <p className='text-destructive text-xs'>{errors.password.message}</p>
+          <p role='alert' className='text-destructive text-xs'>
+            {errors.password.message}
+          </p>
         )}
       </div>
 
@@ -169,7 +173,7 @@ export const RegisterForm = () => {
           {...register('confirmPassword')}
         />
         {errors.confirmPassword && (
-          <p className='text-destructive text-xs'>
+          <p role='alert' className='text-destructive text-xs'>
             {errors.confirmPassword.message}
           </p>
         )}
