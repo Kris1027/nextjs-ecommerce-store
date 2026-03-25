@@ -6,6 +6,8 @@ import type { CategoryResponseDto } from '@/api/generated/types.gen';
 import { Card, CardContent } from '@/components/ui/card';
 import '@/api/client';
 
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   title: 'Categories',
   description: 'Browse all product categories.',
