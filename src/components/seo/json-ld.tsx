@@ -17,6 +17,7 @@ const JsonLd = async ({ data }: JsonLdProps) => {
     <script
       type='application/ld+json'
       nonce={nonce}
+      suppressHydrationWarning
       dangerouslySetInnerHTML={{ __html: serializeJsonLd(data) }}
     />
   );
