@@ -96,13 +96,20 @@ A production-ready **customer-facing ecommerce storefront** built with Next.js 1
 ### SEO & Performance
 
 - Server-side rendering with ISR (60s revalidation)
-- JSON-LD structured data (Organization, WebSite)
-- OpenGraph and Twitter Card meta tags
+- JSON-LD structured data (Organization, WebSite, Product, CollectionPage, BreadcrumbList)
+- Dynamic OpenGraph images (1200×630) for root, product, and category pages
+- Dynamic Twitter Card images (1200×600) for root, product, and category pages
 - Title template with site name
-- robots.txt and sitemap.xml generation
+- robots.txt and sitemap.xml generation (products use `updatedAt` for crawl freshness)
 - React Compiler for automatic memoization
 - Image optimization via Next.js Image + Cloudinary
 - DNS prefetch and preconnect for external services
+
+### PWA & Branding
+
+- Web app manifest with store metadata and theme colors
+- Dynamic PWA icons (192×192, 512×512) and Apple touch icon (180×180)
+- Global error boundary for root layout failures
 
 ---
 
@@ -175,6 +182,13 @@ src/
 │   ├── cart/                     # Shopping cart
 │   ├── checkout/                 # Multi-step checkout + payment
 │   ├── layout.tsx                # Root layout with providers
+│   ├── error.tsx                 # Route-level error boundary
+│   ├── global-error.tsx          # Root layout error boundary
+│   ├── opengraph-image.tsx       # Dynamic OG image (1200×630)
+│   ├── twitter-image.tsx         # Dynamic Twitter image (1200×600)
+│   ├── icon.tsx                  # Dynamic PWA icon (192×192)
+│   ├── apple-icon.tsx            # Dynamic Apple touch icon (180×180)
+│   ├── manifest.ts               # PWA web app manifest
 │   ├── robots.ts                 # SEO robots.txt
 │   └── sitemap.ts                # SEO sitemap.xml
 ├── components/

@@ -1,4 +1,5 @@
 import { headers } from 'next/headers';
+import { STORE_CURRENCY } from '@/lib/constants';
 
 type JsonLdProps = {
   data: Record<string, unknown>;
@@ -54,7 +55,7 @@ const buildProductJsonLd = ({
     offers: {
       '@type': 'Offer',
       price,
-      priceCurrency: 'USD',
+      priceCurrency: STORE_CURRENCY,
       availability:
         stock > 0
           ? 'https://schema.org/InStock'
@@ -98,6 +99,56 @@ const buildBreadcrumbJsonLd = (
   })),
 });
 
+type CategoryJsonLdParams = {
+  name: string;
+  description: string;
+  slug: string;
+  siteUrl: string;
+  imageUrl?: string;
+  products: Array<{
+    name: string;
+    slug: string;
+    price: string;
+    imageUrl?: string;
+  }>;
+};
+
+const buildCategoryJsonLd = ({
+  name,
+  description,
+  slug,
+  siteUrl,
+  imageUrl,
+  products,
+}: CategoryJsonLdParams): Record<string, unknown> => ({
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name,
+  description,
+  url: `${siteUrl}/categories/${slug}`,
+  ...(imageUrl ? { image: imageUrl } : {}),
+  mainEntity: {
+    '@type': 'ItemList',
+    numberOfItems: products.length,
+    itemListElement: products.map((product, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      url: `${siteUrl}/products/${product.slug}`,
+      item: {
+        '@type': 'Product',
+        name: product.name,
+        url: `${siteUrl}/products/${product.slug}`,
+        ...(product.imageUrl ? { image: product.imageUrl } : {}),
+        offers: {
+          '@type': 'Offer',
+          price: product.price,
+          priceCurrency: STORE_CURRENCY,
+        },
+      },
+    })),
+  },
+});
+
 const buildOrganizationJsonLd = (
   siteUrl: string,
   storeName: string,
@@ -129,6 +180,7 @@ const buildWebSiteJsonLd = (
 export {
   JsonLd,
   buildProductJsonLd,
+  buildCategoryJsonLd,
   buildBreadcrumbJsonLd,
   buildOrganizationJsonLd,
   buildWebSiteJsonLd,
