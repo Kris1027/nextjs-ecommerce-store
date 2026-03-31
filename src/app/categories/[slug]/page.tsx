@@ -22,7 +22,11 @@ import { ProductFilters } from '@/components/products/product-filters';
 import { ProductSort } from '@/components/products/product-sort';
 import { ProductPagination } from '@/components/products/product-pagination';
 import { MobileFilters } from '@/components/products/mobile-filters';
-import { JsonLd, buildBreadcrumbJsonLd } from '@/components/seo/json-ld';
+import {
+  JsonLd,
+  buildCategoryJsonLd,
+  buildBreadcrumbJsonLd,
+} from '@/components/seo/json-ld';
 import { env } from '@/config/env';
 import {
   categorySearchParamsSchema,
@@ -140,8 +144,31 @@ const CategoryPage = async ({ params, searchParams }: CategoryPageProps) => {
 
   const siteUrl = env.NEXT_PUBLIC_SITE_URL.replace(/\/+$/, '');
 
+  const description =
+    typeof category.description === 'string'
+      ? category.description
+      : `Browse ${category.name} products.`;
+
   return (
     <div className='space-y-6'>
+      <JsonLd
+        data={buildCategoryJsonLd({
+          name: category.name,
+          description,
+          slug: category.slug,
+          siteUrl,
+          imageUrl:
+            typeof category.imageUrl === 'string'
+              ? category.imageUrl
+              : undefined,
+          products: products.map((p) => ({
+            name: p.name,
+            slug: p.slug,
+            price: p.price,
+            imageUrl: p.images[0]?.url,
+          })),
+        })}
+      />
       <JsonLd data={buildBreadcrumbJsonLd(breadcrumbItems, siteUrl)} />
       <Breadcrumb items={breadcrumbItems} />
 
