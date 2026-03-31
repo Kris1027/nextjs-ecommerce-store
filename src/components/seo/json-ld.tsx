@@ -1,4 +1,5 @@
 import { headers } from 'next/headers';
+import { STORE_CURRENCY } from '@/lib/constants';
 
 type JsonLdProps = {
   data: Record<string, unknown>;
@@ -54,7 +55,7 @@ const buildProductJsonLd = ({
     offers: {
       '@type': 'Offer',
       price,
-      priceCurrency: 'USD',
+      priceCurrency: STORE_CURRENCY,
       availability:
         stock > 0
           ? 'https://schema.org/InStock'
@@ -141,7 +142,7 @@ const buildCategoryJsonLd = ({
         offers: {
           '@type': 'Offer',
           price: product.price,
-          priceCurrency: 'PLN',
+          priceCurrency: STORE_CURRENCY,
         },
       },
     })),
