@@ -56,25 +56,16 @@ export const generateMetadata = async ({
       ? category.description
       : `Browse ${category.name} products.`;
 
-  const imageUrl =
-    typeof category.imageUrl === 'string' ? category.imageUrl : undefined;
-
-  const ogImages = imageUrl
-    ? { images: [{ url: imageUrl, alt: category.name }] }
-    : {};
-
   return {
     title: category.name,
     description,
     openGraph: {
       title: category.name,
       description,
-      ...ogImages,
     },
     twitter: {
       title: category.name,
       description,
-      ...ogImages,
     },
   };
 };
