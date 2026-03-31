@@ -45,7 +45,7 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
         for (const product of response.data) {
           productRoutes.push({
             url: `${siteUrl}/products/${product.slug}`,
-            lastModified: new Date(product.createdAt),
+            lastModified: new Date(product.updatedAt),
             changeFrequency: 'weekly',
             priority: 0.7,
           });
