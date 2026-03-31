@@ -48,24 +48,16 @@ export const generateMetadata = async ({
       ? product.description
       : `Buy ${product.name} at our store.`;
 
-  const firstImage = product.images[0]?.url;
-
   return {
     title: product.name,
     description,
     openGraph: {
       title: product.name,
       description,
-      ...(firstImage && {
-        images: [{ url: firstImage, alt: product.name }],
-      }),
     },
     twitter: {
       title: product.name,
       description,
-      ...(firstImage && {
-        images: [{ url: firstImage, alt: product.name }],
-      }),
     },
   };
 };
