@@ -8,6 +8,11 @@ import { Footer } from '@/components/layout/footer';
 import { OfflineBanner } from '@/components/layout/offline-banner';
 import { env } from '@/config/env';
 import { STORE_NAME, STORE_DESCRIPTION } from '@/lib/constants';
+import {
+  JsonLd,
+  buildWebSiteJsonLd,
+  buildOrganizationJsonLd,
+} from '@/components/seo/json-ld';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -45,6 +50,8 @@ export const metadata: Metadata = {
   },
 };
 
+const siteUrl = env.NEXT_PUBLIC_SITE_URL.replace(/\/+$/, '');
+
 const RootLayout = ({
   children,
 }: Readonly<{
@@ -72,6 +79,8 @@ const RootLayout = ({
         <link rel='dns-prefetch' href='https://js.stripe.com' />
       </head>
       <body className='antialiased'>
+        <JsonLd data={buildWebSiteJsonLd(siteUrl, STORE_NAME)} />
+        <JsonLd data={buildOrganizationJsonLd(siteUrl, STORE_NAME)} />
         <Providers>
           <a
             href='#main-content'
