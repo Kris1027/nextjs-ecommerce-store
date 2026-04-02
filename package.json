@@ -29,6 +29,7 @@
   "license": "SEE LICENSE IN LICENSE",
   "scripts": {
     "dev": "next dev --port 3002",
+    "dev:prod": "dotenv -e .env.production -- next dev --port 3002",
     "prebuild": "openapi-ts",
     "build": "next build",
     "start": "next start --port 3002",
@@ -83,6 +84,7 @@
     "@vitejs/plugin-react": "^6.0.1",
     "@vitest/coverage-v8": "^4.1.1",
     "babel-plugin-react-compiler": "1.0.0",
+    "dotenv-cli": "^11.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.1.7",
     "eslint-plugin-jsx-a11y": "^6.10.2",

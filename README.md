@@ -132,14 +132,17 @@ cd nextjs-ecommerce-store
 pnpm install
 
 # Configure environment
-cp .env.example .env
-# Edit .env — set API URLs and Stripe publishable key
+cp .env.example .env.development
+# Edit .env.development — set API URLs and Stripe publishable key
 
 # Generate API client from backend Swagger spec
 pnpm api:generate
 
-# Start development server
+# Start development server (uses local backend)
 pnpm dev
+
+# Or start against production API
+pnpm dev:prod
 ```
 
 The store runs on **`http://localhost:3002`**.
@@ -148,23 +151,24 @@ The store runs on **`http://localhost:3002`**.
 
 ## Scripts
 
-| Command              | Description                                       |
-| -------------------- | ------------------------------------------------- |
-| `pnpm dev`           | Start Next.js dev server (port 3002)              |
-| `pnpm build`         | Generate API client + Next.js production build    |
-| `pnpm start`         | Run production build (port 3002)                  |
-| `pnpm lint`          | ESLint checks                                     |
-| `pnpm format`        | Prettier format all files                         |
-| `pnpm format:check`  | Check formatting without writing                  |
-| `pnpm typecheck`     | TypeScript type checking only                     |
-| `pnpm api:generate`  | Generate API client from backend OpenAPI spec     |
-| `pnpm test`          | Run unit tests (Vitest, watch mode)               |
-| `pnpm test:run`      | Run unit tests (single run)                       |
-| `pnpm test:coverage` | Generate coverage report                          |
-| `pnpm test:e2e`      | Run Playwright E2E tests                          |
-| `pnpm test:e2e:ui`   | Run E2E tests with Playwright UI                  |
-| `pnpm validate`      | Run all checks (lint, format, types, test, build) |
-| `pnpm analyze`       | Build with bundle analyzer                        |
+| Command              | Description                                             |
+| -------------------- | ------------------------------------------------------- |
+| `pnpm dev`           | Start Next.js dev server with local backend (port 3002) |
+| `pnpm dev:prod`      | Start Next.js dev server with production backend        |
+| `pnpm build`         | Generate API client + Next.js production build          |
+| `pnpm start`         | Run production build (port 3002)                        |
+| `pnpm lint`          | ESLint checks                                           |
+| `pnpm format`        | Prettier format all files                               |
+| `pnpm format:check`  | Check formatting without writing                        |
+| `pnpm typecheck`     | TypeScript type checking only                           |
+| `pnpm api:generate`  | Generate API client from backend OpenAPI spec           |
+| `pnpm test`          | Run unit tests (Vitest, watch mode)                     |
+| `pnpm test:run`      | Run unit tests (single run)                             |
+| `pnpm test:coverage` | Generate coverage report                                |
+| `pnpm test:e2e`      | Run Playwright E2E tests                                |
+| `pnpm test:e2e:ui`   | Run E2E tests with Playwright UI                        |
+| `pnpm validate`      | Run all checks (lint, format, types, test, build)       |
+| `pnpm analyze`       | Build with bundle analyzer                              |
 
 ---
 
@@ -259,12 +263,16 @@ GitHub Actions runs **5 parallel jobs** on every PR and push to main:
 
 See [`.env.example`](.env.example) for all required variables.
 
-| Variable                             | Description               | Default                 |
-| ------------------------------------ | ------------------------- | ----------------------- |
-| `NEXT_PUBLIC_API_URL`                | Backend API URL (browser) | `http://localhost:3000` |
-| `NEXT_PUBLIC_SITE_URL`               | Store URL                 | `http://localhost:3002` |
-| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe publishable key    | —                       |
-| `API_URL`                            | Backend API URL (server)  | `http://localhost:3000` |
+| Variable                             | Description            |
+| ------------------------------------ | ---------------------- |
+| `NEXT_PUBLIC_API_URL`                | Backend API URL        |
+| `NEXT_PUBLIC_SITE_URL`               | Store URL (for SEO)    |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe publishable key |
+
+| File               | Mode                     | API Target                   |
+| ------------------ | ------------------------ | ---------------------------- |
+| `.env.development` | `pnpm dev`               | Local backend (localhost)    |
+| `.env.production`  | `pnpm dev:prod` / Vercel | Production backend (Railway) |
 
 All environment variables are validated at build time via Zod. The app will not build with missing or invalid configuration.
 
