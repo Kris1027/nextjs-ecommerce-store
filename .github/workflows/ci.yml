@@ -78,7 +78,6 @@ jobs:
       NEXT_PUBLIC_API_URL: https://ci.example.com
       NEXT_PUBLIC_SITE_URL: https://ci.example.com
       NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: pk_test_ci_placeholder
-      API_URL: https://ci.example.com
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
