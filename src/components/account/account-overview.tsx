@@ -93,14 +93,16 @@ const AccountOverview = () => {
         </p>
       </div>
 
-      <div className='grid grid-cols-1 gap-3 sm:grid-cols-2'>
+      <div className='grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3'>
         {QUICK_LINKS.map(({ href, label, description, icon: Icon }) => (
           <Link key={href} href={href}>
-            <Card className='flex items-center gap-3 p-4 transition-colors hover:bg-muted/50'>
-              <Icon size={20} className='text-muted-foreground' />
-              <div>
-                <p className='text-sm font-medium'>{label}</p>
-                <p className='text-muted-foreground text-xs'>{description}</p>
+            <Card className='h-full !gap-0 !py-0 transition-colors hover:bg-muted/50'>
+              <div className='flex items-center gap-3 p-4'>
+                <Icon size={20} className='shrink-0 text-muted-foreground' />
+                <div>
+                  <p className='text-sm font-medium'>{label}</p>
+                  <p className='text-muted-foreground text-xs'>{description}</p>
+                </div>
               </div>
             </Card>
           </Link>
