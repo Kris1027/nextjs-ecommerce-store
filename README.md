@@ -86,9 +86,13 @@ A production-ready **customer-facing ecommerce storefront** built with Next.js 1
 
 ### UI/UX
 
+- Mobile-first responsive design with 3-view breakpoint strategy (mobile / tablet / desktop)
+- Fluid typography using CSS `clamp()` for smooth scaling across viewports
+- Safe area support for notched devices (`viewport-fit=cover` + `env(safe-area-inset-*)`)
 - Dark/light/system theme with persistence
-- Responsive layout with mobile-friendly navigation
-- Loading skeletons for all data-fetching states
+- Responsive product grid (1 → 2 → 3 → 4 columns across breakpoints)
+- Mobile navigation drawer with sheet component
+- Loading skeletons matching page container layouts
 - Toast notifications on all mutations (Sonner)
 - Global error boundary + route-level error components
 - Offline detection banner
