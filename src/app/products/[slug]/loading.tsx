@@ -5,7 +5,7 @@ import { RelatedProductsSkeleton } from '@/components/skeletons/related-products
 
 const ProductLoading = () => {
   return (
-    <div className='space-y-12'>
+    <div className='mx-auto max-w-7xl space-y-12 px-4 py-8 sm:px-6 lg:px-8'>
       <div className='flex items-center gap-2'>
         {Array.from({ length: 3 }, (_, i) => (
           <div key={i} className='flex items-center gap-2'>
