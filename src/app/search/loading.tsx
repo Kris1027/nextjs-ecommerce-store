@@ -3,7 +3,7 @@ import { ProductGridSkeleton } from '@/components/skeletons/product-grid-skeleto
 
 const SearchLoading = () => {
   return (
-    <div className='space-y-6'>
+    <div className='mx-auto max-w-7xl space-y-6 px-4 py-8 sm:px-6 lg:px-8'>
       <div>
         <Skeleton className='h-8 w-64' />
         <Skeleton className='mt-1 h-4 w-32' />

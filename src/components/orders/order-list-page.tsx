@@ -57,7 +57,7 @@ const OrderListPage = () => {
 
   return (
     <div className='space-y-6'>
-      <div className='flex items-center justify-between'>
+      <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
         <h1 className='text-2xl font-bold'>My Orders</h1>
         <OrderStatusFilter />
       </div>

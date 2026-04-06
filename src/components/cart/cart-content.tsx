@@ -64,7 +64,7 @@ const CartContent = () => {
   }
 
   return (
-    <div className='grid gap-6 lg:grid-cols-3'>
+    <div className='grid gap-6 md:grid-cols-[1fr_320px] lg:grid-cols-3'>
       <div className='space-y-4 lg:col-span-2'>
         {items.map((item) => (
           <Card key={item.id} className='flex gap-4 p-4'>

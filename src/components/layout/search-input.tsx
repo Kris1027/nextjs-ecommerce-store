@@ -21,6 +21,7 @@ const SearchInput = () => {
 
     timerRef.current = setTimeout(() => {
       router.push(`/search?q=${encodeURIComponent(query.trim())}`);
+      setQuery('');
     }, DEBOUNCE_MS);
 
     return () => {
@@ -36,6 +37,7 @@ const SearchInput = () => {
         clearTimeout(timerRef.current);
       }
       router.push(`/search?q=${encodeURIComponent(query.trim())}`);
+      setQuery('');
     }
   };
 

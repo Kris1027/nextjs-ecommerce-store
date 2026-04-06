@@ -50,7 +50,7 @@ export const PaymentFailurePage = ({ orderId }: PaymentFailurePageProps) => {
     onSuccess: () => {
       toast.success('Order cancelled.');
       queryClient.invalidateQueries({ queryKey: ['order', orderId] });
-      router.push('/orders');
+      router.push('/account/orders');
     },
     onError: (error) => {
       toast.error(getErrorMessage(error));

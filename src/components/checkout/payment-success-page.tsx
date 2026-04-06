@@ -117,7 +117,9 @@ export const PaymentSuccessPage = ({ orderId }: PaymentSuccessPageProps) => {
           <p className='text-muted-foreground mb-6'>
             {getErrorMessage(paymentError)}
           </p>
-          <Button onClick={() => router.push('/orders')}>View orders</Button>
+          <Button onClick={() => router.push('/account/orders')}>
+            View orders
+          </Button>
         </Card>
       </div>
     );
@@ -183,7 +185,9 @@ export const PaymentSuccessPage = ({ orderId }: PaymentSuccessPageProps) => {
             <Button variant='outline' onClick={() => router.push('/products')}>
               Continue shopping
             </Button>
-            <Button onClick={() => router.push('/orders')}>View orders</Button>
+            <Button onClick={() => router.push('/account/orders')}>
+              View orders
+            </Button>
           </div>
         </Card>
       </div>
@@ -198,7 +202,9 @@ export const PaymentSuccessPage = ({ orderId }: PaymentSuccessPageProps) => {
         <p className='text-muted-foreground mb-6'>
           Please check your orders for the latest status.
         </p>
-        <Button onClick={() => router.push('/orders')}>View orders</Button>
+        <Button onClick={() => router.push('/account/orders')}>
+          View orders
+        </Button>
       </Card>
     </div>
   );

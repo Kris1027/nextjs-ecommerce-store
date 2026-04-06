@@ -10,7 +10,11 @@ import { ReviewStep } from '@/components/checkout/review-step';
 import { Button } from '@/components/ui/button';
 import { useEffect } from 'react';
 
-const STEPS = ['Shipping address', 'Shipping method', 'Review order'] as const;
+const STEPS = [
+  { label: 'Shipping address', short: 'Address' },
+  { label: 'Shipping method', short: 'Shipping' },
+  { label: 'Review order', short: 'Review' },
+] as const;
 
 const CheckoutPage = () => {
   const router = useRouter();
@@ -61,7 +65,7 @@ const CheckoutPage = () => {
         <ol className='flex items-center gap-2'>
           {STEPS.map((step, index) => (
             <li
-              key={step}
+              key={step.label}
               className='flex items-center gap-2'
               aria-current={index === currentStep ? 'step' : undefined}
             >
@@ -78,13 +82,22 @@ const CheckoutPage = () => {
                 {index + 1}
               </span>
               <span
+                className={`text-sm sm:hidden ${
+                  index === currentStep
+                    ? 'font-medium'
+                    : 'text-muted-foreground'
+                }`}
+              >
+                {step.short}
+              </span>
+              <span
                 className={`hidden text-sm sm:inline ${
                   index === currentStep
                     ? 'font-medium'
                     : 'text-muted-foreground'
                 }`}
               >
-                {step}
+                {step.label}
               </span>
               <span className='sr-only'>
                 {index < currentStep
