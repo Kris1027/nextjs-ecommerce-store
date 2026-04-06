@@ -15,8 +15,8 @@ type HeaderClientProps = {
 
 const HeaderClient = ({ categories }: HeaderClientProps) => {
   return (
-    <header className='sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60'>
-      <div className='mx-auto flex h-14 max-w-7xl items-center gap-4 px-4 safe-px sm:px-6 lg:px-8'>
+    <header className='sticky top-0 z-50 border-b bg-background/95 safe-pl safe-pr safe-pt backdrop-blur supports-backdrop-filter:bg-background/60'>
+      <div className='mx-auto flex h-14 max-w-7xl items-center gap-4 px-4 sm:px-6 lg:px-8'>
         <MobileNav categories={categories} />
 
         <Link href='/' className='text-lg font-bold tracking-tight'>
