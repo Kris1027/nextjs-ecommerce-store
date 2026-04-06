@@ -41,9 +41,16 @@ const NotificationCard = ({
         !notification.isRead && 'border-l-2 border-l-primary',
       )}
     >
-      <button
-        type='button'
+      <div
+        role='button'
+        tabIndex={0}
         onClick={handleClick}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleClick();
+          }
+        }}
         className='flex w-full items-start gap-3 p-4 text-left'
       >
         <Icon size={16} className='mt-0.5 shrink-0 text-muted-foreground' />
@@ -78,7 +85,7 @@ const NotificationCard = ({
             {formatRelativeTime(notification.createdAt)}
           </p>
         </div>
-      </button>
+      </div>
     </Card>
   );
 };
