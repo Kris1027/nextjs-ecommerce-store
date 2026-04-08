@@ -3,7 +3,7 @@ import { z } from 'zod';
 const emailSchema = z
   .string()
   .min(1, 'Email is required')
-  .check(z.email({ error: 'Please enter a valid email address' }));
+  .pipe(z.email({ error: 'Please enter a valid email address' }));
 
 export const passwordSchema = z
   .string()
