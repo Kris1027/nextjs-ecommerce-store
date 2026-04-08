@@ -221,7 +221,7 @@ const AddressFormDialog = ({
               control={control}
               render={({ field }) => (
                 <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger className='w-full'>
+                  <SelectTrigger className='w-full' aria-label='Address type'>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>

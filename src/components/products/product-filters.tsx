@@ -109,7 +109,7 @@ const ProductFilters = ({
                 updateParam('category', value === 'all' ? '' : value)
               }
             >
-              <SelectTrigger>
+              <SelectTrigger aria-label='Category'>
                 <SelectValue placeholder='All categories' />
               </SelectTrigger>
               <SelectContent>
@@ -163,7 +163,7 @@ const ProductFilters = ({
             updateParam('isFeatured', value === 'all' ? '' : value)
           }
         >
-          <SelectTrigger>
+          <SelectTrigger aria-label='Featured'>
             <SelectValue placeholder='All products' />
           </SelectTrigger>
           <SelectContent>

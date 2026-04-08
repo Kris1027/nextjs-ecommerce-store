@@ -31,7 +31,7 @@ const NotificationReadFilter = () => {
 
   return (
     <Select value={currentValue || 'all'} onValueChange={handleChange}>
-      <SelectTrigger className='w-32'>
+      <SelectTrigger className='w-32' aria-label='Read status'>
         <SelectValue placeholder='All' />
       </SelectTrigger>
       <SelectContent>
