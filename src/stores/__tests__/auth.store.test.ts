@@ -19,8 +19,8 @@ vi.mock('@/lib/auth-tokens', () => ({
 const mockUser: UserProfileDto = {
   id: 'user-1',
   email: 'test@example.com',
-  firstName: 'John' as unknown as UserProfileDto['firstName'],
-  lastName: 'Doe' as unknown as UserProfileDto['lastName'],
+  firstName: 'John',
+  lastName: 'Doe',
   role: 'CUSTOMER',
   isActive: true,
   createdAt: '2026-01-01T00:00:00Z',
@@ -85,7 +85,7 @@ describe('useAuthStore', () => {
 
       const updatedUser = {
         ...mockUser,
-        firstName: 'Jane' as unknown as UserProfileDto['firstName'],
+        firstName: 'Jane',
       };
       useAuthStore.getState().setUser(updatedUser);
 

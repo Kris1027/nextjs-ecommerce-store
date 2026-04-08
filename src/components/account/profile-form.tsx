@@ -60,8 +60,8 @@ const ProfileForm = () => {
     if (profile) {
       reset(
         {
-          firstName: profile.firstName as unknown as string,
-          lastName: profile.lastName as unknown as string,
+          firstName: profile.firstName ?? '',
+          lastName: profile.lastName ?? '',
         },
         { keepDirtyValues: true },
       );

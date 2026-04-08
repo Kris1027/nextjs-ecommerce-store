@@ -80,7 +80,7 @@ export const PaymentFailurePage = ({ orderId }: PaymentFailurePageProps) => {
   }
 
   const payment = paymentData?.data?.data;
-  const failureMessage = payment?.failureMessage as unknown as string | null;
+  const failureMessage = payment?.failureMessage;
 
   return (
     <div className='container mx-auto max-w-2xl px-4 py-8'>

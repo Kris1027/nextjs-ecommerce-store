@@ -20,10 +20,10 @@ const formatDate = (dateString: string): string =>
   }).format(new Date(dateString));
 
 const ReviewCard = ({ review, isOwn, productId }: ReviewCardProps) => {
-  const title = review.title as unknown as string | undefined;
-  const comment = review.comment as unknown as string | undefined;
-  const firstName = review.user.firstName as unknown as string | undefined;
-  const lastName = review.user.lastName as unknown as string | undefined;
+  const title = review.title;
+  const comment = review.comment;
+  const firstName = review.user.firstName;
+  const lastName = review.user.lastName;
   const authorName =
     [firstName, lastName].filter(Boolean).join(' ') || 'Anonymous';
 

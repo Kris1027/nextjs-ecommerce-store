@@ -52,8 +52,8 @@ const ReviewForm = ({
     resolver: zodResolver(reviewSchema),
     defaultValues: {
       rating: existingReview?.rating ?? 0,
-      title: (existingReview?.title as unknown as string) ?? '',
-      comment: (existingReview?.comment as unknown as string) ?? '',
+      title: existingReview?.title ?? '',
+      comment: existingReview?.comment ?? '',
     },
   });
 
@@ -61,8 +61,8 @@ const ReviewForm = ({
     if (open) {
       reset({
         rating: existingReview?.rating ?? 0,
-        title: (existingReview?.title as unknown as string) ?? '',
-        comment: (existingReview?.comment as unknown as string) ?? '',
+        title: existingReview?.title ?? '',
+        comment: existingReview?.comment ?? '',
       });
     }
   }, [open, existingReview, reset]);

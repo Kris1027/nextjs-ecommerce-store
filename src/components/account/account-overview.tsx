@@ -86,7 +86,7 @@ const AccountOverview = () => {
     <div className='space-y-8'>
       <div>
         <h1 className='text-2xl font-bold'>
-          Welcome back, {(user?.firstName as unknown as string) ?? 'there'}
+          Welcome back, {user?.firstName ?? 'there'}
         </h1>
         <p className='text-muted-foreground text-sm'>
           Manage your account settings and view your orders.
@@ -96,7 +96,7 @@ const AccountOverview = () => {
       <div className='grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3'>
         {QUICK_LINKS.map(({ href, label, description, icon: Icon }) => (
           <Link key={href} href={href}>
-            <Card className='h-full !gap-0 !py-0 transition-colors hover:bg-muted/50'>
+            <Card className='h-full gap-0! py-0! transition-colors hover:bg-muted/50'>
               <div className='flex items-center gap-3 p-4'>
                 <Icon size={20} className='shrink-0 text-muted-foreground' />
                 <div>

@@ -42,7 +42,7 @@ const ProductSort = () => {
     <div className='flex items-center justify-end gap-2'>
       <span className='text-sm text-muted-foreground'>Sort by</span>
       <Select value={currentValue} onValueChange={handleSortChange}>
-        <SelectTrigger className='w-full sm:w-48'>
+        <SelectTrigger className='w-full sm:w-48' aria-label='Sort by'>
           <SelectValue placeholder='Select order' />
         </SelectTrigger>
         <SelectContent>

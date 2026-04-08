@@ -20,10 +20,10 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 
 const getThreshold = (method: ShippingMethodDto): string | null =>
-  (method.freeShippingThreshold as unknown as string) ?? null;
+  method.freeShippingThreshold ?? null;
 
 const getRegion = (address: UserAddressDto): string | null =>
-  (address.region as unknown as string) ?? null;
+  address.region ?? null;
 
 export const ReviewStep = () => {
   const router = useRouter();

@@ -10,6 +10,8 @@ const eslintConfig = defineConfig([
     rules: {
       ...jsxA11y.flatConfigs.recommended.rules,
       '@typescript-eslint/no-explicit-any': 'error',
+      'no-console': ['warn', { allow: ['warn', 'error'] }],
+      'prefer-const': 'error',
       'jsx-a11y/label-has-associated-control': [
         'error',
         {

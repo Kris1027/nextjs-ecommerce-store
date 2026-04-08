@@ -25,10 +25,9 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
 
   const images = product.images ?? [];
   const selectedImage = images[selectedImageIndex];
-  const comparePrice = product.comparePrice as unknown as string | null;
-  const description =
-    typeof product.description === 'string' ? product.description : null;
-  const sku = typeof product.sku === 'string' ? product.sku : null;
+  const comparePrice = product.comparePrice;
+  const description = product.description ?? null;
+  const sku = product.sku ?? null;
 
   const stockStatus =
     product.stock === 0
@@ -51,9 +50,7 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
           {selectedImage ? (
             <Image
               src={selectedImage.url}
-              alt={
-                (selectedImage.alt as unknown as string | null) ?? product.name
-              }
+              alt={selectedImage.alt ?? product.name}
               fill
               sizes='(max-width: 768px) 100vw, 50vw'
               className='object-cover'
@@ -88,7 +85,7 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
               >
                 <Image
                   src={image.url}
-                  alt={(image.alt as unknown as string | null) ?? product.name}
+                  alt={image.alt ?? product.name}
                   fill
                   sizes='80px'
                   className='object-cover'

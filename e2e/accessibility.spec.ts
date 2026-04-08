@@ -31,7 +31,7 @@ test('skip-to-content link works', async ({ page }) => {
   const skipLink = page.getByText('Skip to content');
   await expect(skipLink).toBeFocused();
 
-  await skipLink.click();
+  await page.keyboard.press('Enter');
 
   const main = page.locator('#main-content');
   await expect(main).toBeAttached();

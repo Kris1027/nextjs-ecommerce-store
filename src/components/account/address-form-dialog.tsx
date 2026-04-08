@@ -77,7 +77,7 @@ const AddressFormDialog = ({
         phone: address.phone,
         street: address.street,
         city: address.city,
-        region: (address.region as unknown as string) ?? '',
+        region: address.region ?? '',
         postalCode: address.postalCode,
         country: address.country,
       });
@@ -221,7 +221,7 @@ const AddressFormDialog = ({
               control={control}
               render={({ field }) => (
                 <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger className='w-full'>
+                  <SelectTrigger className='w-full' aria-label='Address type'>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>

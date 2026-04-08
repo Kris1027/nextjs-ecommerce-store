@@ -20,7 +20,7 @@ A production-ready **customer-facing ecommerce storefront** built with Next.js 1
 | **Payments**        | Stripe (React Stripe.js + Stripe.js)                  |
 | **API Client**      | @hey-api/openapi-ts (auto-generated from Swagger)     |
 | **Unit Tests**      | Vitest 4 + React Testing Library + MSW 2              |
-| **E2E Tests**       | Playwright + axe-core (accessibility)                 |
+| **E2E Tests**       | Playwright (Chromium + Firefox) + axe-core (a11y)     |
 | **CI/CD**           | GitHub Actions (lint, format, typecheck, test, build) |
 | **Package Manager** | pnpm 10                                               |
 
@@ -241,7 +241,7 @@ pnpm test:e2e
 - **21 test suites** — stores, schemas, and components
 - MSW v2 for API mocking
 - Fresh QueryClient per test (no cache leakage)
-- Playwright E2E with axe-core accessibility testing
+- Playwright E2E with axe-core accessibility testing (Chromium + Firefox)
 
 ---
 
@@ -287,7 +287,7 @@ All environment variables are validated at build time via Zod. The app will not 
 - Dynamic CSP with per-request nonces (script-src, style-src)
 - Security headers: X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy, HSTS
 - Access tokens stored in memory only (never localStorage/sessionStorage)
-- Refresh tokens in httpOnly cookies (SameSite=Lax, Secure in production)
+- Refresh tokens in cookies (SameSite=Lax, Secure in production)
 - Token rotation with reuse detection
 - Multi-tab session sync (logout propagation via BroadcastChannel)
 - 401 interceptor with automatic token refresh and request queue

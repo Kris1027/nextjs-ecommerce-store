@@ -78,8 +78,8 @@ const OrderDetailPage = ({ orderId }: OrderDetailPageProps) => {
 
   if (!order) return null;
 
-  const couponCode = order.couponCode as unknown as string | null;
-  const shippingRegion = order.shippingRegion as unknown as string | null;
+  const couponCode = order.couponCode;
+  const shippingRegion = order.shippingRegion;
   const discount = Number(order.discountAmount);
   const formattedDate = new Date(order.createdAt).toLocaleDateString('pl-PL', {
     year: 'numeric',
@@ -112,7 +112,7 @@ const OrderDetailPage = ({ orderId }: OrderDetailPageProps) => {
         <h2 className='mb-4 text-lg font-semibold'>Items</h2>
         <div className='space-y-3'>
           {order.items.map((item) => {
-            const imageUrl = item.productImageUrl as unknown as string | null;
+            const imageUrl = item.productImageUrl;
 
             return (
               <div key={item.id} className='flex items-center gap-3'>

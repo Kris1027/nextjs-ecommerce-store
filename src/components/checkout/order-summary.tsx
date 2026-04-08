@@ -11,8 +11,8 @@ type OrderSummaryProps = {
 };
 
 export const OrderSummary = ({ order }: OrderSummaryProps) => {
-  const couponCode = order.couponCode as unknown as string | null;
-  const shippingRegion = order.shippingRegion as unknown as string | null;
+  const couponCode = order.couponCode;
+  const shippingRegion = order.shippingRegion;
   const discount = Number(order.discountAmount);
 
   return (
@@ -24,7 +24,7 @@ export const OrderSummary = ({ order }: OrderSummaryProps) => {
 
       <div className='space-y-3'>
         {order.items.map((item) => {
-          const imageUrl = item.productImageUrl as unknown as string | null;
+          const imageUrl = item.productImageUrl;
 
           return (
             <div key={item.id} className='flex items-center gap-3'>

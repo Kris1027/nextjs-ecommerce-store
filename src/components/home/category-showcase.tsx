@@ -19,10 +19,8 @@ const CategoryShowcase = ({ categories }: CategoryShowcaseProps) => {
         </h2>
         <div className='grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4'>
           {categories.map((category) => {
-            const imageUrl = category.imageUrl as unknown as string | null;
-            const description = category.description as unknown as
-              | string
-              | null;
+            const imageUrl = category.imageUrl;
+            const description = category.description;
 
             return (
               <Link key={category.id} href={`/categories/${category.slug}`}>

@@ -35,7 +35,7 @@ const NotificationTypeFilter = () => {
 
   return (
     <Select value={currentType || 'all'} onValueChange={handleChange}>
-      <SelectTrigger className='w-48'>
+      <SelectTrigger className='w-48' aria-label='Notification type'>
         <SelectValue placeholder='All types' />
       </SelectTrigger>
       <SelectContent>

@@ -32,7 +32,7 @@ const OrderStatusFilter = () => {
 
   return (
     <Select value={currentStatus || 'all'} onValueChange={handleStatusChange}>
-      <SelectTrigger className='w-48'>
+      <SelectTrigger className='w-48' aria-label='Order status'>
         <SelectValue placeholder='All orders' />
       </SelectTrigger>
       <SelectContent>
