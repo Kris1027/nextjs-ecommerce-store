@@ -5,12 +5,11 @@ import { useQuery } from '@tanstack/react-query';
 import { usersControllerGetAddresses } from '@/api/generated/sdk.gen';
 import type { UserAddressDto } from '@/api/generated/types.gen';
 import { useCheckoutStore } from '@/stores/checkout.store';
-
-// OpenAPI generates Decimal/nullable fields as { [key: string]: unknown }.
-const getRegion = (address: UserAddressDto): string | null =>
-  address.region ?? null;
 import { Button } from '@/components/ui/button';
 import { AddressForm } from './address-form';
+
+const getRegion = (address: UserAddressDto): string | null =>
+  address.region ?? null;
 
 export const AddressStep = () => {
   const [isAdding, setIsAdding] = useState(false);

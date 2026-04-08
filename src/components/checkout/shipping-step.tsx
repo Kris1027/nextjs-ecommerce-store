@@ -7,7 +7,6 @@ import { useCheckoutStore } from '@/stores/checkout.store';
 import { useCartStore } from '@/stores/cart.store';
 import { formatPrice } from '@/lib/format';
 
-// OpenAPI generates Decimal fields as { [key: string]: unknown }.
 const getThreshold = (method: ShippingMethodDto): string | null =>
   method.freeShippingThreshold ?? null;
 
