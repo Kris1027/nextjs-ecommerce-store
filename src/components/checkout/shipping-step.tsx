@@ -8,12 +8,11 @@ import { useCartStore } from '@/stores/cart.store';
 import { formatPrice } from '@/lib/format';
 
 // OpenAPI generates Decimal fields as { [key: string]: unknown }.
-// At runtime they are strings, so we cast once at the boundary.
 const getThreshold = (method: ShippingMethodDto): string | null =>
-  (method.freeShippingThreshold as unknown as string) ?? null;
+  method.freeShippingThreshold ?? null;
 
 const getDescription = (method: ShippingMethodDto): string | null =>
-  (method.description as unknown as string) ?? null;
+  method.description ?? null;
 
 export const ShippingStep = () => {
   const { shippingMethodId, setShippingMethodId } = useCheckoutStore();

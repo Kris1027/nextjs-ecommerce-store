@@ -19,7 +19,7 @@ const AddressCard = ({
   onDelete,
   onSetDefault,
 }: AddressCardProps) => {
-  const region = address.region as unknown as string | null;
+  const region = address.region;
 
   return (
     <Card className='flex flex-col justify-between gap-4 p-4'>

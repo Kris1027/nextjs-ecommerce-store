@@ -77,7 +77,7 @@ const AddressFormDialog = ({
         phone: address.phone,
         street: address.street,
         city: address.city,
-        region: (address.region as unknown as string) ?? '',
+        region: address.region ?? '',
         postalCode: address.postalCode,
         country: address.country,
       });

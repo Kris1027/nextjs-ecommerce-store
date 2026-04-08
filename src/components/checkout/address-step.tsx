@@ -7,9 +7,8 @@ import type { UserAddressDto } from '@/api/generated/types.gen';
 import { useCheckoutStore } from '@/stores/checkout.store';
 
 // OpenAPI generates Decimal/nullable fields as { [key: string]: unknown }.
-// At runtime they are strings, so we cast once at the boundary.
 const getRegion = (address: UserAddressDto): string | null =>
-  (address.region as unknown as string) ?? null;
+  address.region ?? null;
 import { Button } from '@/components/ui/button';
 import { AddressForm } from './address-form';
 

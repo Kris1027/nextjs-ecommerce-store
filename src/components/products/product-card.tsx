@@ -25,9 +25,8 @@ const ProductCard = ({ product, priority = false }: ProductCardProps) => {
   };
 
   const imageUrl = product.images[0]?.url;
-  const imageAlt =
-    (product.images[0]?.alt as unknown as string | null) ?? product.name;
-  const comparePrice = product.comparePrice as unknown as string | null;
+  const imageAlt = product.images[0]?.alt ?? product.name;
+  const comparePrice = product.comparePrice;
 
   return (
     <Card className='group overflow-hidden'>

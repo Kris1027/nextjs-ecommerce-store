@@ -79,9 +79,7 @@ export const PaymentPage = ({ orderId }: PaymentPageProps) => {
 
   if (!accessToken) return null;
 
-  const clientSecret = intentData?.data?.data?.clientSecret as unknown as
-    | string
-    | undefined;
+  const clientSecret = intentData?.data?.data?.clientSecret;
   const order = orderData?.data?.data;
 
   const isLoading = isOrderLoading || isIntentLoading;

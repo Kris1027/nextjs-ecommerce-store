@@ -38,7 +38,7 @@ const syncGuestCartToStore = (cart: GuestCartResponseDto) => {
 };
 
 const syncAuthCartToStore = (cart: CartResponseDto) => {
-  const couponCode = cart.couponCode as unknown as string | null;
+  const couponCode = cart.couponCode;
   useCartStore.getState().setCart({
     items: cart.items ?? [],
     totalItems: cart.totalItems ?? 0,
