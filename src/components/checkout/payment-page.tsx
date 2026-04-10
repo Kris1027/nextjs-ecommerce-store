@@ -76,6 +76,8 @@ export const PaymentPage = ({ orderId }: PaymentPageProps) => {
 
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       e.preventDefault();
+      // Deprecated but required for Chrome/Safari to show the confirmation dialog
+      e.returnValue = '';
     };
 
     window.addEventListener('beforeunload', handleBeforeUnload);

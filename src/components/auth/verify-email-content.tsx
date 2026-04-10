@@ -12,6 +12,8 @@ export const VerifyEmailContent = () => {
   const token = searchParams.get('token');
   const calledRef = useRef(false);
   const accessToken = useAuthStore((s) => s.accessToken);
+  const isHydrated = useAuthStore((s) => s.isHydrated);
+  const isAuthenticated = isHydrated && !!accessToken;
 
   const verifyMutation = useMutation({
     mutationFn: async () => {
@@ -64,11 +66,11 @@ export const VerifyEmailContent = () => {
       <>
         <h1 className='text-2xl font-bold tracking-tight'>Email Verified!</h1>
         <p className='text-muted-foreground text-sm'>
-          {accessToken
+          {isAuthenticated
             ? 'Your email has been verified successfully.'
             : 'Your email has been verified successfully. You can now sign in.'}
         </p>
-        {accessToken ? (
+        {isAuthenticated ? (
           <Link
             href='/'
             className='bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-4 py-2 text-sm font-medium transition-colors'

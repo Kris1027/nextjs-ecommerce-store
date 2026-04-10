@@ -1,7 +1,6 @@
 'use client';
 
 import * as React from 'react';
-import { useId } from 'react';
 import { Input as InputPrimitive } from '@base-ui/react/input';
 
 import { cn } from '@/lib/utils';
@@ -12,7 +11,7 @@ function Input({
   id,
   ...props
 }: React.ComponentProps<'input'>) {
-  const generatedId = useId();
+  const generatedId = React.useId();
   return (
     <InputPrimitive
       type={type}

@@ -1,7 +1,6 @@
 'use client';
 
 import * as React from 'react';
-import { useId } from 'react';
 import { Dialog as SheetPrimitive } from '@base-ui/react/dialog';
 
 import { cn } from '@/lib/utils';
@@ -101,7 +100,7 @@ function SheetFooter({ className, ...props }: React.ComponentProps<'div'>) {
 }
 
 function SheetTitle({ className, id, ...props }: SheetPrimitive.Title.Props) {
-  const generatedId = useId();
+  const generatedId = React.useId();
   return (
     <SheetPrimitive.Title
       data-slot='sheet-title'
@@ -117,7 +116,7 @@ function SheetDescription({
   id,
   ...props
 }: SheetPrimitive.Description.Props) {
-  const generatedId = useId();
+  const generatedId = React.useId();
   return (
     <SheetPrimitive.Description
       data-slot='sheet-description'

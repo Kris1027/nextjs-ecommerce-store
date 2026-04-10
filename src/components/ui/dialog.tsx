@@ -1,7 +1,6 @@
 'use client';
 
 import * as React from 'react';
-import { useId } from 'react';
 import { Dialog as DialogPrimitive } from '@base-ui/react/dialog';
 
 import { cn } from '@/lib/utils';
@@ -118,7 +117,7 @@ function DialogFooter({
 }
 
 function DialogTitle({ className, id, ...props }: DialogPrimitive.Title.Props) {
-  const generatedId = useId();
+  const generatedId = React.useId();
   return (
     <DialogPrimitive.Title
       data-slot='dialog-title'
@@ -134,7 +133,7 @@ function DialogDescription({
   id,
   ...props
 }: DialogPrimitive.Description.Props) {
-  const generatedId = useId();
+  const generatedId = React.useId();
   return (
     <DialogPrimitive.Description
       data-slot='dialog-description'
