@@ -49,12 +49,13 @@ A production-ready **customer-facing ecommerce storefront** built with Next.js 1
 - Shipping method selection with pricing
 - Order review with itemized totals (subtotal, tax, shipping, discounts)
 - Stripe payment integration with PaymentIntent
+- Navigation guard prevents accidental page leave during payment
 - Success and failure result pages
 
 ### Authentication & Account
 
 - Register, login, logout with JWT access/refresh tokens
-- Email verification with tokenized links
+- Email verification with tokenized links (context-aware post-verification redirect)
 - Password reset flow (forgot password, reset with token)
 - Silent refresh on app load (seamless page reload)
 - Multi-tab session sync via BroadcastChannel
@@ -65,8 +66,11 @@ A production-ready **customer-facing ecommerce storefront** built with Next.js 1
 ### Orders
 
 - Order history with status filtering and pagination
-- Order detail — items, shipping address, financial summary
+- Order detail — items, shipping address, financial summary, payment status
 - Order status timeline visualization
+- "Pay Now" button to resume payment on unpaid orders
+- 24-hour expiration warning with countdown for unpaid orders
+- "Awaiting Payment" badge on order list for pending orders
 - Cancel orders (PENDING/CONFIRMED only)
 - Refund request flow
 
