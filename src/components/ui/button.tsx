@@ -1,5 +1,6 @@
 'use client';
 
+import { useId } from 'react';
 import { Button as ButtonPrimitive } from '@base-ui/react/button';
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -44,11 +45,14 @@ function Button({
   className,
   variant = 'default',
   size = 'default',
+  id,
   ...props
 }: ButtonPrimitive.Props & VariantProps<typeof buttonVariants>) {
+  const generatedId = useId();
   return (
     <ButtonPrimitive
       data-slot='button'
+      id={id ?? generatedId}
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
     />
