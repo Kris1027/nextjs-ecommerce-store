@@ -5,10 +5,15 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useQuery } from '@tanstack/react-query';
-import { ArrowLeftIcon } from '@phosphor-icons/react';
-import { ordersControllerGetMyOrderByIdOptions } from '@/api/generated/@tanstack/react-query.gen';
+import { ArrowLeftIcon, WarningCircleIcon } from '@phosphor-icons/react';
+import {
+  ordersControllerGetMyOrderByIdOptions,
+  paymentsControllerGetPaymentByOrderIdOptions,
+} from '@/api/generated/@tanstack/react-query.gen';
 import { useAuthStore } from '@/stores/auth.store';
 import { formatPrice } from '@/lib/format';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -35,6 +40,14 @@ const OrderDetailPage = ({ orderId }: OrderDetailPageProps) => {
       path: { id: orderId },
     }),
     enabled: !!accessToken,
+  });
+
+  const { data: paymentData } = useQuery({
+    ...paymentsControllerGetPaymentByOrderIdOptions({
+      path: { orderId },
+    }),
+    enabled: !!accessToken,
+    retry: false,
   });
 
   if (!isHydrated) {
@@ -75,8 +88,21 @@ const OrderDetailPage = ({ orderId }: OrderDetailPageProps) => {
   }
 
   const order = data?.data;
+  const payment = paymentData?.data;
 
   if (!order) return null;
+
+  const isUnpaid =
+    order.status === 'PENDING' && payment?.status !== 'SUCCEEDED';
+  const expiresAt = new Date(
+    new Date(order.createdAt).getTime() + 24 * 60 * 60 * 1000,
+  );
+  const now = new Date();
+  const msRemaining = expiresAt.getTime() - now.getTime();
+  const hoursRemaining = Math.floor(msRemaining / (1000 * 60 * 60));
+  const minutesRemaining = Math.floor(
+    (msRemaining % (1000 * 60 * 60)) / (1000 * 60),
+  );
 
   const couponCode = order.couponCode;
   const shippingRegion = order.shippingRegion;
@@ -107,6 +133,54 @@ const OrderDetailPage = ({ orderId }: OrderDetailPageProps) => {
       <div className='mb-6'>
         <OrderStatusTimeline status={order.status} />
       </div>
+
+      {payment && (
+        <div className='mb-6 flex items-center gap-2'>
+          <span className='text-sm font-medium'>Payment:</span>
+          <Badge
+            variant={
+              payment.status === 'SUCCEEDED'
+                ? 'default'
+                : payment.status === 'FAILED'
+                  ? 'destructive'
+                  : 'secondary'
+            }
+          >
+            {payment.status === 'SUCCEEDED' && 'Paid'}
+            {payment.status === 'PENDING' && 'Pending'}
+            {payment.status === 'FAILED' && 'Failed'}
+            {payment.status === 'REFUND_PENDING' && 'Refund Pending'}
+            {payment.status === 'REFUNDED' && 'Refunded'}
+            {payment.status === 'PARTIALLY_REFUNDED' && 'Partially Refunded'}
+          </Badge>
+        </div>
+      )}
+
+      {isUnpaid && (
+        <div className='mb-6 flex items-start gap-2 rounded-md border border-amber-500/30 bg-amber-50 p-4 dark:bg-amber-950/20'>
+          <WarningCircleIcon
+            size={20}
+            className='mt-0.5 shrink-0 text-amber-600'
+          />
+          <div className='text-sm'>
+            {msRemaining <= 0 ? (
+              <p className='text-destructive font-medium'>
+                This order has expired and will be cancelled.
+              </p>
+            ) : (
+              <p className='text-amber-800 dark:text-amber-200'>
+                This order will be automatically cancelled if not paid within 24
+                hours.{' '}
+                <span className='font-medium'>
+                  {hoursRemaining > 0
+                    ? `${hoursRemaining}h ${minutesRemaining}m remaining.`
+                    : `${minutesRemaining}m remaining.`}
+                </span>
+              </p>
+            )}
+          </div>
+        </div>
+      )}
 
       <Card className='mb-6 p-6'>
         <h2 className='mb-4 text-lg font-semibold'>Items</h2>
@@ -185,7 +259,17 @@ const OrderDetailPage = ({ orderId }: OrderDetailPageProps) => {
         </div>
       </Card>
 
-      <OrderActions orderId={orderId} status={order.status} />
+      <div className='flex gap-3'>
+        {isUnpaid && msRemaining > 0 && (
+          <Button
+            nativeButton={false}
+            render={<Link href={`/checkout/payment/${orderId}`} />}
+          >
+            Pay Now
+          </Button>
+        )}
+        <OrderActions orderId={orderId} status={order.status} />
+      </div>
     </div>
   );
 };

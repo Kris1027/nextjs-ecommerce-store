@@ -116,10 +116,12 @@ function DialogFooter({
   );
 }
 
-function DialogTitle({ className, ...props }: DialogPrimitive.Title.Props) {
+function DialogTitle({ className, id, ...props }: DialogPrimitive.Title.Props) {
+  const generatedId = React.useId();
   return (
     <DialogPrimitive.Title
       data-slot='dialog-title'
+      id={id ?? generatedId}
       className={cn('text-sm font-medium', className)}
       {...props}
     />
@@ -128,11 +130,14 @@ function DialogTitle({ className, ...props }: DialogPrimitive.Title.Props) {
 
 function DialogDescription({
   className,
+  id,
   ...props
 }: DialogPrimitive.Description.Props) {
+  const generatedId = React.useId();
   return (
     <DialogPrimitive.Description
       data-slot='dialog-description'
+      id={id ?? generatedId}
       className={cn(
         'text-xs/relaxed text-muted-foreground *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground',
         className,

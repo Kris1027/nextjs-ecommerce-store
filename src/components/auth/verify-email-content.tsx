@@ -5,11 +5,15 @@ import { useMutation } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { authControllerVerifyEmail } from '@/api/generated/sdk.gen';
+import { useAuthStore } from '@/stores/auth.store';
 
 export const VerifyEmailContent = () => {
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
   const calledRef = useRef(false);
+  const accessToken = useAuthStore((s) => s.accessToken);
+  const isHydrated = useAuthStore((s) => s.isHydrated);
+  const isAuthenticated = isHydrated && !!accessToken;
 
   const verifyMutation = useMutation({
     mutationFn: async () => {
@@ -62,14 +66,25 @@ export const VerifyEmailContent = () => {
       <>
         <h1 className='text-2xl font-bold tracking-tight'>Email Verified!</h1>
         <p className='text-muted-foreground text-sm'>
-          Your email has been verified successfully. You can now sign in.
+          {isAuthenticated
+            ? 'Your email has been verified successfully.'
+            : 'Your email has been verified successfully. You can now sign in.'}
         </p>
-        <Link
-          href='/login'
-          className='bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-4 py-2 text-sm font-medium transition-colors'
-        >
-          Sign In
-        </Link>
+        {isAuthenticated ? (
+          <Link
+            href='/'
+            className='bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-4 py-2 text-sm font-medium transition-colors'
+          >
+            Continue Shopping
+          </Link>
+        ) : (
+          <Link
+            href='/login'
+            className='bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-4 py-2 text-sm font-medium transition-colors'
+          >
+            Sign In
+          </Link>
+        )}
       </>
     );
   }

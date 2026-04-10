@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import type { OrderListDto } from '@/api/generated/types.gen';
 import { formatPrice } from '@/lib/format';
+import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { OrderStatusBadge } from '@/components/orders/order-status-badge';
 
@@ -27,6 +28,14 @@ const OrderListCard = ({ order }: OrderListCardProps) => {
         <div className='flex items-center gap-4'>
           <p className='font-medium'>{formatPrice(order.total)}</p>
           <OrderStatusBadge status={order.status} />
+          {order.status === 'PENDING' && (
+            <Badge
+              variant='outline'
+              className='border-amber-500 text-amber-600'
+            >
+              Awaiting Payment
+            </Badge>
+          )}
         </div>
       </Card>
     </Link>
