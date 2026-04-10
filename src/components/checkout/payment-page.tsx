@@ -63,11 +63,24 @@ export const PaymentPage = ({ orderId }: PaymentPageProps) => {
     staleTime: Infinity,
   });
 
+  const clientSecret = intentData?.data?.data?.clientSecret;
+
   useEffect(() => {
     if (isIntentError && intentError) {
       toast.error(getErrorMessage(intentError));
     }
   }, [isIntentError, intentError]);
+
+  useEffect(() => {
+    if (!clientSecret) return;
+
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [clientSecret]);
 
   if (!isHydrated) {
     return (
@@ -79,7 +92,6 @@ export const PaymentPage = ({ orderId }: PaymentPageProps) => {
 
   if (!accessToken) return null;
 
-  const clientSecret = intentData?.data?.data?.clientSecret;
   const order = orderData?.data?.data;
 
   const isLoading = isOrderLoading || isIntentLoading;
