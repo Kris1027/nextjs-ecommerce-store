@@ -18,6 +18,7 @@ export const StripePaymentForm = ({ orderId }: StripePaymentFormProps) => {
   const stripe = useStripe();
   const elements = useElements();
   const [isProcessing, setIsProcessing] = useState(false);
+  const [loaderError, setLoaderError] = useState(false);
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -43,12 +44,19 @@ export const StripePaymentForm = ({ orderId }: StripePaymentFormProps) => {
     <Card className='p-6'>
       <h2 className='mb-4 text-lg font-semibold'>Payment details</h2>
       <form onSubmit={handleSubmit} className='space-y-6'>
-        <PaymentElement />
+        <PaymentElement
+          onLoadError={() => {
+            setLoaderError(true);
+            toast.error(
+              'Failed to load payment form. The payment session may have expired.',
+            );
+          }}
+        />
         <Button
           type='submit'
           className='w-full'
           size='lg'
-          disabled={!stripe || !elements || isProcessing}
+          disabled={!stripe || !elements || isProcessing || loaderError}
         >
           {isProcessing ? 'Processing...' : 'Pay now'}
         </Button>
