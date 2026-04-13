@@ -27,7 +27,6 @@ const CheckoutPage = () => {
     shippingAddressId,
     shippingMethodId,
     isOrderPlaced,
-    reset,
   } = useCheckoutStore();
 
   useEffect(() => {
@@ -35,12 +34,6 @@ const CheckoutPage = () => {
       router.replace('/login?redirect=/checkout');
     }
   }, [isHydrated, accessToken, router]);
-
-  useEffect(() => {
-    if (isOrderPlaced && totalItems > 0) {
-      reset();
-    }
-  }, [isOrderPlaced, totalItems, reset]);
 
   if (!isHydrated) {
     return (

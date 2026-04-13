@@ -40,6 +40,12 @@ export const useCheckoutStore = create<CheckoutState & CheckoutActions>()(
     {
       name: 'checkout',
       storage: createJSONStorage(() => sessionStorage),
+      partialize: (state) => ({
+        currentStep: state.currentStep,
+        shippingAddressId: state.shippingAddressId,
+        shippingMethodId: state.shippingMethodId,
+        notes: state.notes,
+      }),
     },
   ),
 );
