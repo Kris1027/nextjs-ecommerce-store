@@ -43,9 +43,80 @@ describe('addressSchema', () => {
     expect(result.success).toBe(false);
   });
 
-  it('should fail when phone is too short', () => {
-    const result = addressSchema.safeParse({ ...validData, phone: '12345' });
-    expect(result.success).toBe(false);
+  describe('phone validation', () => {
+    it('should pass with 9-digit phone number', () => {
+      const result = addressSchema.safeParse({
+        ...validData,
+        phone: '123456789',
+      });
+      expect(result.success).toBe(true);
+    });
+
+    it('should pass with +48 prefix phone number', () => {
+      const result = addressSchema.safeParse({
+        ...validData,
+        phone: '+48123456789',
+      });
+      expect(result.success).toBe(true);
+    });
+
+    it('should fail with letters in phone number', () => {
+      const result = addressSchema.safeParse({
+        ...validData,
+        phone: 'abcdefghi',
+      });
+      expect(result.success).toBe(false);
+    });
+
+    it('should fail with too few digits', () => {
+      const result = addressSchema.safeParse({
+        ...validData,
+        phone: '12345',
+      });
+      expect(result.success).toBe(false);
+    });
+
+    it('should fail with too many digits', () => {
+      const result = addressSchema.safeParse({
+        ...validData,
+        phone: '1234567890',
+      });
+      expect(result.success).toBe(false);
+    });
+  });
+
+  describe('postalCode validation', () => {
+    it('should pass with valid XX-XXX format', () => {
+      const result = addressSchema.safeParse({
+        ...validData,
+        postalCode: '31-500',
+      });
+      expect(result.success).toBe(true);
+    });
+
+    it('should fail with missing dash', () => {
+      const result = addressSchema.safeParse({
+        ...validData,
+        postalCode: '31500',
+      });
+      expect(result.success).toBe(false);
+    });
+
+    it('should fail with letters', () => {
+      const result = addressSchema.safeParse({
+        ...validData,
+        postalCode: 'hello',
+      });
+      expect(result.success).toBe(false);
+    });
+
+    it('should fail with wrong digit count', () => {
+      const result = addressSchema.safeParse({
+        ...validData,
+        postalCode: '1-234',
+      });
+      expect(result.success).toBe(false);
+    });
   });
 
   it('should fail when country is not exactly 2 characters', () => {
@@ -53,11 +124,6 @@ describe('addressSchema', () => {
       ...validData,
       country: 'POL',
     });
-    expect(result.success).toBe(false);
-  });
-
-  it('should fail when postalCode is too short', () => {
-    const result = addressSchema.safeParse({ ...validData, postalCode: '00' });
     expect(result.success).toBe(false);
   });
 });

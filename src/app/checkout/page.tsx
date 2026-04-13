@@ -21,8 +21,13 @@ const CheckoutPage = () => {
   const accessToken = useAuthStore((s) => s.accessToken);
   const isHydrated = useAuthStore((s) => s.isHydrated);
   const totalItems = useCartStore((s) => s.totalItems);
-  const { currentStep, setCurrentStep, shippingAddressId, shippingMethodId } =
-    useCheckoutStore();
+  const {
+    currentStep,
+    setCurrentStep,
+    shippingAddressId,
+    shippingMethodId,
+    isOrderPlaced,
+  } = useCheckoutStore();
 
   useEffect(() => {
     if (isHydrated && !accessToken) {
@@ -39,6 +44,8 @@ const CheckoutPage = () => {
   }
 
   if (!accessToken) return null;
+
+  if (isOrderPlaced) return null;
 
   if (totalItems === 0) {
     return (

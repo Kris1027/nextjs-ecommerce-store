@@ -1,5 +1,8 @@
 import { z } from 'zod';
 
+const POLISH_POSTAL_CODE = /^\d{2}-\d{3}$/;
+const POLISH_PHONE = /^(\+48)?\d{9}$/;
+
 export const addressSchema = z.object({
   type: z.enum(['SHIPPING', 'BILLING']).default('SHIPPING'),
   isDefault: z.boolean().default(false),
@@ -9,8 +12,7 @@ export const addressSchema = z.object({
     .max(100, 'Full name must be at most 100 characters'),
   phone: z
     .string()
-    .min(9, 'Phone number must be at least 9 characters')
-    .max(15, 'Phone number must be at most 15 characters'),
+    .regex(POLISH_PHONE, 'Phone must be 9 digits, optionally with +48 prefix'),
   street: z
     .string()
     .min(3, 'Street must be at least 3 characters')
@@ -25,8 +27,10 @@ export const addressSchema = z.object({
     .optional(),
   postalCode: z
     .string()
-    .min(3, 'Postal code must be at least 3 characters')
-    .max(20, 'Postal code must be at most 20 characters'),
+    .regex(
+      POLISH_POSTAL_CODE,
+      'Postal code must be in XX-XXX format (e.g. 00-001)',
+    ),
   country: z
     .string()
     .length(2, 'Country must be a 2-letter ISO code')

@@ -15,7 +15,6 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
   CheckCircleIcon,
-  ClockIcon,
   SpinnerGapIcon,
   WarningCircleIcon,
 } from '@phosphor-icons/react';
@@ -43,7 +42,6 @@ export const PaymentSuccessPage = ({ orderId }: PaymentSuccessPageProps) => {
     isLoading: isPaymentLoading,
     isError: isPaymentError,
     error: paymentError,
-    isRefetching,
   } = useQuery({
     queryKey: ['payment', orderId],
     queryFn: () =>
@@ -125,7 +123,7 @@ export const PaymentSuccessPage = ({ orderId }: PaymentSuccessPageProps) => {
     );
   }
 
-  if (payment?.status === 'PENDING' && isRefetching) {
+  if (payment?.status === 'PENDING') {
     return (
       <div className='container mx-auto max-w-2xl px-4 py-8'>
         <Card className='p-8 text-center'>
@@ -136,25 +134,6 @@ export const PaymentSuccessPage = ({ orderId }: PaymentSuccessPageProps) => {
           <p className='text-muted-foreground'>
             This usually takes a few seconds.
           </p>
-        </Card>
-      </div>
-    );
-  }
-
-  if (payment?.status === 'PENDING') {
-    return (
-      <div className='container mx-auto max-w-2xl px-4 py-8'>
-        <Card className='p-8 text-center'>
-          <ClockIcon className='text-muted-foreground mx-auto mb-4 h-12 w-12' />
-          <h1 className='mb-2 text-2xl font-bold'>
-            Payment is being processed
-          </h1>
-          <p className='text-muted-foreground mb-6'>
-            {"We'll send you an email once your payment is confirmed."}
-          </p>
-          <Button onClick={() => router.push('/products')}>
-            Continue shopping
-          </Button>
         </Card>
       </div>
     );

@@ -84,7 +84,7 @@ export const proxy = (request: NextRequest): NextResponse => {
   }
 
   // Generate CSP nonce for every request
-  const nonce = crypto.randomUUID();
+  const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
   const csp = buildCsp(nonce);
 
   // Pass nonce to server components via request headers

@@ -68,7 +68,12 @@ export const AddressForm = ({
 
         <div className='space-y-2'>
           <Label htmlFor='phone'>Phone</Label>
-          <Input id='phone' type='tel' {...register('phone')} />
+          <Input
+            id='phone'
+            type='tel'
+            placeholder='123456789'
+            {...register('phone')}
+          />
           {errors.phone && (
             <p className='text-sm text-red-500'>{errors.phone.message}</p>
           )}
@@ -102,7 +107,11 @@ export const AddressForm = ({
 
         <div className='space-y-2'>
           <Label htmlFor='postalCode'>Postal code</Label>
-          <Input id='postalCode' {...register('postalCode')} />
+          <Input
+            id='postalCode'
+            placeholder='XX-XXX'
+            {...register('postalCode')}
+          />
           {errors.postalCode && (
             <p className='text-sm text-red-500'>{errors.postalCode.message}</p>
           )}

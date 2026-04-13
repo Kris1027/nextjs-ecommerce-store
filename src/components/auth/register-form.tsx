@@ -23,6 +23,7 @@ export const RegisterForm = () => {
   const queryClient = useQueryClient();
   const redirect = getSafeRedirect(searchParams.get('redirect'));
   const setAuth = useAuthStore((state) => state.setAuth);
+  const guestCartToken = useGuestCartStore((state) => state.token);
   const clearGuestCart = useGuestCartStore((state) => state.clearCart);
 
   const {
@@ -49,6 +50,9 @@ export const RegisterForm = () => {
           firstName: values.firstName,
           lastName: values.lastName,
         },
+        headers: guestCartToken
+          ? { 'x-guest-cart-token': guestCartToken }
+          : undefined,
         throwOnError: true,
       });
 

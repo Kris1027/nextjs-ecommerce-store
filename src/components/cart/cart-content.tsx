@@ -67,14 +67,14 @@ const CartContent = () => {
     <div className='grid gap-6 md:grid-cols-[1fr_320px] lg:grid-cols-3'>
       <div className='space-y-4 lg:col-span-2'>
         {items.map((item) => (
-          <Card key={item.id} className='flex gap-4 p-4'>
-            <div className='relative h-24 w-24 shrink-0 overflow-hidden rounded-md bg-muted'>
+          <Card key={item.id} className='flex-row gap-4 p-4'>
+            <div className='relative h-28 w-28 shrink-0 overflow-hidden rounded-md bg-muted'>
               {typeof item.product.imageUrl === 'string' ? (
                 <Image
                   src={item.product.imageUrl}
                   alt={item.product.name}
                   fill
-                  sizes='96px'
+                  sizes='112px'
                   className='object-cover'
                 />
               ) : (
@@ -84,7 +84,7 @@ const CartContent = () => {
               )}
             </div>
 
-            <div className='flex flex-1 flex-col justify-between'>
+            <div className='flex flex-1 flex-col justify-between gap-2'>
               <div className='flex items-start justify-between'>
                 <div>
                   <Link
@@ -102,52 +102,54 @@ const CartContent = () => {
                 </p>
               </div>
 
-              <div className='flex items-center justify-between'>
-                <div className='flex items-center rounded-md border'>
-                  <Button
-                    variant='ghost'
-                    size='icon'
-                    className='h-8 w-8'
-                    aria-label='Decrease quantity'
-                    disabled={item.quantity <= 1 || updateItem.isPending}
-                    onClick={() =>
-                      updateItem.mutate({
-                        itemId: item.id,
-                        quantity: item.quantity - 1,
-                      })
-                    }
+              <div className='flex items-center'>
+                <div className='flex items-center gap-3'>
+                  <div className='flex items-center rounded-md border'>
+                    <Button
+                      variant='ghost'
+                      size='icon'
+                      className='h-8 w-8'
+                      aria-label='Decrease quantity'
+                      disabled={item.quantity <= 1 || updateItem.isPending}
+                      onClick={() =>
+                        updateItem.mutate({
+                          itemId: item.id,
+                          quantity: item.quantity - 1,
+                        })
+                      }
+                    >
+                      <MinusIcon size={14} />
+                    </Button>
+                    <span className='w-8 text-center text-sm'>
+                      {item.quantity}
+                    </span>
+                    <Button
+                      variant='ghost'
+                      size='icon'
+                      className='h-8 w-8'
+                      aria-label='Increase quantity'
+                      disabled={updateItem.isPending}
+                      onClick={() =>
+                        updateItem.mutate({
+                          itemId: item.id,
+                          quantity: item.quantity + 1,
+                        })
+                      }
+                    >
+                      <PlusIcon size={14} />
+                    </Button>
+                  </div>
+                  <button
+                    type='button'
+                    className='flex items-center gap-1 text-sm text-destructive hover:text-destructive/80 disabled:opacity-50'
+                    aria-label={`Remove ${item.product.name} from cart`}
+                    disabled={removeItem.isPending}
+                    onClick={() => removeItem.mutate(item.id)}
                   >
-                    <MinusIcon size={14} />
-                  </Button>
-                  <span className='w-8 text-center text-sm'>
-                    {item.quantity}
-                  </span>
-                  <Button
-                    variant='ghost'
-                    size='icon'
-                    className='h-8 w-8'
-                    aria-label='Increase quantity'
-                    disabled={updateItem.isPending}
-                    onClick={() =>
-                      updateItem.mutate({
-                        itemId: item.id,
-                        quantity: item.quantity + 1,
-                      })
-                    }
-                  >
-                    <PlusIcon size={14} />
-                  </Button>
+                    <TrashIcon size={14} />
+                    Remove
+                  </button>
                 </div>
-                <Button
-                  variant='ghost'
-                  size='icon'
-                  className='h-8 w-8 text-destructive hover:text-destructive'
-                  aria-label={`Remove ${item.product.name} from cart`}
-                  disabled={removeItem.isPending}
-                  onClick={() => removeItem.mutate(item.id)}
-                >
-                  <TrashIcon size={16} />
-                </Button>
               </div>
             </div>
           </Card>
