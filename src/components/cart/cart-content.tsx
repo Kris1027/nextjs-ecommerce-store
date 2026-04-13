@@ -67,7 +67,7 @@ const CartContent = () => {
     <div className='grid gap-6 md:grid-cols-[1fr_320px] lg:grid-cols-3'>
       <div className='space-y-4 lg:col-span-2'>
         {items.map((item) => (
-          <Card key={item.id} className='flex gap-4 p-4'>
+          <Card key={item.id} className='flex-row gap-4 p-4'>
             <div className='relative h-28 w-28 shrink-0 overflow-hidden rounded-md bg-muted'>
               {typeof item.product.imageUrl === 'string' ? (
                 <Image
@@ -85,19 +85,24 @@ const CartContent = () => {
             </div>
 
             <div className='flex flex-1 flex-col justify-between gap-2'>
-              <div>
-                <Link
-                  href={`/products/${item.product.slug}`}
-                  className='font-medium hover:text-primary'
-                >
-                  {item.product.name}
-                </Link>
-                <p className='text-sm text-muted-foreground'>
-                  {formatPrice(String(item.unitPrice))} each
+              <div className='flex items-start justify-between'>
+                <div>
+                  <Link
+                    href={`/products/${item.product.slug}`}
+                    className='font-medium hover:text-primary'
+                  >
+                    {item.product.name}
+                  </Link>
+                  <p className='text-sm text-muted-foreground'>
+                    {formatPrice(String(item.unitPrice))} each
+                  </p>
+                </div>
+                <p className='font-semibold'>
+                  {formatPrice(String(item.lineTotal))}
                 </p>
               </div>
 
-              <div className='flex items-center justify-between'>
+              <div className='flex items-center'>
                 <div className='flex items-center gap-3'>
                   <div className='flex items-center rounded-md border'>
                     <Button
@@ -145,9 +150,6 @@ const CartContent = () => {
                     Remove
                   </button>
                 </div>
-                <p className='font-semibold'>
-                  {formatPrice(String(item.lineTotal))}
-                </p>
               </div>
             </div>
           </Card>
