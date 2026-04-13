@@ -38,18 +38,20 @@ A production-ready **customer-facing ecommerce storefront** built with Next.js 1
 ### Shopping Cart
 
 - Authenticated user cart (Zustand + API sync)
-- Guest cart with localStorage persistence
+- Guest cart with localStorage persistence (preserved on both login and registration)
 - Add, update quantity, remove items
 - Coupon application with live discount preview
 
 ### Multi-Step Checkout
 
 - Step-by-step flow: Address → Shipping → Review → Payment
-- Address selection from saved addresses or new address form
+- Address selection from saved addresses or new address form (Polish format validation for postal code and phone)
 - Shipping method selection with pricing
 - Order review with itemized totals (subtotal, tax, shipping, discounts)
-- Stripe payment integration with PaymentIntent
+- Stripe payment integration with PaymentIntent and graceful load error handling
 - Navigation guard prevents accidental page leave during payment
+- Smooth transitions between checkout steps (no empty cart flash)
+- Consistent processing UI during payment status polling
 - Success and failure result pages
 
 ### Authentication & Account
@@ -115,6 +117,7 @@ A production-ready **customer-facing ecommerce storefront** built with Next.js 1
 
 ### PWA & Branding
 
+- Custom SVG favicon (dark background with purple shopping bag, matching admin panel style)
 - Web app manifest with store metadata and theme colors
 - Dynamic PWA icons (192×192, 512×512) and Apple touch icon (180×180)
 - Global error boundary for root layout failures
