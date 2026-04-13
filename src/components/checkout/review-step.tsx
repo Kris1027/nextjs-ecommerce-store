@@ -28,7 +28,7 @@ const getRegion = (address: UserAddressDto): string | null =>
 export const ReviewStep = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { shippingAddressId, shippingMethodId, notes, reset } =
+  const { shippingAddressId, shippingMethodId, notes, setOrderPlaced, reset } =
     useCheckoutStore();
   const cart = useCartStore();
 
@@ -74,10 +74,11 @@ export const ReviewStep = () => {
         throwOnError: true,
       });
     },
-    onSuccess: async (response) => {
+    onSuccess: (response) => {
       reset();
-      await queryClient.invalidateQueries({ queryKey: ['cart'] });
+      setOrderPlaced();
       router.push(`/checkout/payment/${response.data.data.id}`);
+      queryClient.invalidateQueries({ queryKey: ['cart'] });
     },
     onError: (error) => {
       toast.error(getErrorMessage(error));

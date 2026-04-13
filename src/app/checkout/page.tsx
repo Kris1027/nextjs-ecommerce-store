@@ -21,14 +21,26 @@ const CheckoutPage = () => {
   const accessToken = useAuthStore((s) => s.accessToken);
   const isHydrated = useAuthStore((s) => s.isHydrated);
   const totalItems = useCartStore((s) => s.totalItems);
-  const { currentStep, setCurrentStep, shippingAddressId, shippingMethodId } =
-    useCheckoutStore();
+  const {
+    currentStep,
+    setCurrentStep,
+    shippingAddressId,
+    shippingMethodId,
+    isOrderPlaced,
+    reset,
+  } = useCheckoutStore();
 
   useEffect(() => {
     if (isHydrated && !accessToken) {
       router.replace('/login?redirect=/checkout');
     }
   }, [isHydrated, accessToken, router]);
+
+  useEffect(() => {
+    if (isOrderPlaced && totalItems > 0) {
+      reset();
+    }
+  }, [isOrderPlaced, totalItems, reset]);
 
   if (!isHydrated) {
     return (
@@ -39,6 +51,8 @@ const CheckoutPage = () => {
   }
 
   if (!accessToken) return null;
+
+  if (isOrderPlaced) return null;
 
   if (totalItems === 0) {
     return (

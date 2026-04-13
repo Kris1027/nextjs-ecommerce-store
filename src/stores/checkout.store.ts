@@ -6,6 +6,7 @@ type CheckoutState = {
   shippingAddressId: string | null;
   shippingMethodId: string | null;
   notes: string;
+  isOrderPlaced: boolean;
 };
 
 type CheckoutActions = {
@@ -13,6 +14,7 @@ type CheckoutActions = {
   setShippingAddressId: (id: string) => void;
   setShippingMethodId: (id: string) => void;
   setNotes: (notes: string) => void;
+  setOrderPlaced: () => void;
   reset: () => void;
 };
 
@@ -21,6 +23,7 @@ const initialState: CheckoutState = {
   shippingAddressId: null,
   shippingMethodId: null,
   notes: '',
+  isOrderPlaced: false,
 };
 
 export const useCheckoutStore = create<CheckoutState & CheckoutActions>()(
@@ -31,6 +34,7 @@ export const useCheckoutStore = create<CheckoutState & CheckoutActions>()(
       setShippingAddressId: (id) => set({ shippingAddressId: id }),
       setShippingMethodId: (id) => set({ shippingMethodId: id }),
       setNotes: (notes) => set({ notes }),
+      setOrderPlaced: () => set({ isOrderPlaced: true }),
       reset: () => set(initialState),
     }),
     {
