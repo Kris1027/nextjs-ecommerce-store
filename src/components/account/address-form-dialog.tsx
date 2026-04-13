@@ -163,7 +163,12 @@ const AddressFormDialog = ({
 
             <div className='space-y-2'>
               <Label htmlFor='phone'>Phone</Label>
-              <Input id='phone' type='tel' {...register('phone')} />
+              <Input
+                id='phone'
+                type='tel'
+                placeholder='123456789'
+                {...register('phone')}
+              />
               {errors.phone && (
                 <p role='alert' className='text-destructive text-xs'>
                   {errors.phone.message}
@@ -205,7 +210,11 @@ const AddressFormDialog = ({
 
             <div className='space-y-2'>
               <Label htmlFor='postalCode'>Postal code</Label>
-              <Input id='postalCode' {...register('postalCode')} />
+              <Input
+                id='postalCode'
+                placeholder='XX-XXX'
+                {...register('postalCode')}
+              />
               {errors.postalCode && (
                 <p role='alert' className='text-destructive text-xs'>
                   {errors.postalCode.message}
