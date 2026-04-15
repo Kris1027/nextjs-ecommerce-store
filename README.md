@@ -254,19 +254,23 @@ pnpm test:e2e
 
 ## CI/CD
 
-GitHub Actions runs **5 parallel jobs** on every PR and push to main:
+GitHub Actions runs on every PR and push to main:
 
-| Job            | Description                         |
-| -------------- | ----------------------------------- |
-| **Lint**       | ESLint checks                       |
-| **Format**     | Prettier format validation          |
-| **Type Check** | TypeScript validation + API codegen |
-| **Test**       | All Vitest tests + coverage upload  |
-| **Build**      | Next.js production build            |
+| Job                | Description                         |
+| ------------------ | ----------------------------------- |
+| **Lint & Format**  | ESLint + Prettier checks            |
+| **Type Check**     | TypeScript validation + API codegen |
+| **Unit Tests**     | Vitest tests + coverage upload      |
+| **Security Audit** | `pnpm audit --prod`                 |
+| **Build**          | Next.js production build            |
 
+- All actions pinned to commit SHAs (supply-chain protection)
+- Minimal permissions (`contents: read`)
+- Node version from `.node-version` (single source of truth)
 - pnpm dependency caching for fast runs
 - Concurrency control (cancels stale PR runs)
-- Build depends on all other jobs passing
+- Build depends on lint, typecheck, and tests passing
+- Dependabot for weekly npm and GitHub Actions updates
 
 ---
 
